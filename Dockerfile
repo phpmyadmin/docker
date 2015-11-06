@@ -1,8 +1,7 @@
 FROM netroby/alpine-php
 
-RUN   wget -c https://github.com/phpmyadmin/phpmyadmin/archive/RELEASE_4_5_1.tar.gz; \
+RUN wget --no-check-certificate -c https://github.com/phpmyadmin/phpmyadmin/archive/RELEASE_4_5_1.tar.gz; \
         tar zxvf RELEASE_4_5_1.tar.gz;\
-        mkdir /www; \
         mv phpmyadmin-RELEASE_4_5_1 /www; \
         unlink *.tar.gz
 
