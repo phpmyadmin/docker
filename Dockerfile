@@ -10,3 +10,5 @@ COPY config.inc.php /www/config.inc.php
 EXPOSE 8080
 
 ENTRYPOINT ["php", "-S", "0.0.0.0:8080", "-t", "/www/"]
+
+CMD []
