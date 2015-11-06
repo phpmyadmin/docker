@@ -2,4 +2,4 @@
 
 Update 2015-11-06
 
-Run PHPMyAdmin with alpine + php
+Run PHPMyAdmin with alpine + php built in web server
