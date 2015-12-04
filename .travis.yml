@@ -23,3 +23,4 @@ script:
   - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:8090/ | grep -r 'db via TCP'
   - docker-compose up -d
   - curl http://127.0.0.1:8080/ | grep -q input_password
+  - docker-compose stop
