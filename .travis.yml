@@ -4,4 +4,4 @@ services:
   - docker
 
 script:
-  - docker build -t phpmyadmin/phpmyadmin
+  - docker build -t phpmyadmin/phpmyadmin .
