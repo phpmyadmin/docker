@@ -1,5 +1,5 @@
 phpmyadmin:
-    image: phpmyadmin:testing
+    image: phpmyadmin/phpmyadmin
     container_name: myadmin
     environment:
      - PMA_ARBITRARY=1
