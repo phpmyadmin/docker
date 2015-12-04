@@ -3,5 +3,14 @@ sudo: required
 services:
   - docker
 
+env:
+  matrix:
+    - DB=mysql:5.7
+    - DB=mariadb:10.0
+
+before_install:
+  - docker run --name db_server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d $DB
+
 script:
   - docker build -t phpmyadmin/phpmyadmin .
+  - docker run --name myadmin -d --link db_server:db -p 8080:8080 phpmyadmin/phpmyadmin
