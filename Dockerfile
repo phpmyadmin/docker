@@ -4,7 +4,8 @@ RUN apk add --update php-cli php-mysqli php-ctype php-xml php-gd php-zlib php-op
  && rm -rf /var/cache/apk/*
 
 RUN curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz | tar xzf - \
- && mv phpMyAdmin* /www
+ && mv phpMyAdmin* /www \
+ && rm -rf /www/js/jquery/src/ /www/examples /www/po/
 
 COPY config.inc.arbitrary.php /www/config.inc.arbitrary.php
 COPY config.inc.linked.php /www/config.inc.linked.php
