@@ -1,5 +1,7 @@
 <?php
-$cfg['blowfish_secret'] = 'xkjdkfj2x83kx';
+
+require('./config.secret.inc.php');
+
 $cfg['AllowArbitraryServer'] = true;
 
 $cfg['UploadDir'] = '';

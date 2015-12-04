@@ -1,5 +1,7 @@
 <?php
-$cfg['blowfish_secret'] = 'xkjdkfj2x83kx';
+
+require('./config.secret.inc.php');
+
 $i = 0;
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
