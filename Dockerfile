@@ -5,10 +5,11 @@ RUN wget --progress=dot https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-a
  && rm phpMyAdmin*.tar.gz \
  && mv phpMyAdmin* /www
 
-COPY config.inc.php /www/config.inc.php
+COPY config.inc.arbitrary.php /www/config.inc.arbitrary.php
+COPY config.inc.linked.php /www/config.inc.linked.php
+COPY run.sh /run.sh
+RUN chmod u+rwx /run.sh
 
 EXPOSE 8080
 
-ENTRYPOINT ["php", "-S", "0.0.0.0:8080", "-t", "/www/"]
-
-CMD []
+ENTRYPOINT [ "/run.sh" ]
