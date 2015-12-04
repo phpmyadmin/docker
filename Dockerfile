@@ -1,4 +1,7 @@
-FROM netroby/alpine-php
+FROM alpine
+
+RUN apk add --update php-cli php-mysqli wget php-ctype php-xml php-gd php-zlib php-openssl php-curl php-opcache php-json \
+ && rm -rf /var/cache/apk/*
 
 RUN wget --progress=dot:mega https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz \
  && tar xzf phpMyAdmin*.tar.gz \
