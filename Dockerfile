@@ -1,9 +1,9 @@
 FROM netroby/alpine-php
 
-RUN wget --no-check-certificate -c https://github.com/phpmyadmin/phpmyadmin/archive/RELEASE_4_5_2.tar.gz; \
-        tar zxvf RELEASE_4_5_2.tar.gz;\
-        mv phpmyadmin-RELEASE_4_5_2 /www; \
-        unlink *.tar.gz
+RUN wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+RUN tar xzf phpMyAdmin*.tar.gz
+RUN rm xzf phpMyAdmin*.tar.gz
+RUN mv phpMyAdmin* /www
 
 COPY config.inc.php /www/config.inc.php
 
