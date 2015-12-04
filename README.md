@@ -2,6 +2,8 @@
 
 Run PHPMyAdmin with alpine + php built in web server
 
+[![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
+
 
 ## Usage
 
