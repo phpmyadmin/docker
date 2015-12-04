@@ -1,6 +1,6 @@
 FROM netroby/alpine-php
 
-RUN wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz \
+RUN wget --progress=dot https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz \
  && tar xzf phpMyAdmin*.tar.gz \
  && rm phpMyAdmin*.tar.gz \
  && mv phpMyAdmin* /www
