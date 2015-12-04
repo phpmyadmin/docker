@@ -8,6 +8,10 @@ env:
     - DB=mysql:5.7
     - DB=mariadb:10.0
 
+matrix:
+  allow_failures:
+    - env: DB=mariadb:10.0
+
 before_install:
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d $DB
 
@@ -16,6 +20,6 @@ script:
   - docker run --name testadmin -d --link db_server:db -p 8080:8080 phpmyadmin/phpmyadmin
   - docker ps -a
   - curl http://127.0.0.1:8080/ | grep -q input_password
-  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:8080/
+  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:8080/ | grep -r 'db via TCP'
   - docker-compose build
   - docker-compose up
