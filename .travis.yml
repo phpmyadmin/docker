@@ -10,10 +10,6 @@ env:
   global:
     - PORT=8090
 
-matrix:
-  allow_failures:
-    - env: DB=mariadb:10.0
-
 before_install:
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d $DB
 
