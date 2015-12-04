@@ -13,7 +13,7 @@ before_install:
 
 script:
   - docker build -t phpmyadmin/phpmyadmin .
-  - docker run --name myadmin -d --link db_server:db -p 8080:8080 phpmyadmin/phpmyadmin
+  - docker run --name testadmin -d --link db_server:db -p 8080:8080 phpmyadmin/phpmyadmin
   - docker ps -a
   - curl http://127.0.0.1:8080/ | grep -q input_password
   - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:8080/
