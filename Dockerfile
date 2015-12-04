@@ -1,12 +1,10 @@
 FROM alpine
 
-RUN apk add --update php-cli php-mysqli php-ctype php-xml php-gd php-zlib php-openssl php-curl php-opcache php-json \
+RUN apk add --update php-cli php-mysqli php-ctype php-xml php-gd php-zlib php-openssl php-curl php-opcache php-json curl \
  && rm -rf /var/cache/apk/*
 
-RUN wget --progress=dot:mega https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz \
- && tar xzf phpMyAdmin*.tar.gz \
- && rm phpMyAdmin*.tar.gz \
- && mv phpMyAdmin* /www
+RUN mkdir /www && cd /www \
+ && curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz | tar xzf - --strip-components=1
 
 COPY config.inc.arbitrary.php /www/config.inc.arbitrary.php
 COPY config.inc.linked.php /www/config.inc.linked.php
