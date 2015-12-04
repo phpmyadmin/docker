@@ -15,3 +15,4 @@ script:
   - docker build -t phpmyadmin/phpmyadmin .
   - docker run --name myadmin -d --link db_server:db -p 8080:8080 phpmyadmin/phpmyadmin
   - docker ps -a
+  - curl http://127.0.0.1:8080/
