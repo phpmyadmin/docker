@@ -7,18 +7,24 @@ env:
   matrix:
     - DB=mysql:5.7
     - DB=mariadb:10.0
-  global:
-    - PORT=8090
 
 before_install:
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d $DB
 
 script:
+  # Build image
   - docker build -t phpmyadmin/phpmyadmin .
-  - docker run --name testadmin -d --link db_server:db -p $PORT:8080 phpmyadmin/phpmyadmin
+  # Test for single database
+  - docker run --name testadmin -d --link db_server:db -p 9090:8080 phpmyadmin/phpmyadmin
   - docker ps -a
-  - curl http://127.0.0.1:$PORT/ | grep -q input_password
-  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:$PORT/ | grep -r 'db via TCP'
+  - curl http://127.0.0.1:9090/ | grep -q input_password
+  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:9090/ | grep -r 'db via TCP'
+  # Test for arbitrary database
+  - docker run --name arbitraryadmin -d --link db_server:db -e PMA_ARBITRARY=1 -p 7070:8080 phpmyadmin/phpmyadmin
+  - docker ps -a
+  - curl http://127.0.0.1:7070/ | grep -q input_password
+  - curl --cookie-jar /tmp/cj --location -d pma_servername=db -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:7070/ | grep -r 'db via TCP'
+  # Test docker-compose
   - docker-compose up -d
   - docker ps -a
   - curl http://127.0.0.1:8080/ | grep -q input_password
