@@ -1,0 +1,8 @@
+phpmyadmin:
+    image: phpmyadmin/phpmyadmin:testing
+    container_name: myadmin
+    environment:
+     - PMA_ARBITRARY=1
+    restart: always
+    ports:
+     - 8090:8080
