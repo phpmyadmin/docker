@@ -18,7 +18,7 @@ Then open browser, visit http://***.***.host.ip:8080
 
 You will see the phpMyAdmin login page.
 
-## Usage with external server server
+## Usage with external server
 
 You can specify MySQL host in the `PMA_HOST` environment variable. You can also
 use `PMA_PORT` to specify port of the server in case it's not the default one:
