@@ -20,10 +20,10 @@ script:
   - curl http://127.0.0.1:9090/ | grep -q input_password
   - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:9090/ | grep -r 'db via TCP'
   # Test for single database using env
-  - docker run --name envadmin -d -e PMA_HOST=db_server -p 9090:8080 phpmyadmin/phpmyadmin
+  - docker run --name envadmin -d -e PMA_HOST=db_server -p 6060:8080 phpmyadmin/phpmyadmin
   - docker ps -a
-  - curl http://127.0.0.1:9090/ | grep -q input_password
-  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:9090/ | grep -r 'db via TCP'
+  - curl http://127.0.0.1:6060/ | grep -q input_password
+  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:6060/ | grep -r 'db via TCP'
   # Test for arbitrary database
   - docker run --name arbitraryadmin -d --link db_server:db -e PMA_ARBITRARY=1 -p 7070:8080 phpmyadmin/phpmyadmin
   - docker ps -a
