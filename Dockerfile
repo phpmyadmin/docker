@@ -11,6 +11,9 @@ COPY config.inc.linked.php config.inc.arbitrary.php /www/
 COPY run.sh /run.sh
 RUN chmod u+rwx /run.sh
 
+RUN sed -i -e "s/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/" /etc/php/php.ini
+RUN sed -i -e "s/^post_max_size\s*=\s*8M/post_max_size = 64M/" /etc/php/php.ini
+
 EXPOSE 8080
 
 ENTRYPOINT [ "/run.sh" ]
