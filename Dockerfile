@@ -7,7 +7,7 @@ RUN curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-l
  && mv phpMyAdmin* /www \
  && rm -rf /www/js/jquery/src/ /www/examples /www/po/
 
-COPY config.inc.linked.php config.inc.arbitrary.php /www/
+COPY config.inc.php /www/
 COPY run.sh /run.sh
 RUN chmod u+rwx /run.sh
 

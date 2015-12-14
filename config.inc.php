@@ -2,6 +2,12 @@
 
 require('./config.secret.inc.php');
 
+/* Arbitrary server connection */
+if (isset($_ENV['PMA_ARBITRARY']) && $_ENV['PMA_ARBITRARY'] === '1') {
+    $cfg['AllowArbitraryServer'] = true;
+}
+
+/* First server */
 $i = 0;
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
