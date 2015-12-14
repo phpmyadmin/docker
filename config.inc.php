@@ -7,26 +7,36 @@ if (isset($_ENV['PMA_ARBITRARY']) && $_ENV['PMA_ARBITRARY'] === '1') {
     $cfg['AllowArbitraryServer'] = true;
 }
 
-/* First server */
-$i = 0;
-$i++;
-if (isset($_ENV['PMA_HOST'])) {
-    $cfg['Servers'][$i]['host'] = $_ENV['PMA_HOST'];
-} else {
-    $cfg['Servers'][$i]['host'] = 'db';
+/* Figure out hosts */
+
+/* Fallback to default linked */
+$hosts = array('db');
+
+/* Set by environment */
+if (!empty($_ENV['PMA_HOST'])) {
+    $hosts = array($_ENV['PMA_HOST']);
+} elseif (!empty($_ENV['PMA_HOSTS'])) {
+    $hosts = explode(',', $_ENV['PMA_HOSTS']);
 }
-if (isset($_ENV['PMA_PORT'])) {
-    $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
+
+/* Server settings */
+for ($i = 1; isset($hosts[$i - 1]); $i++) {
+    $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
+    if (isset($_ENV['PMA_PORT'])) {
+        $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
+    }
+    if (isset($_ENV['PMA_USER']) && isset($_ENV['PMA_PASSWORD'])) {
+        $cfg['Servers'][$i]['auth_type'] = 'config';
+        $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
+        $cfg['Servers'][$i]['password'] = $_ENV['PMA_PASSWORD'];
+    } else {
+        $cfg['Servers'][$i]['auth_type'] = 'cookie';
+    }
+    $cfg['Servers'][$i]['connect_type'] = 'tcp';
+    $cfg['Servers'][$i]['compress'] = false;
+    $cfg['Servers'][$i]['AllowNoPassword'] = true;
 }
-if (isset($_ENV['PMA_USER']) && isset($_ENV['PMA_PASSWORD'])) {
-    $cfg['Servers'][$i]['auth_type'] = 'config';
-    $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
-    $cfg['Servers'][$i]['password'] = $_ENV['PMA_PASSWORD'];
-} else {
-    $cfg['Servers'][$i]['auth_type'] = 'cookie';
-}
-$cfg['Servers'][$i]['connect_type'] = 'tcp';
-$cfg['Servers'][$i]['compress'] = false;
-$cfg['Servers'][$i]['AllowNoPassword'] = true;
+
+/* Uploads setup */
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
