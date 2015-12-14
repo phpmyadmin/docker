@@ -18,7 +18,7 @@ if (isset($_ENV['PMA_HOST'])) {
 if (isset($_ENV['PMA_PORT'])) {
     $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
 }
-if (isset($_ENV['PMA_USER']) && isset($_ENV['PMA_PASSWORD']) {
+if (isset($_ENV['PMA_USER']) && isset($_ENV['PMA_PASSWORD'])) {
     $cfg['Servers'][$i]['auth_type'] = 'config';
     $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
     $cfg['Servers'][$i]['password'] = $_ENV['PMA_PASSWORD'];
