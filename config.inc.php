@@ -40,10 +40,10 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     if (isset($_ENV['PMA_PORT'])) {
         $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
     }
-    if (isset($_ENV['PMA_USER']) && isset($_ENV['PMA_PASSWORD'])) {
+    if (isset($_ENV['PMA_USER'])) {                                
         $cfg['Servers'][$i]['auth_type'] = 'config';
         $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
-        $cfg['Servers'][$i]['password'] = $_ENV['PMA_PASSWORD'];
+        $cfg['Servers'][$i]['password'] = isset($_ENV['PMA_PASSWORD']) ? $_ENV['PMA_PASSWORD'] : null;
     } else {
         $cfg['Servers'][$i]['auth_type'] = 'cookie';
     }
