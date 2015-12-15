@@ -2,6 +2,21 @@
 
 require('./config.secret.inc.php');
 
+/* Ensure we got the environment */
+$vars = array(
+    'PMA_ARBITRARY',
+    'PMA_HOST',
+    'PMA_HOSTS',
+    'PMA_PORT',
+    'PMA_USER',
+    'PMA_PASSWORD',
+);
+foreach ($vars as $var) {
+    if (!isset($_ENV[$var]) && getenv($var)) {
+        $_ENV[$var] = getenv($var);
+    }
+}
+
 /* Arbitrary server connection */
 if (isset($_ENV['PMA_ARBITRARY']) && $_ENV['PMA_ARBITRARY'] === '1') {
     $cfg['AllowArbitraryServer'] = true;
