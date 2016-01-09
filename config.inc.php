@@ -10,6 +10,7 @@ $vars = array(
     'PMA_PORT',
     'PMA_USER',
     'PMA_PASSWORD',
+    'PMA_ABSOLUTE_URI'
 );
 foreach ($vars as $var) {
     if (!isset($_ENV[$var]) && getenv($var)) {
