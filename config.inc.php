@@ -22,6 +22,11 @@ if (isset($_ENV['PMA_ARBITRARY']) && $_ENV['PMA_ARBITRARY'] === '1') {
     $cfg['AllowArbitraryServer'] = true;
 }
 
+/* Play nice behind reverse proxys */
+if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
+    $cfg['PmaAbsoluteUri'] = trim($_ENV['PMA_ABSOLUTE_URI']);
+}
+
 /* Figure out hosts */
 
 /* Fallback to default linked */
