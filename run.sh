@@ -8,4 +8,4 @@ if [ ! -f /www/config.secret.inc.php ] ; then
 EOT
 fi
 
-exec php -S 0.0.0.0:8080 -t /www/
+exec php -S 0.0.0.0:80 -t /www/
