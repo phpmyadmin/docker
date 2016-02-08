@@ -5,4 +5,4 @@ phpmyadmin:
      - PMA_ARBITRARY=1
     restart: always
     ports:
-     - 8090:8080
+     - 8090:80

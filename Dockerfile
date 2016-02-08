@@ -16,6 +16,6 @@ RUN sed -i \
     -e "s/^;\s*max_input_vars\s*=\s*1000/max_input_vars = 2000/" \
     /etc/php/php.ini
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT [ "/run.sh" ]
