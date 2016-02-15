@@ -56,3 +56,5 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_HOSTS`` - define comma separated list of address/host names of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
+* ``PHP_UPLOAD_MAX_FILESIZE`` - define upload_max_filesize and post_max_size PHP settings
+* ``PHP_MAX_INPUT_VARS`` - define max_input_vars PHP setting 
