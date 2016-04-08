@@ -58,3 +58,5 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
 * ``PHP_UPLOAD_MAX_FILESIZE`` - define upload_max_filesize and post_max_size PHP settings
 * ``PHP_MAX_INPUT_VARS`` - define max_input_vars PHP setting 
+
+For more detailed documentation see http://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
