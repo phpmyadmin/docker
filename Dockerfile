@@ -7,12 +7,14 @@ RUN curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-l
  && rm -rf /www/js/jquery/src/ /www/examples /www/po/
 
 COPY config.inc.php /www/
-COPY run.sh /run.sh
-RUN chmod u+rwx /run.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 80
 
 ENV PHP_UPLOAD_MAX_FILESIZE=64M \
     PHP_MAX_INPUT_VARS=2000
 
-ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+STOPSIGNAL SIGINT
+
+CMD ["phpmyadmin"]
