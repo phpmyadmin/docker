@@ -8,7 +8,6 @@ RUN curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-l
 
 COPY config.inc.php /www/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod u+rwx /docker-entrypoint.sh
 
 EXPOSE 80
 
