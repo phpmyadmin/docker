@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:edge
 
 RUN apk add --no-cache php-cli php-mysqli php-ctype php-xml php-gd php-zlib php-openssl php-curl php-opcache php-json php-mcrypt curl
 
