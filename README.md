@@ -3,6 +3,7 @@
 Run phpMyAdmin with Alpine and PHP built in web server.
 
 [![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)](https://hub.docker.com/r/phpmyadmin/phpmyadmin/)
 
 All following examples will bring you phpMyAdmin on `http://localhost:8080`
 where you can enjoy your happy MySQL administration.
