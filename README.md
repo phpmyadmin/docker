@@ -3,6 +3,9 @@
 Run phpMyAdmin with Alpine and PHP built in web server.
 
 [![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)][hub]
+[![Docker Stars](https://img.shields.io/docker/stars/phpmyadmin/phpmyadmin.svg)][hub]
+
 
 All following examples will bring you phpMyAdmin on `http://localhost:8080`
 where you can enjoy your happy MySQL administration.
@@ -60,3 +63,5 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PHP_MAX_INPUT_VARS`` - define max_input_vars PHP setting 
 
 For more detailed documentation see http://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
+
+[hub]: https://hub.docker.com/r/phpmyadmin/phpmyadmin/
