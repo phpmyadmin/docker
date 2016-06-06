@@ -11,6 +11,8 @@ COPY config.inc.php /www/
 COPY run.sh /run.sh
 RUN chmod u+rwx /run.sh
 
+VOLUME /sessions
+
 EXPOSE 80
 
 ENV PHP_UPLOAD_MAX_FILESIZE=64M \
