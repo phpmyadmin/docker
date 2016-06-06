@@ -35,3 +35,7 @@ script:
   - curl http://127.0.0.1:8080/ | grep -q input_password
   - curl --cookie-jar /tmp/cj --location -d pma_servername=db -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:8080/ | grep -r 'db via TCP'
   - docker-compose stop
+  # Test session survives shutdown
+  - docker-compose up -d
+  - curl --cookie-jar /tmp/cj --location http://127.0.0.1:8080/ | grep -r 'db via TCP'
+  - docker-compose stop
