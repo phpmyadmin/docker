@@ -1,7 +1,7 @@
 # Switch back to stable once 3.4 is out
 FROM alpine:edge
 
-RUN apk add --no-cache php-cli php-mysqli php-ctype php-xml php-gd php-zlib php-openssl php-curl php-opcache php-json php-mcrypt curl
+RUN apk add --no-cache php5-cli php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz2 php5-zip php5-openssl php5-curl php5-opcache php5-json php5-mcrypt curl
 
 RUN curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz | tar xzf - \
  && mv phpMyAdmin* /www \
@@ -9,6 +9,8 @@ RUN curl --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-l
 
 COPY config.inc.php /www/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+VOLUME ["/sessions"]
 
 EXPOSE 80
 
@@ -19,3 +21,4 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
 
 CMD ["phpmyadmin"]
+

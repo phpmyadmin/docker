@@ -1,29 +1,19 @@
-DOCKER_REPO = phpmyadmin/phpmyadmin
+PRIVATE_REGISTRY_URL=ro.lan:5000
 
-.PHONY: all build build_nc run logs clean stop rm prune
+DOCKER_IMAGE=tranhuucuong91/phpmyadmin
+VERSION=4.6.2
 
-all: build run logs
+all: build
 
 build:
-	docker build -t ${DOCKER_REPO}:testing .
+	docker build --tag=${DOCKER_IMAGE}:${VERSION} .
 
-build_nc:
-	docker build --no-cache=true -t ${DOCKER_REPO}:testing .
+push:
+	docker push ${DOCKER_IMAGE}:${VERSION}
 
-run:
-	docker-compose -f docker-compose.testing.yml up -d
+build-for-private-registry:
+	docker build --tag=${PRIVATE_REGISTRY_URL}/${DOCKER_IMAGE}:${VERSION} .
 
-logs:
-	docker-compose -f docker-compose.testing.yml logs
+push-for-private-registry:
+	docker push ${PRIVATE_REGISTRY_URL}/${DOCKER_IMAGE}:${VERSION}
 
-clean: stop rm prune
-
-stop:
-	docker-compose -f docker-compose.testing.yml stop
-
-rm:
-	docker-compose -f docker-compose.testing.yml rm
-
-prune:
-	docker rm `docker ps -q -a --filter status=exited`
-	docker rmi `docker images -q --filter "dangling=true"`
