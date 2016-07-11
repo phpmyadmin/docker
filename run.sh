@@ -8,6 +8,10 @@ if [ ! -f /www/config.secret.inc.php ] ; then
 EOT
 fi
 
+if [ ! -f /www/config.userdef.inc.php ] ; then
+  touch /www/config.userdef.inc.php
+fi
+
 exec php -S 0.0.0.0:80 -t /www/ \
     -d upload_max_filesize=$PHP_UPLOAD_MAX_FILESIZE \
     -d post_max_size=$PHP_UPLOAD_MAX_FILESIZE \
