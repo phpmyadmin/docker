@@ -58,6 +58,6 @@ docker-compose up -d
 * ``PHP_UPLOAD_MAX_FILESIZE`` - define upload_max_filesize and post_max_size PHP settings
 * ``PHP_MAX_INPUT_VARS`` - define max_input_vars PHP setting 
 
-For more detailed documentation see http://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
+For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
 [hub]: https://hub.docker.com/r/phpmyadmin/phpmyadmin/
