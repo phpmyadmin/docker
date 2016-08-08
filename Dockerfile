@@ -4,16 +4,19 @@ RUN apk add --no-cache php5-cli php5-mysqli php5-ctype php5-xml php5-gd php5-zli
 
 COPY phpmyadmin.keyring /
 
+ENV VERSION 4.6.3
+ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
+
 RUN set -x \
     && export GNUPGHOME="$(mktemp -d)" \
     && apk add --no-cache curl gnupg \
-    && curl --output phpMyAdmin-latest-all-languages.tar.gz --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz \
-    && curl --output phpMyAdmin-latest-all-languages.tar.gz.asc --location https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz.asc \
-    && gpgv --keyring /phpmyadmin.keyring phpMyAdmin-latest-all-languages.tar.gz.asc phpMyAdmin-latest-all-languages.tar.gz \
+    && curl --output phpMyAdmin.tar.gz --location $URL \
+    && curl --output phpMyAdmin.tar.gz.asc --location $URL.asc \
+    && gpgv --keyring /phpmyadmin.keyring phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz \
     && apk del curl gnupg \
     && rm -rf "$GNUPGHOME" \
-    && tar xzf phpMyAdmin-latest-all-languages.tar.gz \
-    && rm -f phpMyAdmin-latest-all-languages.tar.gz phpMyAdmin-latest-all-languages.tar.gz.asc \
+    && tar xzf phpMyAdmin.tar.gz \
+    && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
     && mv phpMyAdmin* /www \
     && rm -rf /www/js/jquery/src/ /www/examples /www/po/
 
