@@ -13,7 +13,7 @@ RUN set -x \
     && curl --output phpMyAdmin.tar.gz --location $URL \
     && curl --output phpMyAdmin.tar.gz.asc --location $URL.asc \
     && gpgv --keyring /phpmyadmin.keyring phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz \
-    && apk del curl gnupg \
+    && apk del --no-cache curl gnupg \
     && rm -rf "$GNUPGHOME" \
     && tar xzf phpMyAdmin.tar.gz \
     && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
