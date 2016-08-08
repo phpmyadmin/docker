@@ -57,5 +57,7 @@ $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
 /* Include User Defined Settings Hook */
-include('./config.userdef.inc.php');
+if (file_exists('/config.user.inc.php')) {
+    include('/config.user.inc.php');
+}
 

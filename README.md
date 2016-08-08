@@ -51,15 +51,15 @@ docker-compose up -d
 ## Adding Custom Configuration
 
 You can add your own custom config.inc.php settings (such as Configuration Storage setup) 
-by creating a file named "config.userdef.inc.php" with the various user defined settings
+by creating a file named "config.user.inc.php" with the various user defined settings
 in it, and then linking it into the container using:
 
 ```
--v /some/local/directory/config.userdef.inc.php:/www/config.userdef.inc.php
+-v /some/local/directory/config.user.inc.php:/config.user.inc.php
 ```
 On the "docker run" line like this:
 ``` 
-docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.userdef.inc.php:/www/config.userdef.inc.php phpmyadmin/phpmyadmin
+docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/config.user.inc.php phpmyadmin/phpmyadmin
 ```
 
 See the following links for config file information.

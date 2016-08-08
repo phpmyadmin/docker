@@ -8,8 +8,8 @@ if [ ! -f /www/config.secret.inc.php ] ; then
 EOT
 fi
 
-if [ ! -f /www/config.userdef.inc.php ] ; then
-  touch /www/config.userdef.inc.php
+if [ ! -f /config.user.inc.php ] ; then
+  touch /config.user.inc.php
 fi
 
 exec php -S 0.0.0.0:80 -t /www/ \
