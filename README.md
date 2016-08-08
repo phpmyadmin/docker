@@ -48,6 +48,24 @@ Using the docker-compose.yml from https://github.com/phpmyadmin/docker
 docker-compose up -d
 ```
 
+## Adding Custom Configuration
+
+You can add your own custom config.inc.php settings (such as Configuration Storage setup) 
+by creating a file named "config.userdef.inc.php" with the various user defined settings
+in it, and then linking it into the container using:
+
+```
+-v /some/local/directory/config.userdef.inc.php:/www/config.userdef.inc.php
+```
+On the "docker run" line like this:
+``` 
+docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.userdef.inc.php:/www/config.userdef.inc.php phpmyadmin/phpmyadmin
+```
+
+See the following links for config file information.
+http://docs.phpmyadmin.net/en/latest/config.html#config
+http://docs.phpmyadmin.net/en/latest/setup.html
+
 ## Environment variables summary
 
 * ``PMA_ARBITRARY`` - when set to 1 connection to the arbitrary server will be allowed

@@ -55,3 +55,7 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
 /* Uploads setup */
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
+
+/* Include User Defined Settings Hook */
+include('./config.userdef.inc.php');
+
