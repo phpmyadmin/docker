@@ -10,6 +10,7 @@ $vars = array(
     'PMA_PORT',
     'PMA_USER',
     'PMA_PASSWORD',
+    'PMA_ABSOLUTE_URI'
 );
 foreach ($vars as $var) {
     if (!isset($_ENV[$var]) && getenv($var)) {
@@ -20,6 +21,11 @@ foreach ($vars as $var) {
 /* Arbitrary server connection */
 if (isset($_ENV['PMA_ARBITRARY']) && $_ENV['PMA_ARBITRARY'] === '1') {
     $cfg['AllowArbitraryServer'] = true;
+}
+
+/* Play nice behind reverse proxys */
+if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
+    $cfg['PmaAbsoluteUri'] = trim($_ENV['PMA_ABSOLUTE_URI']);
 }
 
 /* Figure out hosts */

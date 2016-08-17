@@ -75,6 +75,10 @@ See the following links for config file information.
 http://docs.phpmyadmin.net/en/latest/config.html#config
 http://docs.phpmyadmin.net/en/latest/setup.html
 
+## Usage behind reverse proxys
+
+Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma.example.net/``) where the reverse proxy makes phpMyAdmin available.
+
 ## Environment variables summary
 
 * ``PMA_ARBITRARY`` - when set to 1 connection to the arbitrary server will be allowed
@@ -82,6 +86,7 @@ http://docs.phpmyadmin.net/en/latest/setup.html
 * ``PMA_PORT`` - define port of the MySQL server
 * ``PMA_HOSTS`` - define comma separated list of address/host names of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
+* ``PMA_ABSOLUTE_URI`` - define user-facing URI
 * ``PHP_UPLOAD_MAX_FILESIZE`` - define upload_max_filesize and post_max_size PHP settings
 * ``PHP_MAX_INPUT_VARS`` - define max_input_vars PHP setting 
 
