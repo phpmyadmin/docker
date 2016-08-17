@@ -10,6 +10,15 @@ Run phpMyAdmin with Alpine and PHP built in web server.
 All following examples will bring you phpMyAdmin on `http://localhost:8080`
 where you can enjoy your happy MySQL administration.
 
+## Credentials
+
+phpMyAdmin does use MySQL server credential, please check the corresponding
+server image for information how it is setup.
+
+The official MySQL and MariaDB use following environment variables to define these:
+
+* `MYSQL_ROOT_PASSWORD` - This variable is mandatory and specifies the password that will be set for the `root` superuser account.
+* `MYSQL_USER`, `MYSQL_PASSWORD` - These variables are optional, used in conjunction to create a new user and to set that user's password.
 
 ## Usage with linked server
 
