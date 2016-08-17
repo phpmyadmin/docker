@@ -4,7 +4,7 @@ RUN apk add --no-cache php5-cli php5-mysqli php5-ctype php5-xml php5-gd php5-zli
 
 COPY phpmyadmin.keyring /
 
-ENV VERSION 4.6.3
+ENV VERSION 4.6.4
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
 
 RUN set -x \
