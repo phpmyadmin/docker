@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Install dependencies
-RUN apk add --no-cache php5-cli php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz2 php5-zip php5-openssl php5-curl php5-opcache php5-json
+RUN apk add --no-cache php5-cli php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz2 php5-zip php5-openssl php5-curl php5-opcache php5-json nginx php5-fpm supervisor && rm -rf /var/www/*
 
 # Include keyring to verify download
 COPY phpmyadmin.keyring /
@@ -9,6 +9,8 @@ COPY phpmyadmin.keyring /
 # Calculate download URL
 ENV VERSION 4.6.4
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
+
+RUN sed -i 's/^loglevel=.*/loglevel=debug/' /etc/supervisord.conf
 
 # Download tarball, verify it using gpg and extract
 RUN set -x \
@@ -26,6 +28,7 @@ RUN set -x \
 
 # Copy configuration
 COPY config.inc.php /www/
+COPY etc /etc/
 
 # Copy main script
 COPY run.sh /run.sh
@@ -37,8 +40,5 @@ VOLUME /sessions
 # We expose phpMyAdmin on port 80
 EXPOSE 80
 
-# Configure some PHP limits
-ENV PHP_UPLOAD_MAX_FILESIZE=64M \
-    PHP_MAX_INPUT_VARS=2000
-
 ENTRYPOINT [ "/run.sh" ]
+CMD ["phpmyadmin"]
