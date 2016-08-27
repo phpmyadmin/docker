@@ -25,9 +25,9 @@ script:
   - ./test-docker.sh arbitraryadmin 7070
   # Test docker-compose
   - docker-compose up -d
-  - ./test-docker.sh mydmin 8080
+  - ./test-docker.sh phpmyadmin 8080
   - docker-compose stop
   # Test session survives shutdown
   - docker-compose up -d
-  - ./test-docker.sh mydmin 8080
+  - ./test-docker.sh phpmyadmin 8080
   - docker-compose stop
