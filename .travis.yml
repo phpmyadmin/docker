@@ -16,39 +16,18 @@ script:
   - docker build -t phpmyadmin/phpmyadmin .
   # Test for single database
   - docker run --name testadmin -d --link db_server:db -p 9090:80 phpmyadmin/phpmyadmin
-  - docker ps -a
-  - sleep 10
-  - docker exec testadmin ps faux
-  - docker exec testadmin ls -la '/etc/supervisor.d/*.ini'
-  - docker exec testadmin cat /etc/supervisor.d/nginx.ini
-  - docker exec testadmin cat /var/log/supervisord.log
-  - docker exec testadmin cat /var/log/php7.0-fpm.log
-  - docker exec testadmin cat /var/log/nging-error.log
-  - curl http://127.0.0.1:9090/ | grep -q input_password
-  - docker exec testadmin cat /var/log/php7.0-fpm.log
-  - docker exec testadmin cat /var/log/nging-error.log
-  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:9090/ | grep -r 'db via TCP'
-  - docker exec testadmin cat /var/log/php7.0-fpm.log
-  - docker exec testadmin cat /var/log/nging-error.log
+  - ./test-docker.sh testadmin 9090
   # Test for single database using env
   - docker run --name envadmin -d --link db_server:db2 -e PMA_HOST=db2 -p 6060:80 phpmyadmin/phpmyadmin
-  - docker ps -a
-  - docker exec envadmin ps faux
-  - curl http://127.0.0.1:6060/ | grep -q input_password
-  - curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:6060/ | grep -r 'db2 via TCP'
+  - ./test-docker.sh envadmin 6060
   # Test for arbitrary database
   - docker run --name arbitraryadmin -d --link db_server:db -e PMA_ARBITRARY=1 -p 7070:80 phpmyadmin/phpmyadmin
-  - docker ps -a
-  - docker exec arbitraryadmin ps faux
-  - curl http://127.0.0.1:7070/ | grep -q input_password
-  - curl --cookie-jar /tmp/cj --location -d pma_servername=db -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:7070/ | grep -r 'db via TCP'
+  - ./test-docker.sh arbitraryadmin 7070
   # Test docker-compose
   - docker-compose up -d
-  - docker ps -a
-  - curl http://127.0.0.1:8080/ | grep -q input_password
-  - curl --cookie-jar /tmp/cj --location -d pma_servername=db -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:8080/ | grep -r 'db via TCP'
+  - ./test-docker.sh mydmin 8080
   - docker-compose stop
   # Test session survives shutdown
   - docker-compose up -d
-  - curl --cookie-jar /tmp/cj --location http://127.0.0.1:8080/ | grep -r 'db via TCP'
+  - ./test-docker.sh mydmin 8080
   - docker-compose stop
