@@ -11,3 +11,5 @@ docker ps -a
 docker exec $NAME ps faux
 curl http://127.0.0.1:$PORT/ | grep -q input_password
 curl --cookie-jar /tmp/cj --location -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:$PORT/ | grep -r 'db via TCP'
+docker exec $NAME cat /var/log/php7.0-fpm.log
+docker exec $NAME cat /var/log/nginx-error.log
