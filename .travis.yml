@@ -5,8 +5,8 @@ services:
 
 env:
   matrix:
-    - DB=mysql:5.7
-    - DB=mariadb:10.0
+    - DB=mysql:latest
+    - DB=mariadb:latest
 
 before_install:
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d $DB
