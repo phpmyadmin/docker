@@ -12,6 +12,8 @@ if [ ! -f /config.user.inc.php ] ; then
   touch /config.user.inc.php
 fi
 
+chown nobody:nobody /sessions
+
 #!/usr/bin/env sh
 
 cd $(dirname $0)
