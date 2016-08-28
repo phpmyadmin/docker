@@ -10,8 +10,6 @@ COPY phpmyadmin.keyring /
 ENV VERSION 4.6.4
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
 
-RUN sed -i 's/^loglevel=.*/loglevel=debug/' /etc/supervisord.conf
-
 # Download tarball, verify it using gpg and extract
 RUN set -x \
     && export GNUPGHOME="$(mktemp -d)" \
