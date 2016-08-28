@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function check() {
+check() {
     ret=$?
     if [ $ret -ne 0 ] ; then
         curl http://127.0.0.1:$PORT/
