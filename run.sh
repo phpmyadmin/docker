@@ -1,6 +1,4 @@
 #!/bin/sh
-set -x
-
 if [ ! -f /www/config.secret.inc.php ] ; then
     cat > /www/config.secret.inc.php <<EOT
 <?php
@@ -13,10 +11,6 @@ if [ ! -f /config.user.inc.php ] ; then
 fi
 
 chown nobody:nobody /sessions
-
-#!/usr/bin/env sh
-
-cd $(dirname $0)
 
 if [ "$1" = 'phpmyadmin' ]; then
     exec supervisord --nodaemon --configuration="/etc/supervisord.conf" --loglevel=debug
