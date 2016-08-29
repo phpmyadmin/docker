@@ -9,6 +9,9 @@ import mechanize
 def test_phpmyadmin(url, username, password, server=None, sqlfile='world.sql'):
     br = mechanize.Browser()
 
+    # Ignore robots.txt
+    br.set_handle_robots(False)
+
     # Login page
     br.open(url)
 
