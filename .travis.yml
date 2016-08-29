@@ -26,12 +26,3 @@ script:
   # Test for arbitrary database
   - docker run --name arbitraryadmin -d --link db_server:db3 -e PMA_ARBITRARY=1 -p 7070:80 phpmyadmin/phpmyadmin
   - ./test-docker.sh arbitraryadmin 7070 db3
-  # Test docker-compose (both arbitrary server and without)
-  - docker-compose up -d
-  - ./test-docker.sh phpmyadmin 8080
-  - ./test-docker.sh phpmyadmin 8080 db
-  - docker-compose stop
-  # Test session survives shutdown
-  - docker-compose up -d
-  - ./test-docker.sh phpmyadmin 8080
-  - docker-compose stop
