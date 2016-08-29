@@ -31,7 +31,7 @@ def test_phpmyadmin(url, username, password, server=None, sqlfile='world.sql'):
     assert 'OpenDocument Spreadsheet' in response.read()
 
     # Upload SQL file
-    br.select_form(nr=4)
+    br.select_form('import')
     br.form.add_file(open(sqlfile), 'text/plain', sqlfile)
     response = br.submit()
     assert '5326 queries executed' in response.read()
