@@ -4,3 +4,6 @@ docker-compose.testing.yml
 README.md
 LICENSE
 Makefile
+world.sql
+test-docker.sh
+phpmyadmin_test.py
