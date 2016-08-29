@@ -21,8 +21,8 @@ script:
   - docker run --name envadmin -d --link db_server:db2 -e PMA_HOST=db2 -p 6060:80 phpmyadmin/phpmyadmin
   - ./test-docker.sh envadmin 6060
   # Test for arbitrary database
-  - docker run --name arbitraryadmin -d --link db_server:db -e PMA_ARBITRARY=1 -p 7070:80 phpmyadmin/phpmyadmin
-  - ./test-docker.sh arbitraryadmin 7070
+  - docker run --name arbitraryadmin -d --link db_server:db3 -e PMA_ARBITRARY=1 -p 7070:80 phpmyadmin/phpmyadmin
+  - ./test-docker.sh arbitraryadmin 7070 db3
   # Test docker-compose
   - docker-compose up -d
   - ./test-docker.sh phpmyadmin 8080
