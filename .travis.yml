@@ -11,6 +11,9 @@ env:
 before_install:
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d $DB
 
+install:
+  - pip install mechanize
+
 script:
   # Build image
   - docker build -t phpmyadmin/phpmyadmin .

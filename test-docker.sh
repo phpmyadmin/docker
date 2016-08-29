@@ -1,16 +1,5 @@
 #!/bin/sh
 
-check() {
-    ret=$?
-    if [ $ret -ne 0 ] ; then
-        curl http://127.0.0.1:$PORT/
-        docker exec $NAME cat /var/log/php7.0-fpm.log
-        docker exec $NAME cat /var/log/nginx-error.log
-        exit $ret
-    fi
-}
-
-set -e
 set -x
 
 NAME=$1
@@ -21,13 +10,19 @@ else
     SERVER=db
 fi
 
+URL=http://127.0.0.1:$PORT/
+URL=http://localhost/phpmyadmin/
+
+# Wait for container to start
 while ! docker exec $NAME ps aux | grep -q nginx ; do echo 'Waiting for start...'; sleep 1; done
 
-docker ps -a
-docker exec $NAME ps faux
-
-curl http://127.0.0.1:$PORT/ | grep -q input_password
-check
-
-curl --cookie-jar /tmp/cj --location  -d pma_servername=$SERVER -d pma_username=root -d pma_password=my-secret-pw -d server=1 http://127.0.0.1:$PORT/ | grep -r 'db via TCP'
-check
+# Perform tests
+python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password -my-secret-pw --server $SERVER
+if [ $ret -ne 0 ] ; then
+    curl http://127.0.0.1:$PORT/
+    docker ps -a
+    docker exec $NAME ps faux
+    docker exec $NAME cat /var/log/php7.0-fpm.log
+    docker exec $NAME cat /var/log/nginx-error.log
+    exit $ret
+fi
