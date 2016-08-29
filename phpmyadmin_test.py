@@ -6,6 +6,12 @@ import sys
 import mechanize
 
 
+def test_content(match, content):
+    if not match in content:
+        print content
+        raise Exception('{0} not found in content!'.format(match))
+
+
 def test_phpmyadmin(url, username, password, server=None, sqlfile='world.sql'):
     br = mechanize.Browser()
 
@@ -24,17 +30,17 @@ def test_phpmyadmin(url, username, password, server=None, sqlfile='world.sql'):
 
     # Login and check if loggged in
     response = br.submit()
-    assert 'Server version' in response.read()
+    test_content('Server version', response.read())
 
     # Open server import
     response = br.follow_link(text_regex=re.compile('Import'))
-    assert 'OpenDocument Spreadsheet' in response.read()
+    test_content('OpenDocument Spreadsheet', response.read())
 
     # Upload SQL file
     br.select_form('import')
     br.form.add_file(open(sqlfile), 'text/plain', sqlfile)
     response = br.submit()
-    assert '5326 queries executed' in response.read()
+    test_content('5326 queries executed', response.read())
 
 
 def main():
@@ -47,6 +53,7 @@ def main():
     args = parser.parse_args()
 
     test_phpmyadmin(args.url, args.username, args.password, args.server, args.sqlfile)
+
 
 if __name__ == '__main__':
     main()
