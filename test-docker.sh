@@ -5,9 +5,9 @@ set -x
 NAME=$1
 PORT=$2
 if [ -n "$3" ] ; then
-    SERVER=$3
+    SERVER="--server $3"
 else
-    SERVER=db
+    SERVER=''
 fi
 
 URL=http://127.0.0.1:$PORT/
@@ -17,7 +17,7 @@ URL=http://localhost/phpmyadmin/
 while ! docker exec $NAME ps aux | grep -q nginx ; do echo 'Waiting for start...'; sleep 1; done
 
 # Perform tests
-python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password my-secret-pw --server $SERVER
+python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password my-secret-pw $SERVER
 ret=$?
 if [ $ret -ne 0 ] ; then
     curl http://127.0.0.1:$PORT/
