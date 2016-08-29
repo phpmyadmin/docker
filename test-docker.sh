@@ -17,7 +17,8 @@ URL=http://localhost/phpmyadmin/
 while ! docker exec $NAME ps aux | grep -q nginx ; do echo 'Waiting for start...'; sleep 1; done
 
 # Perform tests
-python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password -my-secret-pw --server $SERVER
+python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password my-secret-pw --server $SERVER
+ret=$?
 if [ $ret -ne 0 ] ; then
     curl http://127.0.0.1:$PORT/
     docker ps -a
