@@ -10,7 +10,8 @@ if [ ! -f /config.user.inc.php ] ; then
   touch /config.user.inc.php
 fi
 
-chown nobody:nobody /sessions
+mkdir -p /var/nginx/client_body_temp
+chown nobody:nobody /sessions /var/nginx/client_body_temp
 
 if [ "$1" = 'phpmyadmin' ]; then
     exec supervisord --nodaemon --configuration="/etc/supervisord.conf" --loglevel=debug
