@@ -22,7 +22,7 @@ RUN set -x \
     && tar xzf phpMyAdmin.tar.gz \
     && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
     && mv phpMyAdmin* /www \
-    && rm -rf /www/js/jquery/src/ /www/setup/ /www/sql/ /www/examples/ /www/test/ /www/po/
+    && rm -rf /www/js/jquery/src/ /www/js/openlayers/src/ /www/setup/ /www/sql/ /www/examples/ /www/test/ /www/po/
 
 # Copy configuration
 COPY config.inc.php /www/
