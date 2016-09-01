@@ -5,6 +5,8 @@ Run phpMyAdmin with Alpine, supervisor, nginx and PHP FPM.
 [![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)][hub]
 [![Docker Stars](https://img.shields.io/docker/stars/phpmyadmin/phpmyadmin.svg)][hub]
+[![Docker Layers](https://images.microbadger.com/badges/image/phpmyadmin/phpmyadmin.svg)](http://microbadger.com/images/phpmyadmin/phpmyadmin "Get your own image badge on microbadger.com")
+[![Docker Version](https://images.microbadger.com/badges/version/phpmyadmin/phpmyadmin.svg)](http://microbadger.com/images/phpmyadmin/phpmyadmin "Get your own version badge on microbadger.com")
 
 
 All following examples will bring you phpMyAdmin on `http://localhost:8080`
