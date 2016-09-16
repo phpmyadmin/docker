@@ -1,4 +1,4 @@
-FROM alpine:3.4.3
+FROM alpine:3.4
 
 # Install dependencies
 RUN apk add --no-cache php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz2 php5-zip php5-openssl php5-curl php5-opcache php5-json nginx php5-fpm supervisor
