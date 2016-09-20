@@ -27,3 +27,5 @@ if [ $ret -ne 0 ] ; then
     docker exec $NAME cat /var/log/nginx-error.log
     exit $ret
 fi
+# List processes
+docker exec $NAME ps faux
