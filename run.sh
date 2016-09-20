@@ -12,6 +12,8 @@ fi
 
 mkdir -p /var/nginx/client_body_temp
 chown nobody:nobody /sessions /var/nginx/client_body_temp
+mkdir -p /var/run/php/
+chown nobody:nobod /var/run/php/
 
 if [ "$1" = 'phpmyadmin' ]; then
     exec supervisord --nodaemon --configuration="/etc/supervisord.conf" --loglevel=debug
