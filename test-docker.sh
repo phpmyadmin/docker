@@ -25,6 +25,7 @@ if [ $ret -ne 0 ] ; then
     docker exec $NAME ps faux
     docker exec $NAME cat /var/log/php7.0-fpm.log
     docker exec $NAME cat /var/log/nginx-error.log
+    docker exec $NAME cat /var/log/supervisord.log
     exit $ret
 fi
 # List processes
