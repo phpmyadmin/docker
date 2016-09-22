@@ -36,13 +36,18 @@ $hosts = array('db');
 /* Set by environment */
 if (!empty($_ENV['PMA_HOST'])) {
     $hosts = array($_ENV['PMA_HOST']);
+    $verbose = array($_ENV['PMA_VERBOSE']);
 } elseif (!empty($_ENV['PMA_HOSTS'])) {
     $hosts = explode(',', $_ENV['PMA_HOSTS']);
+    $verbose = explode(',', $_ENV['PMA_VERBOSES']);
 }
 
 /* Server settings */
 for ($i = 1; isset($hosts[$i - 1]); $i++) {
     $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
+    if (isset($verbose[$i - 1])) {
+        $cfg['Servers'][$i]['verbose'] = $verbose[$i - 1];
+    }
     if (isset($_ENV['PMA_PORT'])) {
         $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
     }
