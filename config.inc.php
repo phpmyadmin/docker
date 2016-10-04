@@ -7,6 +7,8 @@ $vars = array(
     'PMA_ARBITRARY',
     'PMA_HOST',
     'PMA_HOSTS',
+    'PMA_VERBOSE',
+    'PMA_VERBOSES',
     'PMA_PORT',
     'PMA_USER',
     'PMA_PASSWORD',
@@ -71,4 +73,3 @@ $cfg['SaveDir'] = '';
 if (file_exists('/config.user.inc.php')) {
     include('/config.user.inc.php');
 }
-
