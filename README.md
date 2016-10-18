@@ -95,3 +95,5 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
 [hub]: https://hub.docker.com/r/phpmyadmin/phpmyadmin/
+
+Please report any issues with the Docker container to https://github.com/phpmyadmin/docker/issues
