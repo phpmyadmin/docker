@@ -7,3 +7,4 @@ Makefile
 world.sql
 test-docker.sh
 phpmyadmin_test.py
+config.test.inc.php
