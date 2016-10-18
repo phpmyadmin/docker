@@ -14,11 +14,26 @@ URL=http://127.0.0.1:$PORT/
 URL=http://localhost/phpmyadmin/
 
 # Wait for container to start
-while ! docker exec $NAME ps aux | grep -q nginx ; do echo 'Waiting for start...'; sleep 1; done
+ret=0
+TIMEOUT=0
+while ! docker exec $NAME ps aux | grep -q nginx ; do
+    echo 'Waiting for start...'
+    sleep 1
+    TIMEOUT=$(($TIMEOUT + 1))
+    if [ $TIMEOUT -gt 10 ] ; then
+        echo "Failed to wait!"
+        ret=1
+        exit 1
+    fi
+done
 
 # Perform tests
-python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password my-secret-pw $SERVER
-ret=$?
+if [ $ret -eq 0 ] ; then
+    python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password my-secret-pw $SERVER
+    ret=$?
+fi
+
+# Show debug output in case of failure
 if [ $ret -ne 0 ] ; then
     curl http://127.0.0.1:$PORT/
     docker ps -a
@@ -28,5 +43,6 @@ if [ $ret -ne 0 ] ; then
     docker exec $NAME cat /var/log/supervisord.log
     exit $ret
 fi
+
 # List processes
 docker exec $NAME ps faux
