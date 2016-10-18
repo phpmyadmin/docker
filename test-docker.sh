@@ -38,7 +38,7 @@ if [ $ret -ne 0 ] ; then
     curl http://127.0.0.1:$PORT/
     docker ps -a
     docker exec $NAME ps faux
-    docker exec $NAME cat /var/log/php7.0-fpm.log
+    docker exec $NAME cat /var/log/php-fpm.log
     docker exec $NAME cat /var/log/nginx-error.log
     docker exec $NAME cat /var/log/supervisord.log
     exit $ret
