@@ -11,7 +11,6 @@ else
 fi
 
 URL=http://127.0.0.1:$PORT/
-URL=http://localhost/phpmyadmin/
 
 # Wait for container to start
 ret=0
@@ -29,13 +28,13 @@ done
 
 # Perform tests
 if [ $ret -eq 0 ] ; then
-    python phpmyadmin_test.py --url "http://127.0.0.1:$PORT/" --username root --password my-secret-pw $SERVER
+    python phpmyadmin_test.py --url "$URL" --username root --password my-secret-pw $SERVER
     ret=$?
 fi
 
 # Show debug output in case of failure
 if [ $ret -ne 0 ] ; then
-    curl http://127.0.0.1:$PORT/
+    curl "$URL"
     docker ps -a
     docker exec $NAME ps faux
     docker exec $NAME cat /var/log/php-fpm.log
