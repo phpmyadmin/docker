@@ -18,7 +18,7 @@ TIMEOUT=0
 while ! docker exec "$NAME" ps aux | grep -q nginx ; do
     echo 'Waiting for start...'
     sleep 1
-    TIMEOUT=$(($TIMEOUT + 1))
+    TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 10 ] ; then
         echo "Failed to wait!"
         ret=1
