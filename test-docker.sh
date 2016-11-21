@@ -2,8 +2,8 @@
 
 set -x
 
-NAME=$1
-PORT=$2
+NAME="$1"
+PORT="$2"
 if [ -n "$3" ] ; then
     SERVER="--server $3"
 else
@@ -15,7 +15,7 @@ URL=http://127.0.0.1:$PORT/
 # Wait for container to start
 ret=0
 TIMEOUT=0
-while ! docker exec $NAME ps aux | grep -q nginx ; do
+while ! docker exec "$NAME" ps aux | grep -q nginx ; do
     echo 'Waiting for start...'
     sleep 1
     TIMEOUT=$(($TIMEOUT + 1))
@@ -36,12 +36,12 @@ fi
 if [ $ret -ne 0 ] ; then
     curl "$URL"
     docker ps -a
-    docker exec $NAME ps faux
-    docker exec $NAME cat /var/log/php-fpm.log
-    docker exec $NAME cat /var/log/nginx-error.log
-    docker exec $NAME cat /var/log/supervisord.log
+    docker exec "$NAME" ps faux
+    docker exec "$NAME" cat /var/log/php-fpm.log
+    docker exec "$NAME" cat /var/log/nginx-error.log
+    docker exec "$NAME" cat /var/log/supervisord.log
     exit $ret
 fi
 
 # List processes
-docker exec $NAME ps faux
+docker exec "$NAME" ps faux
