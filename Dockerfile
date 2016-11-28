@@ -1,7 +1,7 @@
 FROM alpine:edge
 
 # Install dependencies
-RUN apk add --no-cache php7-mysqli php7-ctype php7-xml php7-gd php7-zlib php7-bz2 php7-zip php7-openssl php7-curl php7-opcache php7-json nginx php7-fpm supervisor
+RUN apk add --no-cache php7-session php7-mysqli php7-ctype php7-mbstring php7-xml php7-gd php7-zlib php7-bz2 php7-zip php7-openssl php7-curl php7-opcache php7-json nginx php7-fpm supervisor
 
 # Include keyring to verify download
 COPY phpmyadmin.keyring /
