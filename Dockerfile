@@ -16,6 +16,7 @@ RUN chmod u+rwx /run.sh
 # Calculate download URL
 ENV VERSION 4.6.5.1
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
+LABEL version=$VERSION
 
 # Download tarball, verify it using gpg and extract
 RUN set -x \
