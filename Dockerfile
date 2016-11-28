@@ -7,7 +7,7 @@ RUN apk add --no-cache php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz
 COPY phpmyadmin.keyring /
 
 # Calculate download URL
-ENV VERSION 4.6.4
+ENV VERSION 4.6.5.1
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
 
 # Download tarball, verify it using gpg and extract
