@@ -12,7 +12,8 @@ ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}
 
 # Download tarball, verify it using gpg and extract
 RUN set -x \
-    && export GNUPGHOME="$(mktemp -d)" \
+    && GNUPGHOME="$(mktemp -d)" \
+    && export GNUPGHOME \
     && apk add --no-cache curl gnupg \
     && curl --output phpMyAdmin.tar.gz --location $URL \
     && curl --output phpMyAdmin.tar.gz.asc --location $URL.asc \
