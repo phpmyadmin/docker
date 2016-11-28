@@ -70,6 +70,6 @@ $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
 /* Include User Defined Settings Hook */
-if (file_exists('/www/config.user.inc.php')) {
-    include('/www/config.user.inc.php');
+if (file_exists('/etc/phpmyadmin/config.user.inc.php')) {
+    include('/etc/phpmyadmin/config.user.inc.php');
 }

@@ -6,6 +6,13 @@ RUN apk add --no-cache php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz
 # Include keyring to verify download
 COPY phpmyadmin.keyring /
 
+# Copy configuration
+COPY etc /etc/
+
+# Copy main script
+COPY run.sh /run.sh
+RUN chmod u+rwx /run.sh
+
 # Calculate download URL
 ENV VERSION 4.6.5.1
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
@@ -28,17 +35,10 @@ RUN set -x \
     && mkdir /www/doc \
     && mv /www/htmldoc /www/doc/html \
     && rm -rf /www/js/jquery/src/ /www/js/openlayers/src/ /www/setup/ /www/examples/ /www/test/ /www/po/ /www/templates/test/ /www/phpunit.xml.* /www/build.xml  /www/composer.json /www/RELEASE-DATE-$VERSION \
+    && sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php \
     && chown -R root:nobody /www \
     && find /www -type d -exec chmod 750 {} \; \
     && find /www -type f -exec chmod 640 {} \;
-
-# Copy configuration
-COPY config.inc.php /www/
-COPY etc /etc/
-
-# Copy main script
-COPY run.sh /run.sh
-RUN chmod u+rwx /run.sh
 
 # Add volume for sessions to allow session persistence
 VOLUME /sessions

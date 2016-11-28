@@ -27,5 +27,5 @@ script:
   - docker run --name arbitraryadmin -d --link db_server:db3 -e PMA_ARBITRARY=1 -p 7070:80 phpmyadmin/phpmyadmin
   - ./test-docker.sh arbitraryadmin 7070 db3
   # Test for arbitrary database with user config
-  - docker run --name userconfigadmin -d --link db_server:db3 -v `readlink -f ./config.test.inc.php`:/www/config.user.inc.php -p 7080:80 phpmyadmin/phpmyadmin
+  - docker run --name userconfigadmin -d --link db_server:db3 -v `readlink -f ./config.test.inc.php`:/etc/phpmyadmin/config.user.inc.php -p 7080:80 phpmyadmin/phpmyadmin
   - ./test-docker.sh userconfigadmin 7080 db3
