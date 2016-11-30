@@ -35,6 +35,7 @@ RUN set -x \
     && rm -rf /www/doc \
     && mkdir /www/doc \
     && mv /www/htmldoc /www/doc/html \
+    && rm /www/doc/html/.buildinfo /www/doc/html/objects.inv \
     && rm -rf /www/js/jquery/src/ /www/js/openlayers/src/ /www/setup/ /www/examples/ /www/test/ /www/po/ /www/templates/test/ /www/phpunit.xml.* /www/build.xml  /www/composer.json /www/RELEASE-DATE-$VERSION \
     && sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php \
     && chown -R root:nobody /www \
