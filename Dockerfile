@@ -1,7 +1,7 @@
-FROM alpine:3.4
+FROM alpine:3.5
 
 # Install dependencies
-RUN apk add --no-cache php5-mysqli php5-xml php5-gd php5-zlib php5-bz2 php5-zip php5-openssl php5-curl php5-opcache php5-json nginx php5-fpm supervisor
+RUN apk add --no-cache php7-mysqli php7-xml php7-gd php7-zlib php7-bz2 php7-zip php7-openssl php7-curl php7-opcache php7-json nginx php7-fpm supervisor
 
 # Include keyring to verify download
 COPY phpmyadmin.keyring /
