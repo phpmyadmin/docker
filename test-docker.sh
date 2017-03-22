@@ -28,7 +28,7 @@ done
 
 # Perform tests
 if [ $ret -eq 0 ] ; then
-    python phpmyadmin_test.py --url "$URL" --username root --password my-secret-pw $SERVER
+    python phpmyadmin_test.py --url "$URL" --username root --password $TESTSUITE_PASSWORD $SERVER
     ret=$?
 fi
 
