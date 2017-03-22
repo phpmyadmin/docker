@@ -13,7 +13,7 @@ before_install:
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=$TESTSUITE_PASSWORD -d $DB
 
 install:
-  - pip install mechanize
+  - pip install mechanize html5lib
 
 script:
   # Build image
