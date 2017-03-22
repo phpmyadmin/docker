@@ -52,7 +52,13 @@ def main():
     parser.add_argument('--sqlfile', default='world.sql')
     args = parser.parse_args()
 
-    test_phpmyadmin(args.url, args.username, args.password, args.server, args.sqlfile)
+    test_phpmyadmin(
+        args.url,
+        args.username,
+        args.password,
+        args.server,
+        args.sqlfile
+    )
 
 
 if __name__ == '__main__':
