@@ -8,10 +8,8 @@ env:
     - DB=mysql:latest
     - DB=mariadb:latest
 
-before_script:
-  - export TESTSUITE_PASSWORD=`openssl rand -base64 30`
-
 before_install:
+  - export TESTSUITE_PASSWORD=`openssl rand -base64 30`
   - docker run --name db_server -e MYSQL_ROOT_PASSWORD=$TESTSUITE_PASSWORD -d $DB
 
 install:
