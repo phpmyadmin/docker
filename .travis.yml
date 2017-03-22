@@ -3,6 +3,10 @@ sudo: required
 services:
   - docker
 
+language: python
+python:
+  - "3.5"
+
 env:
   matrix:
     - DB=mysql:latest

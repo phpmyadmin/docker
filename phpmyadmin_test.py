@@ -8,7 +8,7 @@ import mechanize
 
 def test_content(match, content):
     if not match in content:
-        print content
+        print(content)
         raise Exception('{0} not found in content!'.format(match))
 
 
