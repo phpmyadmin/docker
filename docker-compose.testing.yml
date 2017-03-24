@@ -1,8 +1,33 @@
-phpmyadmin:
-    image: phpmyadmin/phpmyadmin:testing
-    container_name: myadmin
+version: '2'
+
+services:
+  mariadb:
+    image: mariadb:10.1
+    container_name: phpmyadmin_testing_mariadb
+    volumes:
+      - ./world.sql:/docker-entrypoint-initdb.d/world.sql
     environment:
-     - PMA_ARBITRARY=1
-    restart: always
+      - MYSQL_ROOT_PASSWORD=test123
+
+  mysql:
+    image: mysql:5.7
+    container_name: phpmyadmin_testing_mysql
+    volumes:
+      - ./world.sql:/docker-entrypoint-initdb.d/world.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test123
+
+  phpmyadmin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: phpmyadmin_testing
+    volumes:
+      - /sessions
     ports:
-     - 8090:80
+      - 8090:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - mariadb
+      - mysql
