@@ -67,6 +67,16 @@ Using the docker-compose.yml from https://github.com/phpmyadmin/docker
 docker-compose up -d
 ```
 
+## Run the E2E tests with docker-compose
+
+You can run the E2E tests with the local test environment by running MariaDB/MySQL databases. Adding ENV variable `PHPMYADMIN_RUN_TEST=true` already added on docker-compose file. Simply run:
+
+Using the docker-compose.testing.yml from https://github.com/phpmyadmin/docker
+
+```
+docker-compose -f docker-compose.testing.yml up phpmyadmin
+```
+
 ## Adding Custom Configuration
 
 You can add your own custom config.inc.php settings (such as Configuration Storage setup) 

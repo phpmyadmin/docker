@@ -1,7 +1,7 @@
 FROM alpine:3.5
 
 # Install dependencies
-RUN apk add --no-cache php7-session php7-mysqli php7-mbstring php7-xml php7-gd php7-zlib php7-bz2 php7-zip php7-openssl php7-curl php7-opcache php7-json nginx php7-fpm supervisor
+RUN apk add --no-cache curl php7-session php7-mysqli php7-mbstring php7-xml php7-gd php7-zlib php7-bz2 php7-zip php7-openssl php7-curl php7-opcache php7-json nginx php7-fpm py2-pip supervisor
 
 # Include keyring to verify download
 COPY phpmyadmin.keyring /
@@ -22,11 +22,11 @@ LABEL version=$VERSION
 RUN set -x \
     && GNUPGHOME="$(mktemp -d)" \
     && export GNUPGHOME \
-    && apk add --no-cache curl gnupg \
+    && apk add --no-cache gnupg \
     && curl --output phpMyAdmin.tar.gz --location $URL \
     && curl --output phpMyAdmin.tar.gz.asc --location $URL.asc \
     && gpgv --keyring /phpmyadmin.keyring phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz \
-    && apk del --no-cache curl gnupg \
+    && apk del --no-cache gnupg \
     && rm -rf "$GNUPGHOME" \
     && tar xzf phpMyAdmin.tar.gz \
     && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
