@@ -4,16 +4,12 @@ services:
   mariadb:
     image: mariadb:10.1
     container_name: phpmyadmin_testing_mariadb
-    volumes:
-      - ./world.sql:/docker-entrypoint-initdb.d/world.sql
     environment:
       - MYSQL_ROOT_PASSWORD=test123
 
   mysql:
     image: mysql:5.7
     container_name: phpmyadmin_testing_mysql
-    volumes:
-      - ./world.sql:/docker-entrypoint-initdb.d/world.sql
     environment:
       - MYSQL_ROOT_PASSWORD=test123
 
@@ -23,11 +19,16 @@ services:
       dockerfile: Dockerfile
     container_name: phpmyadmin_testing
     volumes:
+      - ./phpmyadmin_test.py:/phpmyadmin_test.py
+      - ./test-docker.sh:/test-docker.sh
+      - ./world.sql:/world.sql
       - /sessions
     ports:
       - 8090:80
     environment:
       - PMA_ARBITRARY=1
+      - PHPMYADMIN_RUN_TEST=true
+      - TESTSUITE_PASSWORD=test123
     depends_on:
       - mariadb
       - mysql

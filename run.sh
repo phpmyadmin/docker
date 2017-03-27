@@ -1,4 +1,12 @@
 #!/bin/sh
+
+# Set Supervisor default config (run tests or not)
+if [ "$PHPMYADMIN_RUN_TEST" = true ] ; then
+    CONFIG_PATH="/etc/supervisord.test.conf"
+else
+    CONFIG_PATH="/etc/supervisord.conf"
+fi
+
 if [ ! -f /etc/phpmyadmin/config.secret.inc.php ] ; then
     cat > /etc/phpmyadmin/config.secret.inc.php <<EOT
 <?php
@@ -18,5 +26,5 @@ touch /var/log/php-fpm.log
 chown nobody:nobody /var/log/php-fpm.log
 
 if [ "$1" = 'phpmyadmin' ]; then
-    exec supervisord --nodaemon --configuration="/etc/supervisord.conf" --loglevel=info
+    exec supervisord --nodaemon --configuration=$CONFIG_PATH --loglevel=info
 fi
