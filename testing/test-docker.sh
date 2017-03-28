@@ -47,18 +47,6 @@ if [ -f /.dockerenv ] ; then
             exit 1
         fi
     done
-
-    # Install mechanize via pip package manager
-    if ! python -c "import mechanize" &> /dev/null ; then
-        pip install --user mechanize
-        ret=$?
-    fi
-
-    # Install html5lib via pip package manager
-    if ! python -c "import html5lib" &> /dev/null ; then
-        pip install --user html5lib
-        ret=$?
-    fi
 else
     echo "Tests running outside container..."
     docker ps -a
