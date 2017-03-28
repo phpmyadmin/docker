@@ -81,7 +81,12 @@ done
 
 # Perform tests
 if [ $ret -eq 0 ] ; then
-    python phpmyadmin_test.py --url "$PHPMYADMIN_URL" --username root --password $TESTSUITE_PASSWORD $SERVER
+    if [ -f ./phpmyadmin_test.py ] ; then
+        FILENAME=./phpmyadmin_test.py
+    else
+        FILENAME=./testing/phpmyadmin_test.py
+    fi
+    python $FILENAME --url "$PHPMYADMIN_URL" --username root --password $TESTSUITE_PASSWORD $SERVER
     ret=$?
 fi
 

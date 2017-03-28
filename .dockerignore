@@ -4,10 +4,4 @@ docker-compose.testing.yml
 README.md
 LICENSE
 Makefile
-world.sql
-test-docker.sh
-phpmyadmin_test.py
-config.test.inc.php
-test-mariadb.ini
-test-mysql.ini
-Dockerfile-testing
+testing

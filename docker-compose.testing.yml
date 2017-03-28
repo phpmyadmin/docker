@@ -15,8 +15,7 @@ services:
 
   phpmyadmin:
     build:
-      context: .
-      dockerfile: Dockerfile-testing
+      context: testing/
     container_name: phpmyadmin_testing
     volumes:
       - /sessions
