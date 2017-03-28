@@ -2,13 +2,13 @@ version: '2'
 
 services:
   mariadb:
-    image: mariadb:10.1
+    image: mariadb:latest
     container_name: phpmyadmin_testing_mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=test123
 
   mysql:
-    image: mysql:5.7
+    image: mysql:latest
     container_name: phpmyadmin_testing_mysql
     environment:
       - MYSQL_ROOT_PASSWORD=test123
