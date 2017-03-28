@@ -20,9 +20,9 @@ PHPMYADMIN_PORT=${TESTSUITE_PORT:=80}
 PHPMYADMIN_URL=http://$PHPMYADMIN_HOSTNAME:$PORT/
 
 # Color text output
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
 
 ret=0
 # Check if script is running inside container
@@ -42,7 +42,7 @@ if [ -f /.dockerenv ] ; then
         TIMEOUT=$((TIMEOUT + 1))
         if [ $TIMEOUT -gt 3 ] ; then
             echo "Failed to connect ${PHPMYADMIN_DB_HOSTNAME} database!"
-            echo -e "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
+            echo "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
             ret=1
             exit 1
         fi
@@ -73,7 +73,7 @@ while ! $COMMAND_HOST ps aux | grep -q nginx ; do
     TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 10 ] ; then
         echo "Failed to connect PHPMyAdmin!"
-        echo -e "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
+        echo "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
         ret=1
         exit 1
     fi
@@ -92,8 +92,8 @@ if [ $ret -ne 0 ] ; then
     $COMMAND_HOST cat /var/log/php-fpm.log
     $COMMAND_HOST cat /var/log/nginx-error.log
     $COMMAND_HOST cat /var/log/supervisord.log
-    echo -e "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
+    echo "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
     exit $ret
 fi
 
-echo -e "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${GREEN}SUCCESS${NC}"
+echo "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${GREEN}SUCCESS${NC}"
