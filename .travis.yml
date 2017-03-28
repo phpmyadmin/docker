@@ -34,3 +34,9 @@ script:
   # Test for arbitrary database with user config
   - docker run --name userconfigadmin -d --link db_server:db3 -v `readlink -f ./config.test.inc.php`:/etc/phpmyadmin/config.user.inc.php -p 7080:80 phpmyadmin/phpmyadmin
   - ./test-docker.sh userconfigadmin 7080 db3
+  # Test docker-compose
+  - docker-compose up -d
+  - ./test-docker.sh phpmyadmin 8080
+  - docker-compose stop
+  # Run tests in testing container
+  - docker-compose -f docker-compose.testing.yml up phpmyadmin
