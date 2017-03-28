@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import os
 import re
 import sys
 
@@ -12,7 +13,12 @@ def test_content(match, content):
         raise Exception('{0} not found in content!'.format(match))
 
 
-def test_phpmyadmin(url, username, password, server=None, sqlfile='world.sql'):
+def test_phpmyadmin(url, username, password, server=None, sqlfile=None):
+    if sqlfile is None:
+        if os.path.exists('./world.sql'):
+            sqlfile = './world.sql'
+        else:
+            sqlfile = './testing/world.sql'
     br = mechanize.Browser()
 
     # Ignore robots.txt
@@ -49,7 +55,7 @@ def main():
     parser.add_argument('--username', required=True)
     parser.add_argument('--password', required=True)
     parser.add_argument('--server')
-    parser.add_argument('--sqlfile', default='world.sql')
+    parser.add_argument('--sqlfile', default=None)
     args = parser.parse_args()
 
     test_phpmyadmin(
