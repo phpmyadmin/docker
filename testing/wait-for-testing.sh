@@ -28,5 +28,5 @@ if [ `docker-compose -f docker-compose.testing.yml logs phpmyadmin | grep -c 'Re
 fi
 
 docker-compose -f docker-compose.testing.yml logs phpmyadmin
-echo "${GREEN}Success{$NC}"
+echo "${GREEN}Success${NC}"
 exit 0
