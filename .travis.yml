@@ -36,7 +36,7 @@ script:
   - ./test-docker.sh userconfigadmin 7080 db3
   # Test docker-compose
   - docker-compose up -d
-  - ./test-docker.sh phpmyadmin 8080
+  - ./test-docker.sh phpmyadmin 8080 db_server
   - docker-compose stop
   # Run tests in testing container
   - docker-compose -f docker-compose.testing.yml up phpmyadmin
