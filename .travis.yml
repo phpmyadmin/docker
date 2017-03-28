@@ -35,9 +35,8 @@ script:
   - docker run --name userconfigadmin -d --link db_server:db3 -v `readlink -f ./testing/config.test.inc.php`:/etc/phpmyadmin/config.user.inc.php -p 7080:80 phpmyadmin/phpmyadmin
   - ./testing/test-docker.sh userconfigadmin 7080 db3
   # Test docker-compose
-  - docker-compose up -d
-  # There is no db server linked, so this is expected to fail
-  - ./testing/test-docker.sh phpmyadmin 8080 db_server || true
+  - docker-compose -f docker-compose.yml -f docker-compose.db.yml up -d
+  - ./testing/test-docker.sh phpmyadmin 8080 db_server
   - docker-compose stop
   # Run tests in testing container
   - docker-compose -f docker-compose.testing.yml up -d phpmyadmin
