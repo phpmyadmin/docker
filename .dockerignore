@@ -10,3 +10,4 @@ phpmyadmin_test.py
 config.test.inc.php
 test-mariadb.ini
 test-mysql.ini
+Dockerfile-testing
