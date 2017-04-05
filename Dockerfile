@@ -31,11 +31,7 @@ RUN set -x \
     && tar xzf phpMyAdmin.tar.gz \
     && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
     && mv phpMyAdmin-$VERSION-all-languages /www \
-    && mv /www/doc/html /www/htmldoc \
-    && rm -rf /www/doc \
-    && mkdir /www/doc \
-    && mv /www/htmldoc /www/doc/html \
-    && rm -rf /www/js/jquery/src/ /www/js/openlayers/src/ /www/setup/ /www/examples/ /www/test/ /www/po/ /www/templates/test/ /www/phpunit.xml.* /www/build.xml  /www/composer.json /www/RELEASE-DATE-$VERSION \
+    && rm -rf /www/setup/ /www/examples/ /www/test/ /www/po/ /www/composer.json /www/RELEASE-DATE-$VERSION \
     && sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php \
     && chown -R root:nobody /www \
     && find /www -type d -exec chmod 750 {} \; \
