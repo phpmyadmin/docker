@@ -10,6 +10,7 @@ $vars = array(
     'PMA_VERBOSE',
     'PMA_VERBOSES',
     'PMA_PORT',
+    'PMA_PORTS',
     'PMA_USER',
     'PMA_PASSWORD',
     'PMA_ABSOLUTE_URI'
@@ -39,9 +40,11 @@ $hosts = array('db');
 if (!empty($_ENV['PMA_HOST'])) {
     $hosts = array($_ENV['PMA_HOST']);
     $verbose = array($_ENV['PMA_VERBOSE']);
+    $ports = array($_ENV['PMA_PORT']);
 } elseif (!empty($_ENV['PMA_HOSTS'])) {
     $hosts = explode(',', $_ENV['PMA_HOSTS']);
     $verbose = explode(',', $_ENV['PMA_VERBOSES']);
+    $ports = explode(',', $_ENV['PMA_PORTS']);
 }
 
 /* Server settings */
@@ -50,8 +53,8 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     if (isset($verbose[$i - 1])) {
         $cfg['Servers'][$i]['verbose'] = $verbose[$i - 1];
     }
-    if (isset($_ENV['PMA_PORT'])) {
-        $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
+    if (isset($ports[$i - 1])) {
+        $cfg['Servers'][$i]['port'] = $ports[$i - 1];
     }
     if (isset($_ENV['PMA_USER'])) {
         $cfg['Servers'][$i]['auth_type'] = 'config';
