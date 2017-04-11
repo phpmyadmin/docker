@@ -16,8 +16,9 @@ $vars = array(
     'PMA_ABSOLUTE_URI'
 );
 foreach ($vars as $var) {
-    if (!isset($_ENV[$var]) && getenv($var)) {
-        $_ENV[$var] = getenv($var);
+    $env = getenv($var);
+    if (!isset($_ENV[$var]) && $env !== false) {
+        $_ENV[$var] = $env;
     }
 }
 
