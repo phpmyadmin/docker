@@ -28,6 +28,7 @@ You can use following tags on Docker hub:
 
 * `latest` - latest stable release
 * `4.6` - latest stable release from the 4.6 branch
+* `4.7` - latest stable release from the 4.7 branch
 * `edge` - bleeding edge docker image (contains stable phpMyAdmin, but the Docker image changes might not yet be fully tested)
 
 ## Usage with linked server
