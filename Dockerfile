@@ -37,6 +37,9 @@ RUN set -x \
     && find /www -type d -exec chmod 750 {} \; \
     && find /www -type f -exec chmod 640 {} \;
 
+# Add directory for sessions to allow session persistence
+RUN mkdir /sessions
+
 # We expose phpMyAdmin on port 80
 EXPOSE 80
 
