@@ -24,12 +24,9 @@ RUN set -x \
     && export GNUPGHOME \
     && apk add --no-cache curl gnupg \
     && curl --output phpMyAdmin.tar.gz --location $URL \
-    && curl --output phpMyAdmin.tar.gz.asc --location $URL.asc \
-    && gpgv --keyring /phpmyadmin.keyring phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz \
     && apk del --no-cache curl gnupg \
     && rm -rf "$GNUPGHOME" \
     && tar xzf phpMyAdmin.tar.gz \
-    && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
     && mv phpMyAdmin-$VERSION-all-languages /www \
     && rm -rf /www/setup/ /www/examples/ /www/test/ /www/po/ /www/composer.json /www/RELEASE-DATE-$VERSION \
     && sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php \
