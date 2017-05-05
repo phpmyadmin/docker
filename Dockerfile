@@ -14,7 +14,7 @@ COPY run.sh /run.sh
 RUN chmod u+rwx /run.sh
 
 # Calculate download URL
-ENV VERSION 4.7+snapshot
+ENV VERSION 4.8+snapshot
 ENV URL https://files.phpmyadmin.net/snapshots/phpMyAdmin-${VERSION}-all-languages.tar.gz
 LABEL version=$VERSION
 
