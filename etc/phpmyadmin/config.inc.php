@@ -68,6 +68,11 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     $cfg['Servers'][$i]['compress'] = false;
     $cfg['Servers'][$i]['AllowNoPassword'] = true;
 }
+/*
+ * Revert back to last configured server to make
+ * it easier in config.user.inc.php
+ */
+$i--;
 
 /* Uploads setup */
 $cfg['UploadDir'] = '';
