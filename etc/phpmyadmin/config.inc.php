@@ -64,7 +64,6 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     } else {
         $cfg['Servers'][$i]['auth_type'] = 'cookie';
     }
-    $cfg['Servers'][$i]['connect_type'] = 'tcp';
     $cfg['Servers'][$i]['compress'] = false;
     $cfg['Servers'][$i]['AllowNoPassword'] = true;
 }
