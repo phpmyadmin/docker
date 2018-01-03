@@ -69,8 +69,8 @@ done
 
 # Perform tests
 if [ $ret -eq 0 ] ; then
-    if [ -f ./phpmyadmin_test.py ] ; then
-        FILENAME=./phpmyadmin_test.py
+    if [ -f /phpmyadmin_test.py ] ; then
+        FILENAME=/phpmyadmin_test.py
     else
         FILENAME=./testing/phpmyadmin_test.py
     fi
