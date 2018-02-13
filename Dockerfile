@@ -1,7 +1,13 @@
 FROM php:7.2-fpm-alpine
 
+RUN apk add --no-cache \
+    nginx \
+    supervisor
+
 # Install dependencies
-RUN apk add --no-cache --virtual .build-deps \
+RUN set -ex; \
+    \
+    apk add --no-cache --virtual .build-deps \
         bzip2-dev \
         freetype-dev \
         libjpeg-turbo-dev \
@@ -20,8 +26,7 @@ RUN apk add --no-cache --virtual .build-deps \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
     )"; \
     apk add --virtual .phpmyadmin-phpexts-rundeps $runDeps; \
-    apk del .build-deps; \
-    apk add --no-cache nginx supervisor
+    apk del .build-deps
 
 # Copy configuration
 COPY etc /etc/
