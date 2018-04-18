@@ -63,7 +63,9 @@ RUN set -ex; \
     apk del .fetch-deps
 
 # Add directory for sessions to allow session persistence
-RUN mkdir /sessions
+RUN mkdir /sessions \
+    && mkdir -p /www/tmp \
+    && chmod -R 777 /www/tmp
 
 # We expose phpMyAdmin on port 80
 EXPOSE 80
