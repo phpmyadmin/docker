@@ -42,21 +42,7 @@ LABEL version=$VERSION
 
 # Download tarball, verify it using gpg and extract
 RUN set -ex; \
-    apk add --no-cache --virtual .fetch-deps \
-        gnupg \
-    ; \
-    \
-    export GNUPGHOME="$(mktemp -d)"; \
-    export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
     curl --output phpMyAdmin.tar.gz --location $URL; \
-    curl --output phpMyAdmin.tar.gz.asc --location $URL.asc; \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
-        || gpg --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
-        || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
-    gpg --batch --verify phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz; \
-    rm -rf "$GNUPGHOME"; \
     tar xzf phpMyAdmin.tar.gz; \
     rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc; \
     mv phpMyAdmin-$VERSION-all-languages /www; \
@@ -64,8 +50,7 @@ RUN set -ex; \
     sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php; \
     chown -R root:nobody /www; \
     find /www -type d -exec chmod 750 {} \; ; \
-    find /www -type f -exec chmod 640 {} \; ; \
-    apk del .fetch-deps
+    find /www -type f -exec chmod 640 {} \; 
 
 # Add directory for sessions to allow session persistence
 RUN mkdir /sessions \
