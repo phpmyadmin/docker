@@ -49,7 +49,7 @@ RUN set -ex; \
     export GNUPGHOME="$(mktemp -d)"; \
     curl --output phpMyAdmin.tar.gz --location $URL; \
     curl --output phpMyAdmin.tar.gz.asc --location $URL.asc; \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 3D06A59ECE730EB71B511C17CE752F178259BD92; \
+    gpg --keyserver keys.gnupg.net --recv-keys 3D06A59ECE730EB71B511C17CE752F178259BD92; \
     gpg --batch --verify phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz; \
     rm -rf "$GNUPGHOME"; \
     tar xzf phpMyAdmin.tar.gz; \
