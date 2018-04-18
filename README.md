@@ -110,6 +110,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_PORT`` - define port of the MySQL server
 * ``PMA_HOSTS`` - define comma separated list of address/host names of the MySQL servers
 * ``PMA_VERBOSES`` - define comma separated list of verbose names of the MySQL servers
+* ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
 

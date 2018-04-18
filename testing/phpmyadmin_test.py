@@ -15,7 +15,9 @@ def test_content(match, content):
 
 def test_phpmyadmin(url, username, password, server=None, sqlfile=None):
     if sqlfile is None:
-        if os.path.exists('./world.sql'):
+        if os.path.exists('/world.sql'):
+            sqlfile = '/world.sql'
+        elif os.path.exists('./world.sql'):
             sqlfile = './world.sql'
         else:
             sqlfile = './testing/world.sql'
