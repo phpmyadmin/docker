@@ -54,7 +54,7 @@ RUN set -ex; \
         || gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
         || gpg --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
         || gpg --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
-        || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY";
+        || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz; \
     rm -rf "$GNUPGHOME"; \
     tar xzf phpMyAdmin.tar.gz; \
