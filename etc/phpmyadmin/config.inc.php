@@ -94,8 +94,6 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
       $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
       $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
       $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
-      $cfg['Servers'][$i]['compress'] = false;
-      $cfg['Servers'][$i]['AllowNoPassword'] = true;
     }
     if (isset($_ENV['PMA_CONTROLHOST'])) {
       $cfg['Servers'][$i]['controlhost'] = $_ENV['PMA_CONTROLHOST'];
@@ -109,6 +107,8 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     if (isset($_ENV['PMA_CONTROLPASS'])) {
       $cfg['Servers'][$i]['controlpass'] = $_ENV['PMA_CONTROLPASS'];
     }
+    $cfg['Servers'][$i]['compress'] = false;
+    $cfg['Servers'][$i]['AllowNoPassword'] = true;
 }
 /*
  * Revert back to last configured server to make
