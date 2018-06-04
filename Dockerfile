@@ -57,9 +57,9 @@ RUN set -ex; \
         || gpg --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
-    rm -rf "$GNUPGHOME"; \
     tar xf phpMyAdmin.tar.xz; \
-    rm -f phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
+    gpgconf --kill all; \
+    rm -r "$GNUPGHOME" phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc; \
     mv phpMyAdmin-$VERSION-all-languages /www; \
     rm -rf /www/setup/ /www/examples/ /www/test/ /www/po/ /www/composer.json /www/RELEASE-DATE-$VERSION; \
     sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php; \
