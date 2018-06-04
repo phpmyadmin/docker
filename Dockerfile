@@ -38,7 +38,7 @@ RUN chmod u+rwx /run.sh
 
 # Calculate download URL
 ENV VERSION 4.8.1
-ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
+ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 LABEL version=$VERSION
 
 # Download tarball, verify it using gpg and extract
@@ -49,17 +49,17 @@ RUN set -ex; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
-    curl --output phpMyAdmin.tar.gz --location $URL; \
-    curl --output phpMyAdmin.tar.gz.asc --location $URL.asc; \
+    curl --output phpMyAdmin.tar.xz --location $URL; \
+    curl --output phpMyAdmin.tar.xz.asc --location $URL.asc; \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
         || gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
         || gpg --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
         || gpg --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
-    gpg --batch --verify phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz; \
+    gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
     rm -rf "$GNUPGHOME"; \
-    tar xzf phpMyAdmin.tar.gz; \
-    rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc; \
+    tar xf phpMyAdmin.tar.xz; \
+    rm -f phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
     mv phpMyAdmin-$VERSION-all-languages /www; \
     rm -rf /www/setup/ /www/examples/ /www/test/ /www/po/ /www/composer.json /www/RELEASE-DATE-$VERSION; \
     sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php; \
