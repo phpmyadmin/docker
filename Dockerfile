@@ -57,7 +57,7 @@ RUN set -ex; \
         || gpg --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
-    tar xf phpMyAdmin.tar.xz; \
+    tar -xf phpMyAdmin.tar.xz; \
     gpgconf --kill all; \
     rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
     mv phpMyAdmin-$VERSION-all-languages /www; \
