@@ -28,14 +28,6 @@ RUN set -ex; \
     apk add --virtual .phpmyadmin-phpexts-rundeps $runDeps; \
     apk del .build-deps
 
-# Copy configuration
-COPY etc /etc/
-COPY php.ini /usr/local/etc/php/conf.d/php-phpmyadmin.ini
-
-# Copy main script
-COPY run.sh /run.sh
-RUN chmod u+rwx /run.sh
-
 # Calculate download URL
 ENV VERSION 4.8.1
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
@@ -66,12 +58,18 @@ RUN set -ex; \
     chown -R root:nobody /www; \
     find /www -type d -exec chmod 750 {} \; ; \
     find /www -type f -exec chmod 640 {} \; ; \
+# Add directory for sessions to allow session persistence
+    mkdir /sessions; \
+    mkdir -p /www/tmp; \
+    chmod -R 777 /www/tmp; \
     apk del .fetch-deps
 
-# Add directory for sessions to allow session persistence
-RUN mkdir /sessions \
-    && mkdir -p /www/tmp \
-    && chmod -R 777 /www/tmp
+# Copy configuration
+COPY etc /etc/
+COPY php.ini /usr/local/etc/php/conf.d/php-phpmyadmin.ini
+
+# Copy main script
+COPY run.sh /run.sh
 
 # We expose phpMyAdmin on port 80
 EXPOSE 80
