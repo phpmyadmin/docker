@@ -59,7 +59,7 @@ RUN set -ex; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
     tar xf phpMyAdmin.tar.xz; \
     gpgconf --kill all; \
-    rm -r "$GNUPGHOME" phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc; \
+    rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
     mv phpMyAdmin-$VERSION-all-languages /www; \
     rm -rf /www/setup/ /www/examples/ /www/test/ /www/po/ /www/composer.json /www/RELEASE-DATE-$VERSION; \
     sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php; \
