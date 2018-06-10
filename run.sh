@@ -17,6 +17,4 @@ chown nobody:nogroup /var/run/php/
 touch /var/log/php-fpm.log
 chown nobody:nogroup /var/log/php-fpm.log
 
-if [ "$1" = 'phpmyadmin' ]; then
-    exec supervisord --nodaemon --configuration="/etc/supervisord.conf" --loglevel=info
-fi
+exec "$@"
