@@ -16,7 +16,7 @@ env:
 
 before_install:
   - export TESTSUITE_PASSWORD=`openssl rand -base64 30`
-  - docker run --name db_server -e MYSQL_ROOT_PASSWORD=$TESTSUITE_PASSWORD -d $DB
+  - docker run --name db_server -e MYSQL_ROOT_PASSWORD=$TESTSUITE_PASSWORD -v $PWD/testing/testing.cnf:/etc/mysql/conf.d/testing.cnf:ro -d $DB
 
 install:
   - pip install mechanize html5lib
