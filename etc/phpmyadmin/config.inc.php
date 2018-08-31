@@ -118,10 +118,8 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     $cfg['Servers'][$i]['AllowNoPassword'] = true;
 }
 for ($i = 1; isset($sockets[$i - 1]); $i++) {
-    if (isset($sockets[$i - 1])) {
-        $cfg['Servers'][$i]['socket'] = $sockets[$i - 1];
-        $cfg['Servers'][$i]['host'] = 'localhost';
-    }
+    $cfg['Servers'][$i]['socket'] = $sockets[$i - 1];
+    $cfg['Servers'][$i]['host'] = 'localhost';
 }
 /*
  * Revert back to last configured server to make
