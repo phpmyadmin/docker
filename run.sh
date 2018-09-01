@@ -17,4 +17,6 @@ chown nobody:nogroup /var/run/php/
 touch /var/log/php-fpm.log
 chown nobody:nogroup /var/log/php-fpm.log
 
+chmod 644 /etc/phpmyadmin/*
+
 exec "$@"
