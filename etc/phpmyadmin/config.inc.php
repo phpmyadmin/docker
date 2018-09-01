@@ -11,6 +11,8 @@ $vars = array(
     'PMA_VERBOSES',
     'PMA_PORT',
     'PMA_PORTS',
+    'PMA_SOCKET',
+    'PMA_SOCKETS',
     'PMA_USER',
     'PMA_PASSWORD',
     'PMA_ABSOLUTE_URI',
@@ -55,6 +57,11 @@ if (!empty($_ENV['PMA_HOST'])) {
     $hosts = explode(',', $_ENV['PMA_HOSTS']);
     $verbose = explode(',', $_ENV['PMA_VERBOSES']);
     $ports = explode(',', $_ENV['PMA_PORTS']);
+}
+if (!empty($_ENV['PMA_SOCKET'])) {
+    $sockets = array($_ENV['PMA_SOCKET']);
+} elseif (!empty($_ENV['PMA_SOCKETS'])) {
+    $sockets = explode(',', $_ENV['PMA_SOCKETS']);
 }
 
 /* Server settings */
@@ -109,6 +116,10 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     }
     $cfg['Servers'][$i]['compress'] = false;
     $cfg['Servers'][$i]['AllowNoPassword'] = true;
+}
+for ($i = 1; isset($sockets[$i - 1]); $i++) {
+    $cfg['Servers'][$i]['socket'] = $sockets[$i - 1];
+    $cfg['Servers'][$i]['host'] = 'localhost';
 }
 /*
  * Revert back to last configured server to make
