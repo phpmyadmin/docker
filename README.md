@@ -59,6 +59,25 @@ You can use arbitrary servers by adding ENV variable `PMA_ARBITRARY=1` to the st
 docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin/phpmyadmin
 ```
 
+If in browser after try to login to db you get error:
+
+> Failed to set session cookie. Maybe you are using HTTP instead of HTTPS.
+
+then create file `config.user.inc.php` with body:
+```
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][$i]['user'] = 'username';
+$cfg['Servers'][$i]['password'] = 'password';
+$cfg['Servers'][$i]['extension'] = 'mysqli';
+$cfg['Servers'][$i]['AllowNoPassword'] = true;
+```
+
+and use following command to run:
+
+```
+docker run --name myadmin -d -v /...path_to_config.../config.user.inc.php:/etc/phpmyadmin/config.user.inc.php -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin/phpmyadmin
+```
+
 ## Usage with docker-compose and arbitrary server
 
 This will run phpMyAdmin with arbitrary server - allowing you to specify MySQL/MariaDB
