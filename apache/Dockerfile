@@ -31,14 +31,6 @@ RUN set -ex; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*
 
-# Copy configuration
-COPY etc /etc/
-COPY php.ini /usr/local/etc/php/conf.d/php-phpmyadmin.ini
-
-# Copy main script
-COPY run.sh /run.sh
-RUN chmod u+rwx /run.sh
-
 # Calculate download URL
 ENV VERSION 4.8.3
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
@@ -81,7 +73,7 @@ COPY config.inc.php /etc/phpmyadmin/config.inc.php
 COPY php.ini /usr/local/etc/php/conf.d/php-phpmyadmin.ini
 
 # Copy main script
-COPY run.sh /run.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD ["apache2-foreground"]

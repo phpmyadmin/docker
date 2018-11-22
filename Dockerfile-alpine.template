@@ -1,6 +1,6 @@
 FROM php:7.2-%%VARIANT%%
 
-# run.sh dependencies
+# docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
 	bash
 
@@ -65,7 +65,7 @@ COPY config.inc.php /etc/phpmyadmin/config.inc.php
 COPY php.ini /usr/local/etc/php/conf.d/php-phpmyadmin.ini
 
 # Copy main script
-COPY run.sh /run.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD ["%%CMD%%"]

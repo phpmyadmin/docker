@@ -17,8 +17,8 @@ for variant in apache fpm fpm-alpine; do
 	template="Dockerfile-${base[$variant]}.template"
 	cp $template "$variant/Dockerfile"
 	cp config.inc.php "$variant/config.inc.php"
+	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 	cp php.ini "$variant/php.ini"
-	cp run.sh "$variant/run.sh"
 	sed -ri -e '
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
