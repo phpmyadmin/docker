@@ -19,7 +19,7 @@ install:
 
 script:
   # Build image
-  - docker build -t phpmyadmin/phpmyadmin .
+  - docker build -t phpmyadmin/phpmyadmin apache
   # Test for single database
   - docker run --name testadmin -d --link db_server:db -p 9090:80 phpmyadmin/phpmyadmin
   - ./testing/test-docker.sh testadmin 9090
