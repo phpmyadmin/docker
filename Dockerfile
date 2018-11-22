@@ -43,11 +43,11 @@ RUN set -ex; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
     curl --output phpMyAdmin.tar.xz --location $URL; \
     curl --output phpMyAdmin.tar.xz.asc --location $URL.asc; \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
-        || gpg --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
-        || gpg --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
+    gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
+        || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
+        || gpg --batch --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
+        || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
+        || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
     tar -xf phpMyAdmin.tar.xz; \
     gpgconf --kill all; \
