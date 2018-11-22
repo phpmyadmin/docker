@@ -49,19 +49,15 @@ RUN set -ex; \
         || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
-    tar -xf phpMyAdmin.tar.xz; \
+    tar -xf phpMyAdmin.tar.xz -C /usr/src; \
     gpgconf --kill all; \
     rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
-    mv phpMyAdmin-$VERSION-all-languages /www; \
-    rm -rf /www/setup/ /www/examples/ /www/test/ /www/po/ /www/composer.json /www/RELEASE-DATE-$VERSION; \
-    sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /www/libraries/vendor_config.php; \
-    chown -R nobody:nogroup /www; \
-    find /www -type d -exec chmod 750 {} \; ; \
-    find /www -type f -exec chmod 640 {} \; ; \
+    mv /usr/src/phpMyAdmin-$VERSION-all-languages /usr/src/phpmyadmin; \
+    rm -rf /usr/src/phpmyadmin/setup/ /usr/src/phpmyadmin/examples/ /usr/src/phpmyadmin/test/ /usr/src/phpmyadmin/po/ /usr/src/phpmyadmin/composer.json /usr/src/phpmyadmin/RELEASE-DATE-$VERSION; \
+    sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /usr/src/phpmyadmin/libraries/vendor_config.php; \
 # Add directory for sessions to allow session persistence
     mkdir /sessions; \
-    mkdir -p /www/tmp; \
-    chmod -R 777 /www/tmp; \
+    mkdir -p /var/nginx/client_body_temp; \
     apk del .fetch-deps
 
 # Copy configuration
@@ -75,4 +71,4 @@ COPY run.sh /run.sh
 EXPOSE 80
 
 ENTRYPOINT [ "/run.sh" ]
-CMD ["supervisord", "-n"]
+CMD ["supervisord", "-n", "-j", "/supervisord.pid"]
