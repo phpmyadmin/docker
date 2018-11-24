@@ -36,7 +36,7 @@ if [ -f /.dockerenv ] ; then
 
     # Wait for database to start
     TIMEOUT=0
-    while ! curl "$PHPMYADMIN_DB_URL" &>/dev/null; do
+    while [ $(docker logs db_server 2>&1 | fgrep -c "mysqld: ready for connections.") -le 0 ] ; do
         echo "Waiting for ${PHPMYADMIN_DB_HOSTNAME} database start..."
         sleep 10
         TIMEOUT=$((TIMEOUT + 1))
@@ -55,7 +55,7 @@ fi
 
 # Wait for container to start
 TIMEOUT=0
-while ! $COMMAND_HOST ps aux | grep -q nginx ; do
+while [ $(docker logs ${NAME} 2>&1 | fgrep -c "Command line: 'apache2 -D FOREGROUND'") -le 0 ] ; do
     echo "Waiting for PHPMyAdmin start..."
     sleep 1
     TIMEOUT=$((TIMEOUT + 1))
@@ -76,7 +76,7 @@ if [ $ret -eq 0 ] ; then
     else
         FILENAME=./testing/phpmyadmin_test.py
     fi
-    python $FILENAME --url "$PHPMYADMIN_URL" --username root --password $TESTSUITE_PASSWORD $SERVER
+    python2 $FILENAME --url "$PHPMYADMIN_URL" --username root --password $TESTSUITE_PASSWORD $SERVER
     ret=$?
 fi
 
@@ -84,9 +84,7 @@ fi
 if [ $ret -ne 0 ] ; then
     curl "$PHPMYADMIN_URL"
     $COMMAND_HOST ps faux
-    $COMMAND_HOST cat /var/log/php-fpm.log
-    $COMMAND_HOST cat /var/log/nginx-error.log
-    $COMMAND_HOST cat /var/log/supervisord.log
+    docker logs ${NAME}
     echo "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
     exit $ret
 fi

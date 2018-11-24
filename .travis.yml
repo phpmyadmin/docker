@@ -8,7 +8,7 @@ python:
 env:
   matrix:
     - DB=mysql:latest
-    - DB=mariadb:10.2
+    - DB=mariadb:latest
 
 before_install:
   - export TESTSUITE_PASSWORD=`openssl rand -base64 30`
@@ -38,4 +38,5 @@ script:
   - docker-compose stop
   # Run tests in testing container
   - docker-compose -f docker-compose.testing.yml up -d phpmyadmin
+  - docker-compose exec phpmyadmin /test-docker.sh test 80 db_server
   - ./testing/wait-for-testing.sh

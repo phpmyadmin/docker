@@ -3,15 +3,17 @@ version: '2'
 services:
   db_server:
     image: ${DB}
-    container_name: phpmyadmin_testing_mariadb
+    container_name: phpmyadmin_testing_${DB}
     environment:
-      - MYSQL_ROOT_PASSWORD=test123
+      - MYSQL_ROOT_PASSWORD=${TESTSUITE_PASSWORD}
     volumes:
       - ./testing/testing.cnf:/etc/mysql/conf.d/testing.cnf:ro
 
   phpmyadmin:
     build:
       context: testing/
+    links:
+      - db_server:db_server
     container_name: phpmyadmin_testing
     volumes:
       - /sessions
@@ -19,6 +21,6 @@ services:
       - 8090:80
     environment:
       - PMA_ARBITRARY=1
-      - TESTSUITE_PASSWORD=test123
+      - TESTSUITE_PASSWORD=${TESTSUITE_PASSWORD}
     depends_on:
       - db_server
