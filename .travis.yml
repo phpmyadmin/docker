@@ -38,5 +38,4 @@ script:
   - docker-compose stop
   # Run tests in testing container
   - docker-compose -f docker-compose.testing.yml up -d phpmyadmin
-  - docker-compose exec phpmyadmin /test-docker.sh test 80 db_server
-  - ./testing/wait-for-testing.sh
+  - docker-compose exec phpmyadmin /test-docker.sh phpmyadmin_testing 80 phpmyadmin_testing_db

@@ -3,7 +3,7 @@ version: '2'
 services:
   db_server:
     image: ${DB}
-    container_name: phpmyadmin_testing_${DB}
+    container_name: phpmyadmin_testing_db
     environment:
       - MYSQL_ROOT_PASSWORD=${TESTSUITE_PASSWORD}
     volumes:
