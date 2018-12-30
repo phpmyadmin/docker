@@ -27,8 +27,9 @@ The official MySQL and MariaDB use following environment variables to define the
 You can use following tags on Docker hub:
 
 * `latest` - latest stable release
-* `4.6` - latest stable release from the 4.6 branch
-* `4.7` - latest stable release from the 4.7 branch
+* `4.6` - latest stable release for the 4.6 version
+* `4.7` - latest stable release for the 4.7 version
+* `4.8` - latest stable release for the 4.8 version
 * `edge` - bleeding edge docker image (contains stable phpMyAdmin, but the Docker image changes might not yet be fully tested)
 * `edge-4.7` - bleeding edge docker image + latest snapshots from 4.7 branch
 * `edge-4.8` - bleeding edge docker image + latest snapshots from 4.8 branch (currently master)
