@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ] || [ "$1" == supervisord ] ; then
     if [ "$(id -u)" = '0' ]; then
         case "$1" in
