@@ -29,7 +29,7 @@ RUN set -ex; \
     apk del .build-deps
 
 # Calculate download URL
-ENV VERSION 4.8.3
+ENV VERSION 4.8.4
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 LABEL version=$VERSION
 
