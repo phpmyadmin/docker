@@ -124,6 +124,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
+* ``HIDE_PHP_VERSION`` - if defined, will hide the php version (`expose_php = Off`). Set to any value (such as HIDE_PHP_VERSION=true).
 
 For usage with Docker secrets, appending ``_FILE`` to any environment variable is allowed:
 ```
