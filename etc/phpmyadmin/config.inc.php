@@ -43,6 +43,11 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
     $cfg['PmaAbsoluteUri'] = trim($_ENV['PMA_ABSOLUTE_URI']);
 }
 
+/* Configure ExecTimeLimit from ENV */
+if (isset($_ENV['PMA_EXEC_TIME_LIMIT'])) {
+    $cfg['ExecTimeLimit'] = trim($_ENV['PMA_EXEC_TIME_LIMIT']);
+}
+
 /* Figure out hosts */
 
 /* Fallback to default linked */

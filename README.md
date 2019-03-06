@@ -111,6 +111,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
+* ``PMA_EXEC_TIME_LIMIT`` - define execution time limit for PMA (default: 300)
 
 For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
