@@ -13,6 +13,8 @@ declare -A base=(
 	[fpm-alpine]='alpine'
 )
 
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
+
 for variant in apache fpm fpm-alpine; do
 	template="Dockerfile-${base[$variant]}.template"
 	cp $template "$variant/Dockerfile"
@@ -20,6 +22,7 @@ for variant in apache fpm fpm-alpine; do
 	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 	cp php.ini "$variant/php.ini"
 	sed -ri -e '
+		s/%%VERSION%%/'"$latest"'/;
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
 	' "$variant/Dockerfile"
