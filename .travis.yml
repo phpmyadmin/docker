@@ -8,7 +8,7 @@ python:
 env:
   matrix:
     - DB=mysql:latest
-    - DB=mariadb:10.2
+    - DB=mariadb:latest
 
 before_install:
   - export TESTSUITE_PASSWORD=`openssl rand -base64 30`
@@ -19,7 +19,7 @@ install:
 
 script:
   # Build image
-  - docker build -t phpmyadmin/phpmyadmin .
+  - docker build -t phpmyadmin/phpmyadmin apache
   # Test for single database
   - docker run --name testadmin -d --link db_server:db -p 9090:80 phpmyadmin/phpmyadmin
   - ./testing/test-docker.sh testadmin 9090
@@ -37,5 +37,6 @@ script:
   - ./testing/test-docker.sh phpmyadmin 8080 db_server
   - docker-compose stop
   # Run tests in testing container
-  - docker-compose -f docker-compose.testing.yml up -d phpmyadmin
-  - ./testing/wait-for-testing.sh
+  - docker-compose -f docker-compose.testing.yml up -d db_server
+  - docker-compose -f docker-compose.testing.yml up -d
+  - docker-compose exec phpmyadmin /test-docker.sh phpmyadmin_testing 80 phpmyadmin_testing_db

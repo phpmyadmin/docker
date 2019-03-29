@@ -1,5 +1,5 @@
-#!/bin/sh
-if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ] || [ "$1" == supervisord ] ; then
+#!/bin/bash
+if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
     if [ "$(id -u)" = '0' ]; then
         case "$1" in
             apache2*)

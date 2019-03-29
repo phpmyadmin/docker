@@ -4,11 +4,16 @@ DOCKER_REPO = phpmyadmin/phpmyadmin
 
 all: build run logs
 
-build:
-	docker build -t ${DOCKER_REPO}:testing .
+build: build-apache build-fpm build-fpm-alpine
 
-build_nc:
-	docker build --no-cache=true -t ${DOCKER_REPO}:testing .
+build-apache:
+	docker build ${DOCKER_FLAGS} -t ${DOCKER_REPO}:testing apache
+
+build-fpm:
+	docker build ${DOCKER_FLAGS} -t ${DOCKER_REPO}:testing-fpm fpm
+
+build-fpm-alpine:
+	docker build ${DOCKER_FLAGS} -t ${DOCKER_REPO}:testing-fpm-alpine fpm-alpine
 
 run:
 	docker-compose -f docker-compose.testing.yml up -d
