@@ -28,8 +28,21 @@ You can use following tags on Docker hub:
 
 * `latest` - latest stable release
 * `4.8` - latest stable release for the 4.8 version
-* `edge` - bleeding edge docker image (contains stable phpMyAdmin, but the Docker image changes might not yet be fully tested)
-* `edge-4.8` - bleeding edge docker image + latest snapshots from 4.8 branch (currently master)
+* `4.8.5` - specific patch release for the 4.8 version
+
+For each tag the following variants are provided:
+
+### apache
+
+This starts an Apache webserver with PHP, so you can use phpMyAdmin out of the box.
+
+### fpm-alpine
+
+This image has a very small footprint. It is based on Alpine Linux and starts only a PHP FPM process. Use this variant if you already have a seperate webserver. If you need more tools, that are not available on Alpine Linux, use the fpm image instead.
+
+### fpm
+
+This image starts only a PHP FPM container. Use this variant if you already have a seperate webserver.
 
 ## Usage with linked server
 
