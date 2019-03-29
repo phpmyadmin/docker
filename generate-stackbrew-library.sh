@@ -46,7 +46,7 @@ dockerfileCommit() {
 cat <<-EOH
 # This file is generated via https://github.com/phpmyadmin/docker/blob/$(fileCommit "$self")/$self
 Maintainers: Isaac Bennetch <bennetch@gmail.com>
-             Michal Čiha <michal@cihar.com>
+             Michal Čihar <michal@cihar.com>
 GitRepo: https://github.com/phpmyadmin/docker.git
 EOH
 
