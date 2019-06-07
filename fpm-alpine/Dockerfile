@@ -33,32 +33,17 @@ ENV VERSION 4.9+snapshot
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 LABEL version=$VERSION
 
-# Download tarball, verify it using gpg and extract
+# Download tarball and extract
 RUN set -ex; \
-    apk add --no-cache --virtual .fetch-deps \
-        gnupg \
-    ; \
-    \
-    export GNUPGHOME="$(mktemp -d)"; \
-    export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
     curl --output phpMyAdmin.tar.xz --location $URL; \
-    curl --output phpMyAdmin.tar.xz.asc --location $URL.asc; \
-    gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
-    gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
     tar -xf phpMyAdmin.tar.xz -C /usr/src; \
-    gpgconf --kill all; \
-    rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
+    rm -r phpMyAdmin.tar.xz; \
     mv /usr/src/phpMyAdmin-$VERSION-all-languages /usr/src/phpmyadmin; \
     rm -rf /usr/src/phpmyadmin/setup/ /usr/src/phpmyadmin/examples/ /usr/src/phpmyadmin/test/ /usr/src/phpmyadmin/po/ /usr/src/phpmyadmin/composer.json /usr/src/phpmyadmin/RELEASE-DATE-$VERSION; \
     sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /usr/src/phpmyadmin/libraries/vendor_config.php; \
 # Add directory for sessions to allow session persistence
     mkdir /sessions; \
-    mkdir -p /var/nginx/client_body_temp; \
-    apk del .fetch-deps
+    mkdir -p /var/nginx/client_body_temp
 
 # Copy configuration
 COPY config.inc.php /etc/phpmyadmin/config.inc.php
