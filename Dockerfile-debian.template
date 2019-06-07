@@ -33,7 +33,7 @@ RUN set -ex; \
 
 # Calculate download URL
 ENV VERSION 4.9+snapshot
-ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
+ENV URL https://files.phpmyadmin.net/snapshots/phpMyAdmin-${VERSION}-all-languages.tar.xz
 LABEL version=$VERSION
 
 # Download tarball and extract
