@@ -2,7 +2,7 @@ FROM php:7.2-fpm-alpine
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
-	bash
+    bash
 
 # Install dependencies
 RUN set -ex; \
@@ -27,6 +27,28 @@ RUN set -ex; \
     )"; \
     apk add --virtual .phpmyadmin-phpexts-rundeps $runDeps; \
     apk del .build-deps
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+        echo 'opcache.memory_consumption=128'; \
+        echo 'opcache.interned_strings_buffer=8'; \
+        echo 'opcache.max_accelerated_files=4000'; \
+        echo 'opcache.revalidate_freq=2'; \
+        echo 'opcache.fast_shutdown=1'; \
+        echo 'opcache.enable_cli=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
+    \
+    { \
+        echo 'session.cookie_httponly = 1'; \
+        echo 'session.use_strict_mode = 1'; \
+    } > /usr/local/etc/php/conf.d/session-strict.ini; \
+    \
+    { \
+        echo 'allow_url_fopen = Off'; \
+        echo 'max_execution_time = 600'; \
+        echo 'memory_limit = 512M'; \
+    } > /usr/local/etc/php/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
 ENV VERSION 4.9.0.1
@@ -62,7 +84,6 @@ RUN set -ex; \
 
 # Copy configuration
 COPY config.inc.php /etc/phpmyadmin/config.inc.php
-COPY php.ini /usr/local/etc/php/conf.d/php-phpmyadmin.ini
 
 # Copy main script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
