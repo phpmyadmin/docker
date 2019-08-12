@@ -1,6 +1,6 @@
 DOCKER_REPO = phpmyadmin/phpmyadmin
 
-.PHONY: all build build_nc run logs clean stop rm prune
+.PHONY: all build build-apache build-fpm build-fpm-alpine run logs clean stop rm prune
 
 all: build run logs
 
