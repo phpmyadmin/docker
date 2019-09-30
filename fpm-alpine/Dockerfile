@@ -48,8 +48,6 @@ RUN { \
         echo 'allow_url_fopen = Off'; \
         echo 'max_execution_time = 600'; \
         echo 'memory_limit = 512M'; \
-        echo 'upload_max_filesize = 10G'; \
-        echo 'post_max_size = 10G'; \
     } > /usr/local/etc/php/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
