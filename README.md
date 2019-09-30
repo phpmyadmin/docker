@@ -1,6 +1,6 @@
 # Official phpMyAdmin Docker image
 
-Run phpMyAdmin with Alpine, supervisor, nginx and PHP FPM.
+Run phpMyAdmin with Alpine, nginx and PHP FPM.
 
 [![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)][hub]
@@ -27,8 +27,7 @@ The official MySQL and MariaDB use following environment variables to define the
 You can use following tags on Docker hub:
 
 * `latest` - latest stable release
-* `4.8` - latest stable release for the 4.8 version
-* `4.8.5` - specific patch release for the 4.8 version
+* `4.9` - latest stable release for the 4.9 version
 
 For each tag the following variants are provided:
 
