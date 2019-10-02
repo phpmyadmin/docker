@@ -48,6 +48,12 @@ RUN { \
     } > /usr/local/etc/php/conf.d/session-strict.ini; \
     \
     { \
+        echo 'file_uploads = On'; \
+        echo 'upload_max_filesize = 512M'; \
+        echo 'post_max_size = 512M'; \
+    } > /usr/local/etc/php/conf.d/upload-misc.ini; \
+    \    
+    { \
         echo 'allow_url_fopen = Off'; \
         echo 'max_execution_time = 600'; \
         echo 'memory_limit = 512M'; \
