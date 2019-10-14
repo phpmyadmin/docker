@@ -96,5 +96,8 @@ COPY config.inc.php /etc/phpmyadmin/config.inc.php
 # Copy main script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+HEALTHCHECK --interval=5m --timeout=1s --start-period=5m \
+    CMD curl -f http://localhost/LICENSE || exit 1
+
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD ["%%CMD%%"]
