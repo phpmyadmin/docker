@@ -18,6 +18,15 @@ install:
   - pip install mechanize html5lib
 
 script:
+  # Run tests in testing container
+  - docker-compose -f docker-compose.testing.yml up -d db_server
+  - docker-compose -f docker-compose.testing.yml up -d
+  - docker-compose exec phpmyadmin /test-docker.sh phpmyadmin_testing 80 phpmyadmin_testing_db
+  - docker-compose stop
+  # Test docker-compose
+  - docker-compose -f docker-compose.yml -f docker-compose.db.yml up -d
+  - ./testing/test-docker.sh phpmyadmin 8080 db_server
+  - docker-compose stop
   # Build image
   - docker build -t phpmyadmin/phpmyadmin apache
   # Test for single database
@@ -32,11 +41,3 @@ script:
   # Test for arbitrary database with user config
   - docker run --name userconfigadmin -d --link db_server:db3 -v `readlink -f ./testing/config.test.inc.php`:/etc/phpmyadmin/config.user.inc.php -p 7080:80 phpmyadmin/phpmyadmin
   - ./testing/test-docker.sh userconfigadmin 7080 db3
-  # Test docker-compose
-  - docker-compose -f docker-compose.yml -f docker-compose.db.yml up -d
-  - ./testing/test-docker.sh phpmyadmin 8080 db_server
-  - docker-compose stop
-  # Run tests in testing container
-  - docker-compose -f docker-compose.testing.yml up -d db_server
-  - docker-compose -f docker-compose.testing.yml up -d
-  - docker-compose exec phpmyadmin /test-docker.sh phpmyadmin_testing 80 phpmyadmin_testing_db
