@@ -54,7 +54,7 @@ RUN { \
     } > /usr/local/etc/php/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
-ENV VERSION 4.9.1
+ENV VERSION 4.9.2
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 LABEL version=$VERSION
 
