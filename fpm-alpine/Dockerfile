@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.3-fpm-alpine
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
@@ -14,6 +14,7 @@ RUN set -ex; \
         libpng-dev \
         libwebp-dev \
         libxpm-dev \
+        libzip-dev \
     ; \
     \
     docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr --with-png-dir=/usr --with-xpm-dir=/usr; \
