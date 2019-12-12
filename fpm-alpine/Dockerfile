@@ -1,4 +1,4 @@
-FROM php:7.3-fpm-alpine
+FROM php:7.4-fpm-alpine
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
@@ -17,8 +17,14 @@ RUN set -ex; \
         libzip-dev \
     ; \
     \
-    docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr --with-png-dir=/usr --with-xpm-dir=/usr; \
-    docker-php-ext-install bz2 gd mysqli opcache zip; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
+    docker-php-ext-install -j "$(nproc)" \
+        bz2 \
+        gd \
+        mysqli \
+        opcache \
+        zip \
+    ; \
     \
     runDeps="$( \
         scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \

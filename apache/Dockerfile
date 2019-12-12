@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 # Install dependencies
 RUN set -ex; \
@@ -16,8 +16,14 @@ RUN set -ex; \
         libzip-dev \
     ; \
     \
-    docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr --with-png-dir=/usr --with-xpm-dir=/usr; \
-    docker-php-ext-install bz2 gd mysqli opcache zip; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
+    docker-php-ext-install -j "$(nproc)" \
+        bz2 \
+        gd \
+        mysqli \
+        opcache \
+        zip \
+    ; \
     \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
