@@ -27,8 +27,8 @@ The official MySQL and MariaDB use following environment variables to define the
 You can use following tags on Docker hub:
 
 * `latest` - latest stable release
-* `4.8` - latest stable release for the 4.8 version
-* `4.8.5` - specific patch release for the 4.8 version
+* `4.9` - latest stable release for the 4.9 version
+* `4.9.1` - specific patch release for the 4.9 version
 
 For each tag the following variants are provided:
 
@@ -93,15 +93,15 @@ docker-compose -f docker-compose.testing.yml up phpmyadmin
 
 ## Adding Custom Configuration
 
-You can add your own custom config.inc.php settings (such as Configuration Storage setup) 
-by creating a file named "config.user.inc.php" with the various user defined settings
+You can add your own custom config.inc.php settings (such as Configuration Storage setup)
+ by creating a file named "config.user.inc.php" with the various user defined settings
 in it, and then linking it into the container using:
 
 ```
 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
 ```
 On the "docker run" line like this:
-``` 
+```
 docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin/phpmyadmin
 ```
 
