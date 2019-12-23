@@ -16,7 +16,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
         group="$(id -g)"
     fi
 
-    chown www-data:www-data /sessions /var/nginx/client_body_temp
+    chown ${user}:${group} /sessions /var/nginx/client_body_temp
 
     if ! [ -e index.php -a -e db_designer.php ]; then
         echo >&2 "phpMyAdmin not found in $PWD - copying now..."
