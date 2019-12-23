@@ -1,6 +1,6 @@
 # Official phpMyAdmin Docker image
 
-Run phpMyAdmin with Alpine, supervisor, nginx and PHP FPM.
+Run phpMyAdmin with Alpine, nginx and PHP FPM.
 
 [![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)][hub]
