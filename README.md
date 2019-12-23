@@ -1,6 +1,6 @@
 # Official phpMyAdmin Docker image
 
-Run phpMyAdmin with Alpine, nginx and PHP FPM.
+Run phpMyAdmin with Alpine, Apache and PHP FPM.
 
 [![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)][hub]
@@ -125,7 +125,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
 * ``HIDE_PHP_VERSION`` - if defined, will hide the php version (`expose_php = Off`). Set to any value (such as HIDE_PHP_VERSION=true).
-* ``UPLOAD_LIMIT`` - if set, will override the default value for nginx and php-fpm (default value is 2048 kb)
+* ``UPLOAD_LIMIT`` - if set, will override the default value for apache and php-fpm (default value is 2048 kb)
 
 For usage with Docker secrets, appending ``_FILE`` to any environment variable is allowed:
 ```

@@ -16,6 +16,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
         group="$(id -g)"
     fi
 
+    # Custom folders for sessions
     chown ${user}:${group} /sessions /var/nginx/client_body_temp
 
     if ! [ -e index.php -a -e url.php ]; then
