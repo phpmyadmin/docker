@@ -10,7 +10,8 @@ RUN set -ex; \
 		curl \
 		python-pip \
 	; \
-	pip install mechanize html5lib; \
+	pip install setuptools wheel; \
+	pip install mechanize html5lib pytest; \
 	rm -rf /var/lib/apt/lists/*
 
-COPY phpmyadmin_test.py test-docker.sh world.sql /
+COPY phpmyadmin_test.py test-docker.sh world.sql conftest.py /

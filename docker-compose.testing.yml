@@ -1,26 +1,30 @@
-version: '2'
+version: '3.1'
 
 services:
   db_server:
-    image: ${DB}
+    image: ${DB:-mariadb:10.3}
     container_name: phpmyadmin_testing_db
     environment:
-      - MYSQL_ROOT_PASSWORD=${TESTSUITE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${TESTSUITE_PASSWORD:-my-secret-pw}
     volumes:
       - ./testing/testing.cnf:/etc/mysql/conf.d/testing.cnf:ro
+    tmpfs: 
+      - /var/lib/mysql:rw,noexec,nosuid,size=300m
 
   phpmyadmin:
     build:
       context: testing/
-    links:
-      - db_server:db_server
     container_name: phpmyadmin_testing
     volumes:
       - /sessions
+      - ./testing/conftest.py:/conftest.py
+      - ./testing/test-docker.sh:/test-docker.sh
+      - ./testing/phpmyadmin_test.py:/phpmyadmin_test.py
+      - ./docker-entrypoint.sh:/docker-entrypoint.sh
     ports:
       - 8090:80
     environment:
       - PMA_ARBITRARY=1
-      - TESTSUITE_PASSWORD=${TESTSUITE_PASSWORD}
+      - TESTSUITE_PASSWORD=${TESTSUITE_PASSWORD:-my-secret-pw}
     depends_on:
       - db_server

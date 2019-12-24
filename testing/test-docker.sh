@@ -28,6 +28,7 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m" # No Color
 
+
 # Find test script
 if [ -f ./phpmyadmin_test.py ] ; then
     FILENAME=./phpmyadmin_test.py
@@ -75,12 +76,11 @@ fi
 
 # Perform tests
 ret=0
-$FILENAME --url "$PHPMYADMIN_URL" --username root --password $TESTSUITE_PASSWORD $SERVER
+pytest -q --url "$PHPMYADMIN_URL" --username root --password "$TESTSUITE_PASSWORD"  $SERVER $FILENAME
 ret=$?
 
 # Show debug output in case of failure
 if [ $ret -ne 0 ] ; then
-    curl "$PHPMYADMIN_URL"
     ${COMMAND_HOST} ps faux
     echo "Result of ${PHPMYADMIN_DB_HOSTNAME} tests: ${RED}FAILED${NC}"
     exit $ret

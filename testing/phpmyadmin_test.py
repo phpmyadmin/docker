@@ -1,26 +1,27 @@
 #!/usr/bin/env python2
 import argparse
 import os
+import subprocess
 import re
 import sys
 
 import mechanize
+import tempfile
+import pytest
 
 
-def test_content(match, content):
-    if not match in content:
-        print(content)
-        raise Exception('{0} not found in content!'.format(match))
+def do_test_content(match, content):
+    assert(match in content)
 
-
-def test_phpmyadmin(url, username, password, server=None, sqlfile=None):
+def test_phpmyadmin(url, username, password, server, sqlfile):
     if sqlfile is None:
         if os.path.exists('/world.sql'):
             sqlfile = '/world.sql'
         elif os.path.exists('./world.sql'):
             sqlfile = './world.sql'
         else:
-            sqlfile = './testing/world.sql'
+            path = os.path.dirname(os.path.realpath(__file__))
+            sqlfile = path + '/world.sql'
     br = mechanize.Browser()
 
     # Ignore robots.txt
@@ -38,36 +39,37 @@ def test_phpmyadmin(url, username, password, server=None, sqlfile=None):
 
     # Login and check if loggged in
     response = br.submit()
-    test_content('Server version', response.read())
+    do_test_content('Server version', response.read())
 
     # Open server import
     response = br.follow_link(text_regex=re.compile('Import'))
-    test_content('OpenDocument Spreadsheet', response.read())
+    do_test_content('OpenDocument Spreadsheet', response.read())
 
     # Upload SQL file
     br.select_form('import')
     br.form.add_file(open(sqlfile), 'text/plain', sqlfile)
     response = br.submit()
-    test_content('5326 queries executed', response.read())
+    do_test_content('5326 queries executed', response.read())
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--url', required=True)
-    parser.add_argument('--username', required=True)
-    parser.add_argument('--password', required=True)
-    parser.add_argument('--server')
-    parser.add_argument('--sqlfile', default=None)
-    args = parser.parse_args()
+def docker_secret(env_name):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    secret_file = tempfile.mkstemp()
 
-    test_phpmyadmin(
-        args.url,
-        args.username,
-        args.password,
-        args.server,
-        args.sqlfile
-    )
+    password = "The_super_secret_password"
+    password_file = open(secret_file[1], 'wb')
+    password_file.write(str.encode(password))
+    password_file.close()
 
+    test_env = {env_name + '_FILE': secret_file[1]}
 
-if __name__ == '__main__':
-    main()
+    # Run entrypoint and afterwards echo the environment variables
+    result = subprocess.Popen(dir_path+ "/../docker-entrypoint.sh 'env'", shell=True, stdout=subprocess.PIPE, env=test_env)
+    output = result.stdout.read().decode()
+
+    assert (env_name + "=" + password) in output
+
+def test_phpmyadmin_secrets():
+    docker_secret('MYSQL_PASSWORD')
+    docker_secret('MYSQL_ROOT_PASSWORD')
+    docker_secret('PMA_PASSWORD')
