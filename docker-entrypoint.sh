@@ -16,9 +16,10 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
         group="$(id -g)"
     fi
 
-    chown www-data:www-data /sessions /var/nginx/client_body_temp
+    # Custom folders for sessions
+    chown ${user}:${group} /sessions /var/nginx/client_body_temp
 
-    if ! [ -e index.php -a -e db_designer.php ]; then
+    if ! [ -e index.php -a -e url.php ]; then
         echo >&2 "phpMyAdmin not found in $PWD - copying now..."
         if [ "$(ls -A)" ]; then
             echo >&2 "WARNING: $PWD is not empty - press Ctrl+C now if this is an error!"
@@ -50,6 +51,12 @@ fi
 if [ ! -z "${HIDE_PHP_VERSION}" ]; then
     echo "PHP version is now hidden."
     echo -e 'expose_php = Off\n' > $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini
+fi
+
+UPLOAD_LIMIT_INI_FILE="$PHP_INI_DIR/conf.d/phpmyadmin-upload-limit.ini"
+if [ ! -z "${UPLOAD_LIMIT}" ]; then
+    echo "Adding the custom upload limit."
+    echo -e "upload_max_filesize = $UPLOAD_LIMIT\npost_max_size = $UPLOAD_LIMIT\n" > $UPLOAD_LIMIT_INI_FILE
 fi
 
 exec "$@"

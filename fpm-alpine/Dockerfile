@@ -43,18 +43,18 @@ RUN { \
         echo 'opcache.max_accelerated_files=4000'; \
         echo 'opcache.revalidate_freq=2'; \
         echo 'opcache.fast_shutdown=1'; \
-    } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
+    } > $PHP_INI_DIR/conf.d/opcache-recommended.ini; \
     \
     { \
         echo 'session.cookie_httponly = 1'; \
         echo 'session.use_strict_mode = 1'; \
-    } > /usr/local/etc/php/conf.d/session-strict.ini; \
+    } > $PHP_INI_DIR/conf.d/session-strict.ini; \
     \
     { \
         echo 'allow_url_fopen = Off'; \
         echo 'max_execution_time = 600'; \
         echo 'memory_limit = 512M'; \
-    } > /usr/local/etc/php/conf.d/phpmyadmin-misc.ini
+    } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
 ENV VERSION 4.9.2
