@@ -59,4 +59,14 @@ if [ ! -z "${UPLOAD_LIMIT}" ]; then
     echo -e "upload_max_filesize = $UPLOAD_LIMIT\npost_max_size = $UPLOAD_LIMIT\n" > $UPLOAD_LIMIT_INI_FILE
 fi
 
+if [ ! -z "${PMA_CONFIG_BASE64}" ]; then
+    echo "Adding the custom config.inc.php from base64."
+    echo "${PMA_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.inc.php
+fi
+
+if [ ! -z "${PMA_USER_CONFIG_BASE64}" ]; then
+    echo "Adding the custom config.user.inc.php from base64."
+    echo "${PMA_USER_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.user.inc.php
+fi
+
 exec "$@"

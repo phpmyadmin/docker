@@ -126,6 +126,8 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
 * ``HIDE_PHP_VERSION`` - if defined, will hide the php version (`expose_php = Off`). Set to any value (such as HIDE_PHP_VERSION=true).
 * ``UPLOAD_LIMIT`` - if set, will override the default value for apache and php-fpm (default value is 2048 kb)
+* ``PMA_CONFIG_BASE64`` - if set, will override the default config.inc.php with the base64 decoded contents of the variable
+* ``PMA_USER_CONFIG_BASE64`` - if set, will override the default config.user.inc.php with the base64 decoded contents of the variable
 
 For usage with Docker secrets, appending ``_FILE`` to any environment variable is allowed:
 ```

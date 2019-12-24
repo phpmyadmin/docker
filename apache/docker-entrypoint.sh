@@ -64,4 +64,14 @@ else
     fi
 fi
 
+if [ ! -z "${PMA_CONFIG_BASE64}" ]; then
+    echo "Adding the custom config.inc.php from base64."
+    echo "${PMA_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.inc.php
+fi
+
+if [ ! -z "${PMA_USER_CONFIG_BASE64}" ]; then
+    echo "Adding the custom config.user.inc.php from base64."
+    echo "${PMA_USER_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.user.inc.php
+fi
+
 exec "$@"
