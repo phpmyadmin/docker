@@ -50,18 +50,13 @@ fi
 
 if [ ! -z "${HIDE_PHP_VERSION}" ]; then
     echo "PHP version is now hidden."
-    echo 'expose_php = Off' > $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini
+    echo -e 'expose_php = Off\n' > $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini
 fi
 
 UPLOAD_LIMIT_INI_FILE="$PHP_INI_DIR/conf.d/phpmyadmin-upload-limit.ini"
 if [ ! -z "${UPLOAD_LIMIT}" ]; then
     echo "Adding the custom upload limit."
     echo -e "upload_max_filesize = $UPLOAD_LIMIT\npost_max_size = $UPLOAD_LIMIT\n" > $UPLOAD_LIMIT_INI_FILE
-else
-    if [ -f $UPLOAD_LIMIT_INI_FILE ]; then
-        echo "Removing the custom upload limit."
-        rm $UPLOAD_LIMIT_INI_FILE
-    fi
 fi
 
 if [ ! -z "${PMA_CONFIG_BASE64}" ]; then
