@@ -134,6 +134,13 @@ For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` envir
 docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin/phpmyadmin
 ```
 
+### Variables that can be read from a file using ``_FILE``
+- PMA_PASSWORD
+- MYSQL_ROOT_PASSWORD
+- MYSQL_PASSWORD
+- PMA_HOSTS
+- PMA_HOST
+
 For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
 [hub]: https://hub.docker.com/r/phpmyadmin/phpmyadmin/

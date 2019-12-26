@@ -84,7 +84,7 @@ function get_docker_secret() {
 get_docker_secret PMA_PASSWORD
 get_docker_secret MYSQL_ROOT_PASSWORD
 get_docker_secret MYSQL_PASSWORD
-get_docker_secret PMA_HOSTS_FILE
-get_docker_secret PMA_HOST_FILE
+get_docker_secret PMA_HOSTS
+get_docker_secret PMA_HOST
 
 exec "$@"
