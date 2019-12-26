@@ -22,27 +22,29 @@ The official MySQL and MariaDB use following environment variables to define the
 * `MYSQL_ROOT_PASSWORD` - This variable is mandatory and specifies the password that will be set for the `root` superuser account.
 * `MYSQL_USER`, `MYSQL_PASSWORD` - These variables are optional, used in conjunction to create a new user and to set that user's password.
 
-## Docker hub tags
+## Supported Docker hub tags
 
-You can use following tags on Docker hub:
+The following tags are available:
 
-* `latest` - latest stable release
-* `4.9` - latest stable release for the 4.9 version
-* `4.9.1` - specific patch release for the 4.9 version
+* `latest`, `fpm`, and `fpm-alpine` are always the most recent released version
+* Major versions, such as `5`, `5-fpm`, and `5-fpm-alpine`
+* Specific minor versions, such as `5.0`, `5.0-fpm`, and `5-fpm-alpine`
+* Specific patch versions, such as `5.0.0`, `5.0.0-fpm`, and `5.0.0-alpine`. Note that, on rare occasion,
+there may be an intermediary "docker-only" release, such as 4.9.2-1
+* `edge`, `edge-fpm`, `edge-fpm-alpine`, a development version build from the daily snapshot
 
-For each tag the following variants are provided:
+A complete list of tags is [available at Docker Hub](https://hub.docker.com/r/phpmyadmin/phpmyadmin/tags)
 
-### apache
+## Image variants
 
-This starts an Apache webserver with PHP, so you can use phpMyAdmin out of the box.
+We provide three variations:
 
-### fpm-alpine
-
-This image has a very small footprint. It is based on Alpine Linux and starts only a PHP FPM process. Use this variant if you already have a seperate webserver. If you need more tools, that are not available on Alpine Linux, use the fpm image instead.
-
-### fpm
-
-This image starts only a PHP FPM container. Use this variant if you already have a seperate webserver.
+* "apache" includes a full Apache webserver with PHP and includes everything needed to work out of the box.
+This is the default when only a version number is requested.
+* "fpm" only starts a PHP FPM container. Use this variant if you already have a seperate webserver.
+This includes more tools and is therefore a larger image than the "fpm-alpine" variation.
+* "fpm-alpine" has a very small footprint. It is based on Alpine Linux and only starts a PHP FPM process.
+Use this variant if you already have a seperate webserver. If you need more tools that are not available on Alpine Linux, use the fpm image instead.
 
 ## Usage with linked server
 
