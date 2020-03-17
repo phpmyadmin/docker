@@ -29,7 +29,7 @@ _helpers:
   stage: "Run tests in testing container"
   script:
     # Build image
-    - docker build -t phpmyadmin/phpmyadmin apache
+    - docker build --build-arg VCS_REF=`git rev-parse HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` -t phpmyadmin/phpmyadmin apache
     # Test for single database
     - docker run --name testadmin -d --link db_server:db -p 9090:80 phpmyadmin/phpmyadmin
     - ./testing/test-docker.sh testadmin 9090
@@ -71,17 +71,17 @@ jobs:
       name: "Apache amd64"
       arch: amd64
       script:
-      - docker build -t phpmyadmin/phpmyadmin apache
+      - docker build --build-arg VCS_REF=`git rev-parse HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` -t phpmyadmin/phpmyadmin apache
     - <<: *build-image
       name: "fpm amd64"
       arch: amd64
       script:
-      - docker build -t phpmyadmin/phpmyadmin fpm
+      - docker build --build-arg VCS_REF=`git rev-parse HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` -t phpmyadmin/phpmyadmin fpm
     - <<: *build-image
       name: "fpm-alpine amd64"
       arch: amd64
       script:
-      - docker build -t phpmyadmin/phpmyadmin fpm-alpine
+      - docker build --build-arg VCS_REF=`git rev-parse HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` -t phpmyadmin/phpmyadmin fpm-alpine
     - <<: *test-apache-image
       name: "Run testing for MariaDB"
       env: DB=mariadb:latest
