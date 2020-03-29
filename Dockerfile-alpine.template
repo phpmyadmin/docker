@@ -2,7 +2,8 @@ FROM php:7.4-%%VARIANT%%
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
-    bash
+    bash \
+    tzdata
 
 # Install dependencies
 RUN set -ex; \
