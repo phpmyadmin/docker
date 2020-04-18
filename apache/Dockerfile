@@ -101,12 +101,13 @@ RUN set -ex; \
         || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
-    mkdir /usr/src/phpmyadmin; \
-    tar -xf phpMyAdmin.tar.xz -C /usr/src/phpmyadmin --strip-components=1; \
+    tar -xf phpMyAdmin.tar.xz -C /var/www/html --strip-components=1; \
+    mkdir -p /var/www/html/tmp; \
+    chown www-data:www-data /var/www/html/tmp; \
     gpgconf --kill all; \
     rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
-    rm -rf /usr/src/phpmyadmin/setup/ /usr/src/phpmyadmin/examples/ /usr/src/phpmyadmin/test/ /usr/src/phpmyadmin/po/ /usr/src/phpmyadmin/composer.json /usr/src/phpmyadmin/RELEASE-DATE-$VERSION; \
-    sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /usr/src/phpmyadmin/libraries/vendor_config.php; \
+    rm -rf /var/www/html/setup/ /var/www/html/examples/ /var/www/html/test/ /var/www/html/po/ /var/www/html/composer.json /var/www/html/RELEASE-DATE-$VERSION; \
+    sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /var/www/html/libraries/vendor_config.php; \
 # Add directory for sessions to allow session persistence
     \
     apt-mark auto '.*' > /dev/null; \

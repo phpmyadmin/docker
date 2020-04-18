@@ -16,23 +16,6 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
         group="$(id -g)"
     fi
 
-    if ! [ -e index.php -a -e url.php ]; then
-        echo >&2 "phpMyAdmin not found in $PWD - copying now..."
-        if [ "$(ls -A)" ]; then
-            echo >&2 "WARNING: $PWD is not empty - press Ctrl+C now if this is an error!"
-            ( set -x; ls -A; sleep 10 )
-        fi
-        tar --create \
-            --file - \
-            --one-file-system \
-            --directory /usr/src/phpmyadmin \
-            --owner "$user" --group "$group" \
-            . | tar --extract --file -
-        echo >&2 "Complete! phpMyAdmin has been successfully copied to $PWD"
-        mkdir -p tmp; \
-        chmod -R 777 tmp; \
-    fi
-
     if [ ! -f /etc/phpmyadmin/config.secret.inc.php ]; then
         cat > /etc/phpmyadmin/config.secret.inc.php <<EOT
 <?php
