@@ -62,11 +62,8 @@ RUN set -ex; \
 # Calculate download URL
 ENV VERSION 5.0.2
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
-ARG BUILD_DATE
-ARG VCS_REF
 
-LABEL maintainer="The phpMyAdmin Team <developers@phpmyadmin.net>" \
-    org.opencontainers.image.title="Official phpMyAdmin Docker image" \
+LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.description="Run phpMyAdmin with Alpine, Apache and PHP FPM." \
     org.opencontainers.image.authors="The phpMyAdmin Team <developers@phpmyadmin.net>" \
     org.opencontainers.image.vendor="phpMyAdmin" \
@@ -74,9 +71,7 @@ LABEL maintainer="The phpMyAdmin Team <developers@phpmyadmin.net>" \
     org.opencontainers.image.licenses="GPL-2.0-only" \
     org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.url="https://github.com/phpmyadmin/docker#readme" \
-    org.opencontainers.image.source="https://github.com/phpmyadmin/docker.git" \
-    org.opencontainers.image.revision="${VCS_REF}" \
-    org.opencontainers.image.created="${BUILD_DATE}"
+    org.opencontainers.image.source="https://github.com/phpmyadmin/docker.git"
 
 # Download tarball, verify it using gpg and extract
 RUN set -ex; \
@@ -101,8 +96,6 @@ RUN set -ex; \
     rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
     rm -rf /var/www/html/setup/ /var/www/html/examples/ /var/www/html/test/ /var/www/html/po/ /var/www/html/composer.json /var/www/html/RELEASE-DATE-$VERSION; \
     sed -i "s@define('CONFIG_DIR'.*@define('CONFIG_DIR', '/etc/phpmyadmin/');@" /var/www/html/libraries/vendor_config.php; \
-
-# Add directory for sessions to allow session persistence
     apk del --no-network .fetch-deps
 
 # Copy configuration
