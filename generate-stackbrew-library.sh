@@ -81,6 +81,9 @@ for variant in apache fpm fpm-alpine; do
 		variantAliases+=( "${versionAliases[@]}" )
 	fi
 
+	# Add the variant to the tag list
+	variantAliases+=( "${variant}" )
+
 	variantParent="$(awk 'toupper($1) == "FROM" { print $2 }' "$variant/Dockerfile")"
 
 	# depends on docker library
