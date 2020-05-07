@@ -1,20 +1,5 @@
 #!/bin/bash
 if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
-    if [ "$(id -u)" = '0' ]; then
-        case "$1" in
-            apache2*)
-                user="${APACHE_RUN_USER:-www-data}"
-                group="${APACHE_RUN_GROUP:-www-data}"
-                ;;
-            *) # php-fpm
-                user='www-data'
-                group='www-data'
-                ;;
-        esac
-    else
-        user="$(id -u)"
-        group="$(id -g)"
-    fi
 
     if [ ! -f /etc/phpmyadmin/config.secret.inc.php ]; then
         cat > /etc/phpmyadmin/config.secret.inc.php <<EOT
@@ -49,7 +34,7 @@ if [ ! -z "${PMA_USER_CONFIG_BASE64}" ]; then
     echo "${PMA_USER_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.user.inc.php
 fi
 
-function get_docker_secret() {
+get_docker_secret() {
     local env_var="${1}"
     local env_var_file="${env_var}_FILE"
 
