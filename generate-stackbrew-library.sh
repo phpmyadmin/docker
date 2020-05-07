@@ -65,6 +65,9 @@ latest="$(
 		| tail -1
 )"
 
+# Example: RELEASE_5_0_2^{}
+latest=$(echo "$latest" | cut -d'_' -f2,3,4 | cut -d'^' -f1 | awk '{gsub("_","."); print}')
+
 for variant in apache fpm fpm-alpine; do
 	commit="$(dockerfileCommit "$variant")"
 	fullversion="$(git show "$commit":"$variant/Dockerfile" | awk '$1 == "ENV" && $2 == "VERSION" { print $3; exit }')"
