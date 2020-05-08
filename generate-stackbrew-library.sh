@@ -57,16 +57,7 @@ join() {
 	echo "${out#$sep}"
 }
 
-latest="$(
-	git ls-remote --tags https://github.com/phpmyadmin/phpmyadmin.git \
-		| cut -d/ -f3 \
-		| grep -vE -- '-rc|-b' \
-		| sort -V \
-		| tail -1
-)"
-
-# Example: RELEASE_5_0_2^{}
-latest=$(echo "$latest" | cut -d'_' -f2,3,4 | cut -d'^' -f1 | awk '{gsub("_","."); print}')
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
 
 for variant in apache fpm fpm-alpine; do
 	commit="$(dockerfileCommit "$variant")"
@@ -88,7 +79,7 @@ for variant in apache fpm fpm-alpine; do
 
 	# depends on docker library
 	#variantArches="${parentRepoToArches[$variantParent]}"
-	variantArches="amd64 arm32v7 arm64v8 i386 ppc64le"
+	variantArches="amd64 arm32v7 arm64v8 i386 ppc64le s390x"
 
 	cat <<-EOE
 
