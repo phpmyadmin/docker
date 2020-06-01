@@ -61,6 +61,7 @@ RUN set -ex; \
 
 # Calculate download URL
 ENV VERSION 5.0.2
+ENV SHA256 cbcc78d1499308d9329950fcba2ebaa84c559a934fe54efc027d459d8e4161c8
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
@@ -83,6 +84,7 @@ RUN set -ex; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
     curl -fsSL -o phpMyAdmin.tar.xz $URL; \
     curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
+    echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
     gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \

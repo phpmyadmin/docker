@@ -22,6 +22,7 @@ declare -A base=(
 )
 
 latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
+sha256="$(curl -fsSL "https://files.phpmyadmin.net/phpMyAdmin/$latest/phpMyAdmin-$latest-all-languages.tar.xz.sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
 
 for variant in apache fpm fpm-alpine; do
 	template="Dockerfile-${base[$variant]}.template"
@@ -30,6 +31,7 @@ for variant in apache fpm fpm-alpine; do
 	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 	sed -ri -e '
 		s/%%VERSION%%/'"$latest"'/;
+		s/%%SHA256%%/'"$sha256"'/;
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
 	' "$variant/Dockerfile"
