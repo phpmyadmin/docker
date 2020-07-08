@@ -1,0 +1,4 @@
+#!/bin/sh
+# This file is used by docker hub to build the image
+
+docker build -t $IMAGE_NAME .

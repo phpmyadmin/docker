@@ -2,7 +2,7 @@ FROM alpine AS builder
 
 # Download QEMU, see https://github.com/docker/hub-feedback/issues/1261
 ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v4.0.0%2Bbalena2/qemu-4.0.0.balena2-aarch64.tar.gz
-RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . && mv qemu-4.0.0+balena2-aarch64/qemu-aarch64-static .
 
 FROM arm64v8/php:7.4-fpm-alpine
 
@@ -18,29 +18,29 @@ RUN apk add --no-cache \
 RUN set -ex; \
     \
     apk add --no-cache --virtual .build-deps \
-        bzip2-dev \
-        freetype-dev \
-        libjpeg-turbo-dev \
-        libpng-dev \
-        libwebp-dev \
-        libxpm-dev \
-        libzip-dev \
+    bzip2-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
+    libxpm-dev \
+    libzip-dev \
     ; \
     \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
     docker-php-ext-install -j "$(nproc)" \
-        bz2 \
-        gd \
-        mysqli \
-        opcache \
-        zip \
+    bz2 \
+    gd \
+    mysqli \
+    opcache \
+    zip \
     ; \
     \
     runDeps="$( \
-        scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
-            | tr ',' '\n' \
-            | sort -u \
-            | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+    | tr ',' '\n' \
+    | sort -u \
+    | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
     )"; \
     apk add --virtual .phpmyadmin-phpexts-rundeps $runDeps; \
     apk del --no-network .build-deps
@@ -50,22 +50,22 @@ RUN set -ex; \
 RUN set -ex; \
     \
     { \
-        echo 'opcache.memory_consumption=128'; \
-        echo 'opcache.interned_strings_buffer=8'; \
-        echo 'opcache.max_accelerated_files=4000'; \
-        echo 'opcache.revalidate_freq=2'; \
-        echo 'opcache.fast_shutdown=1'; \
+    echo 'opcache.memory_consumption=128'; \
+    echo 'opcache.interned_strings_buffer=8'; \
+    echo 'opcache.max_accelerated_files=4000'; \
+    echo 'opcache.revalidate_freq=2'; \
+    echo 'opcache.fast_shutdown=1'; \
     } > $PHP_INI_DIR/conf.d/opcache-recommended.ini; \
     \
     { \
-        echo 'session.cookie_httponly = 1'; \
-        echo 'session.use_strict_mode = 1'; \
+    echo 'session.cookie_httponly = 1'; \
+    echo 'session.use_strict_mode = 1'; \
     } > $PHP_INI_DIR/conf.d/session-strict.ini; \
     \
     { \
-        echo 'allow_url_fopen = Off'; \
-        echo 'max_execution_time = 600'; \
-        echo 'memory_limit = 512M'; \
+    echo 'allow_url_fopen = Off'; \
+    echo 'max_execution_time = 600'; \
+    echo 'memory_limit = 512M'; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
@@ -86,7 +86,7 @@ LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
 # Download tarball, verify it using gpg and extract
 RUN set -ex; \
     apk add --no-cache --virtual .fetch-deps \
-        gnupg \
+    gnupg \
     ; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
@@ -95,10 +95,10 @@ RUN set -ex; \
     curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
     echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
     gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
+    || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
+    || gpg --batch --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
+    || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
+    || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
     tar -xf phpMyAdmin.tar.xz -C /var/www/html --strip-components=1; \
     mkdir -p /var/www/html/tmp; \

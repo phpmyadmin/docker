@@ -1,8 +1,8 @@
 FROM alpine AS builder
 
 # Download QEMU, see https://github.com/docker/hub-feedback/issues/1261
-ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz
-RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . && mv qemu-3.0.0+resin-arm/qemu-arm-static .
+ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v4.0.0%2Bbalena2/qemu-4.0.0.balena2-arm.tar.gz
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . && mv qemu-4.0.0+balena2-arm/qemu-arm-static .
 
 FROM arm32v7/php:7.4-apache
 
