@@ -3,3 +3,5 @@
 # Register qemu-*-static for all supported processors except the 
 # current one, but also remove all registered binfmt_misc before
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
+curl -L https://github.com/balena-io/qemu/releases/download/v4.0.0%2Bbalena2/qemu-4.0.0.balena2-arm.tar.gz | tar zxvf - -C . && mv qemu-4.0.0+balena2-arm/qemu-arm-static .
+curl -L https://github.com/balena-io/qemu/releases/download/v4.0.0%2Bbalena2/qemu-4.0.0.balena2-aarch64.tar.gz | tar zxvf - -C . && mv qemu-4.0.0+balena2-aarch64/qemu-aarch64-static .
