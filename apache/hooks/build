@@ -2,5 +2,5 @@
 # This file is used by docker hub to build the image
 
 docker build -t $IMAGE_NAME-amd64 .
-docker build -t $IMAGE_NAME-arm32v7 --platform=linux/arm/v7 Dockerfile.arm32v7
-docker build -t $IMAGE_NAME-arm64v8 --platform=linux/arm64/v8 Dockerfile.arm64v8
+docker build -t $IMAGE_NAME-arm32v7 --platform=linux/arm/v7 -f Dockerfile.arm32v7 .
+docker build -t $IMAGE_NAME-arm64v8 --platform=linux/arm64/v8 -f Dockerfile.arm64v8 .
