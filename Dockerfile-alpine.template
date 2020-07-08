@@ -1,4 +1,7 @@
-FROM php:7.4-%%VARIANT%%
+FROM %%ARCHLONG%%/php:7.4-%%VARIANT%%
+
+# Add QEMU
+COPY qemu-%%ARCH%%-static /usr/bin
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \

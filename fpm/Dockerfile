@@ -1,4 +1,6 @@
-FROM php:7.4-fpm
+FROM amd64/php:7.4-fpm
+
+# Add QEMU
 
 # Install dependencies
 RUN set -ex; \

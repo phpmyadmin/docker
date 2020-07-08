@@ -1,0 +1,6 @@
+#!/bin/sh
+# This file is used by docker hub to push the image
+
+docker push phpmyadmin:$IMAGE_NAME-amd64
+docker push phpmyadmin:$IMAGE_NAME-arm32v7
+docker push phpmyadmin:$IMAGE_NAME-arm64v8
