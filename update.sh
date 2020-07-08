@@ -21,6 +21,11 @@ declare -A base=(
 	[fpm-alpine]='alpine'
 )
 
+declare -A archlong=(
+	[arm]='arm32v7'
+	[aarch64]='arm64v8'
+)
+
 latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
 sha256="$(curl -fsSL "https://files.phpmyadmin.net/phpMyAdmin/$latest/phpMyAdmin-$latest-all-languages.tar.xz.sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
 
@@ -28,7 +33,24 @@ for variant in apache fpm fpm-alpine; do
 	template="Dockerfile-${base[$variant]}.template"
 	cp $template "$variant/Dockerfile"
 	cp config.inc.php "$variant/config.inc.php"
+	cp hooks/build "$variant/hooks/build"
+	cp hooks/pre_build "$variant/hooks/pre_build"
+	cp hooks/post_push "$variant/hooks/post_push"
+	cp multi-arch-manifest.yaml "$variant/multi-arch-manifest.yaml"
 	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
+	for arch in arm aarch64; do
+		emulated="Dockerfile-${base[$variant]}-emulated.template"
+		cp $emulated "$variant/Dockerfile.${archlong[$arch]}"
+		sed -ri -e '
+		s/%%VERSION%%/'"$latest"'/;
+		s/%%SHA256%%/'"$sha256"'/;
+		s/%%VARIANT%%/'"$variant"'/;
+		s/%%CMD%%/'"${cmd[$variant]}"'/;
+		s/%%ARCH%%/'"$arch"'/g;
+		s/%%ARCHLONG%%/'"${archlong[$arch]}"'/;
+	' "$variant/Dockerfile.${archlong[$arch]}"
+	done
+	sed -ri -e 's/%%VARIANT%%/'"$variant"'/;' "$variant/multi-arch-manifest.yaml"
 	sed -ri -e '
 		s/%%VERSION%%/'"$latest"'/;
 		s/%%SHA256%%/'"$sha256"'/;

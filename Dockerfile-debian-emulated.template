@@ -1,13 +1,13 @@
 FROM alpine AS builder
 
 # Download QEMU, see https://github.com/docker/hub-feedback/issues/1261
-ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v4.0.0%2Bbalena2/qemu-4.0.0.balena2-arm.tar.gz
-RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . && mv qemu-4.0.0+balena2-arm/qemu-arm-static .
+ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v4.0.0%2Bbalena2/qemu-4.0.0.balena2-%%ARCH%%.tar.gz
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . && mv qemu-4.0.0+balena2-%%ARCH%%/qemu-%%ARCH%%-static .
 
-FROM arm32v7/php:7.4-fpm
+FROM %%ARCHLONG%%/php:7.4-%%VARIANT%%
 
 # Add QEMU
-COPY --from=builder qemu-arm-static /usr/bin
+COPY --from=builder qemu-%%ARCH%%-static /usr/bin
 
 # Install dependencies
 RUN set -ex; \
@@ -71,8 +71,8 @@ RUN set -ex; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
-ENV VERSION 5.0.2
-ENV SHA256 cbcc78d1499308d9329950fcba2ebaa84c559a934fe54efc027d459d8e4161c8
+ENV VERSION %%VERSION%%
+ENV SHA256 %%SHA256%%
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
@@ -127,4 +127,4 @@ COPY config.inc.php /etc/phpmyadmin/config.inc.php
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
-CMD ["php-fpm"]
+CMD ["%%CMD%%"]

@@ -1,15 +1,15 @@
-image: phpmyadmin/phpmyadmin:apache
+image: phpmyadmin/phpmyadmin:%%VARIANT%%
 manifests:
-  - image: phpmyadmin/phpmyadmin:apache-amd64
+  - image: phpmyadmin/phpmyadmin:%%VARIANT%%-amd64
     platform:
       architecture: amd64
       os: linux
-  - image: phpmyadmin/phpmyadmin:apache-arm32v7
+  - image: phpmyadmin/phpmyadmin:%%VARIANT%%-arm32v7
     platform:
       architecture: arm
       os: linux
       variant: v7
-  - image: phpmyadmin/phpmyadmin:apache-arm64v8
+  - image: phpmyadmin/phpmyadmin:%%VARIANT%%-arm64v8
     platform:
       architecture: arm64
       os: linux
