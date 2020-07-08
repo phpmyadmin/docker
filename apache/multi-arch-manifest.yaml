@@ -1,15 +1,15 @@
-image: phpmyadmin/phpmyadmin:apache
+image: trann3l/phpmyadmin:apache
 manifests:
-  - image: phpmyadmin/phpmyadmin:apache-amd64
+  - image: trann3l/phpmyadmin:apache-amd64
     platform:
       architecture: amd64
       os: linux
-  - image: phpmyadmin/phpmyadmin:apache-arm32v7
+  - image: trann3l/phpmyadmin:apache-arm32v7
     platform:
       architecture: arm
       os: linux
       variant: v7
-  - image: phpmyadmin/phpmyadmin:apache-arm64v8
+  - image: trann3l/phpmyadmin:apache-arm64v8
     platform:
       architecture: arm64
       os: linux

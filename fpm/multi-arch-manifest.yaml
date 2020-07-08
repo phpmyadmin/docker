@@ -1,15 +1,15 @@
-image: phpmyadmin/phpmyadmin:fpm
+image: trann3l/phpmyadmin:fpm
 manifests:
-  - image: phpmyadmin/phpmyadmin:fpm-amd64
+  - image: trann3l/phpmyadmin:fpm-amd64
     platform:
       architecture: amd64
       os: linux
-  - image: phpmyadmin/phpmyadmin:fpm-arm32v7
+  - image: trann3l/phpmyadmin:fpm-arm32v7
     platform:
       architecture: arm
       os: linux
       variant: v7
-  - image: phpmyadmin/phpmyadmin:fpm-arm64v8
+  - image: trann3l/phpmyadmin:fpm-arm64v8
     platform:
       architecture: arm64
       os: linux
