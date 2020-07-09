@@ -35,8 +35,7 @@ for variant in apache fpm fpm-alpine; do
 	cp hooks/build "$variant/hooks/build"
 	cp hooks/push "$variant/hooks/push"
 	cp hooks/pre_build "$variant/hooks/pre_build"
-	cp multi-arch-manifest.yaml "$variant/multi-arch-manifest.yaml"
-	sed -ri -e 's/%%VARIANT%%/'"$variant"'/;' "$variant/multi-arch-manifest.yaml"
+	
 	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 	for arc in arm32v7 arm64v8 amd64; do
 		template="Dockerfile-${base[$variant]}.template"
