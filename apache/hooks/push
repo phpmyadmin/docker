@@ -3,6 +3,10 @@
 # Use manifest-tool to create the manifest, given the experimental
 # "docker manifest" command isn't available yet on Docker Hub.
 
+docker push $IMAGE_NAME-amd64
+docker push $IMAGE_NAME-arm32v7
+docker push $IMAGE_NAME-arm64v8
+
 docker manifest create $IMAGE_NAME $IMAGE_NAME-amd64 $IMAGE_NAME-arm32v7 $IMAGE_NAME-arm64v8
 
 docker manifest annotate $IMAGE_NAME $IMAGE_NAME-amd64 --arch amd64 --os linux
