@@ -50,6 +50,7 @@ for variant in apache fpm fpm-alpine; do
 		' "$variant/Dockerfile.$arc"
 		if [ $arc == amd64 ]; then
 			sed -i '/COPY qemu-amd64-static \/usr\/bin/d' "$variant/Dockerfile.$arc"
+			sed -i '/# Add QEMU/d' "$variant/Dockerfile.$arc"
 			mv "$variant/Dockerfile.$arc" "$variant/Dockerfile"
 		fi
 	done

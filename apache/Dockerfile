@@ -1,6 +1,5 @@
 FROM amd64/php:7.4-apache
 
-# Add QEMU
 
 # Install dependencies
 RUN set -ex; \

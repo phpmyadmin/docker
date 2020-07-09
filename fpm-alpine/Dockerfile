@@ -1,6 +1,5 @@
 FROM amd64/php:7.4-fpm-alpine
 
-# Add QEMU
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \

@@ -2,6 +2,7 @@
 
 # Use manifest-tool to create the manifest, given the experimental
 # "docker manifest" command isn't available yet on Docker Hub.
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
 docker push $IMAGE_NAME-amd64
 docker push $IMAGE_NAME-arm32v7
