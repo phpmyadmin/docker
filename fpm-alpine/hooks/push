@@ -1,6 +1,6 @@
 #!/bin/sh
 # This file is used by docker hub to push the image
 
-docker push trann3l/phpmyadmin:$IMAGE_NAME-amd64
-docker push trann3l/phpmyadmin:$IMAGE_NAME-arm32v7
-docker push trann3l/phpmyadmin:$IMAGE_NAME-arm64v8
+docker push $IMAGE_NAME-amd64
+docker push $IMAGE_NAME-arm32v7
+docker push $IMAGE_NAME-arm64v8

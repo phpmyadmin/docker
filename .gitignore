@@ -4,3 +4,4 @@ __pycache__
 .vscode
 .history
 .venv
+/.vs/slnx.sqlite
