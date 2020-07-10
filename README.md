@@ -46,6 +46,20 @@ This includes more tools and is therefore a larger image than the "fpm-alpine" v
 * "fpm-alpine" has a very small footprint. It is based on Alpine Linux and only starts a PHP FPM process.
 Use this variant if you already have a seperate webserver. If you need more tools that are not available on Alpine Linux, use the fpm image instead.
 
+## Image architectures
+Currently amd64, arm32v7 and arm64v8 are supported.
+
+Multi-arch images are generated with the help of qemu and [custom docker hub hooks](https://docs.docker.com/docker-hub/builds/advanced/#override-build-test-or-push-commands).
+
+* The "pre_build" hook runs the [multiarch/qemu-user-static:register](https://github.com/multiarch/qemu-user-static) image to enable multi-arch builds in docker hub and it downloads the needed qemu binaries for arm32v7 and arm64v8.
+* The "build" hook overrides the docker hub build task to also build the other architectures.
+* The "push" hook overrides the docker hub push task. It creates the manifest which is needed for multi-arch docker images and pushes the images.
+
+In addition to the custom build hooks, the update.sh scripts also does some magic. It uses the template files and generates the Dockerfiles for each variation and each architecture.
+The resulting Dockerfiles are nearly identical, but they use a different architecture for the base image and the none amd64 images also copy the qemu binaries into /usr/bin for the emulation.
+
+If any changes are required one only needs the update the template files and/or the hooks in the root directory and run the update.sh script.
+
 ## Usage with linked server
 
 First you need to run MySQL or MariaDB server in Docker, and this image need
