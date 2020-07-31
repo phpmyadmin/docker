@@ -127,7 +127,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
 * ``HIDE_PHP_VERSION`` - if defined, will hide the php version (`expose_php = Off`). Set to any value (such as HIDE_PHP_VERSION=true).
-* ``UPLOAD_LIMIT`` - if set, will override the default value for apache and php-fpm (format as "[0-9+](K,M,G)" default value is 2048K, this will change ``upload_max_filesize`` and ``post_max_size`` values)
+* ``UPLOAD_LIMIT`` - if set, will override the default value for apache and php-fpm (format as `[0-9+](K,M,G)` default value is 2048K, this will change ``upload_max_filesize`` and ``post_max_size`` values)
 * ``PMA_CONFIG_BASE64`` - if set, will override the default config.inc.php with the base64 decoded contents of the variable
 * ``PMA_USER_CONFIG_BASE64`` - if set, will override the default config.user.inc.php with the base64 decoded contents of the variable
 
