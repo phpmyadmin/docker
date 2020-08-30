@@ -1,6 +1,6 @@
 # Testing image for phpMyAdmin
 
-FROM phpmyadmin/phpmyadmin
+FROM phpmyadmin
 
 # Install test dependencies
 RUN set -ex; \

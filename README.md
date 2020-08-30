@@ -2,11 +2,20 @@
 
 Run phpMyAdmin with Alpine, Apache and PHP FPM.
 
-[![Build Status](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/phpmyadmin/phpmyadmin.svg)][hub]
-[![Docker Stars](https://img.shields.io/docker/stars/phpmyadmin/phpmyadmin.svg)][hub]
-[![Docker Layers](https://images.microbadger.com/badges/image/phpmyadmin/phpmyadmin.svg)](https://microbadger.com/images/phpmyadmin/phpmyadmin "Get your own image badge on microbadger.com")
-[![Docker Version](https://images.microbadger.com/badges/version/phpmyadmin/phpmyadmin.svg)](https://microbadger.com/images/phpmyadmin/phpmyadmin "Get your own version badge on microbadger.com")
+[![Build Status Travis](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
+[![amd64 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/amd64/job/phpmyadmin.svg?label=amd64)](https://doi-janky.infosiftr.net/job/multiarch/job/amd64/job/phpmyadmin)
+[![arm32v5 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm32v5/job/phpmyadmin.svg?label=arm32v5)](https://doi-janky.infosiftr.net/job/multiarch/job/arm32v5/job/phpmyadmin)
+[![arm32v6 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm32v6/job/phpmyadmin.svg?label=arm32v6)](https://doi-janky.infosiftr.net/job/multiarch/job/arm32v6/job/phpmyadmin)
+[![arm32v7 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm32v7/job/phpmyadmin.svg?label=arm32v7)](https://doi-janky.infosiftr.net/job/multiarch/job/arm32v7/job/phpmyadmin)
+[![arm64v8 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm64v8/job/phpmyadmin.svg?label=arm64v8)](https://doi-janky.infosiftr.net/job/multiarch/job/arm64v8/job/phpmyadmin)
+[![i386 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/i386/job/phpmyadmin.svg?label=i386)](https://doi-janky.infosiftr.net/job/multiarch/job/i386/job/phpmyadmin)
+[![mips64le build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/mips64le/job/phpmyadmin.svg?label=mips64le)](https://doi-janky.infosiftr.net/job/multiarch/job/mips64le/job/phpmyadmin)
+[![ppc64le build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/ppc64le/job/phpmyadmin.svg?label=ppc64le)](https://doi-janky.infosiftr.net/job/multiarch/job/ppc64le/job/phpmyadmin)
+[![s390x build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/s390x/job/phpmyadmin.svg?label=s390x)](https://doi-janky.infosiftr.net/job/multiarch/job/s390x/job/phpmyadmin)
+[![Docker Pulls](https://img.shields.io/docker/pulls/_/phpmyadmin.svg)][hub]
+[![Docker Stars](https://img.shields.io/docker/stars/_/phpmyadmin.svg)][hub]
+[![Docker Layers](https://images.microbadger.com/badges/image/phpmyadmin.svg)](https://microbadger.com/images/phpmyadmin "Get your own image badge on microbadger.com")
+[![Docker Version](https://images.microbadger.com/badges/version/phpmyadmin.svg)](https://microbadger.com/images/phpmyadmin "Get your own version badge on microbadger.com")
 
 
 All following examples will bring you phpMyAdmin on `http://localhost:8080`
@@ -29,11 +38,9 @@ The following tags are available:
 * `latest`, `fpm`, and `fpm-alpine` are always the most recent released version
 * Major versions, such as `5`, `5-fpm`, and `5-fpm-alpine`
 * Specific minor versions, such as `5.0`, `5.0-fpm`, and `5-fpm-alpine`
-* Specific patch versions, such as `5.0.0`, `5.0.0-fpm`, and `5.0.0-alpine`. Note that, on rare occasion,
-there may be an intermediary "docker-only" release, such as 4.9.2-1
-* `edge`, `edge-fpm`, `edge-fpm-alpine`, a development version build from the daily snapshot
+* Specific patch versions, such as `5.0.0`, `5.0.0-fpm`, and `5.0.0-alpine`
 
-A complete list of tags is [available at Docker Hub](https://hub.docker.com/r/phpmyadmin/phpmyadmin/tags)
+A complete list of tags is [available at Docker Hub](https://hub.docker.com/_/phpmyadmin/tags)
 
 ## Image variants
 
@@ -52,7 +59,7 @@ First you need to run MySQL or MariaDB server in Docker, and this image need
 link a running mysql instance container:
 
 ```
-docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 phpmyadmin/phpmyadmin
+docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 phpmyadmin
 ```
 
 ## Usage with external server
@@ -61,7 +68,7 @@ You can specify MySQL host in the `PMA_HOST` environment variable. You can also
 use `PMA_PORT` to specify port of the server in case it's not the default one:
 
 ```
-docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin/phpmyadmin
+docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin
 ```
 
 ## Usage with arbitrary server
@@ -69,7 +76,7 @@ docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin/phpmyadmin
 You can use arbitrary servers by adding ENV variable `PMA_ARBITRARY=1` to the startup command:
 
 ```
-docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin/phpmyadmin
+docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin
 ```
 
 ## Usage with docker-compose and arbitrary server
@@ -104,7 +111,7 @@ in it, and then linking it into the container using:
 ```
 On the "docker run" line like this:
 ```
-docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin/phpmyadmin
+docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin
 ```
 
 See the following links for config file information.
@@ -133,7 +140,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 
 For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` environment variable is allowed (it overrides ``PMA_PASSWORD`` if it is set):
 ```
-docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin/phpmyadmin
+docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin
 ```
 
 #### Variables that can be read from a file using ``_FILE``
@@ -145,7 +152,7 @@ docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -
 
 For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
-[hub]: https://hub.docker.com/r/phpmyadmin/phpmyadmin/
+[hub]: https://hub.docker.com/_/phpmyadmin
 
 Please report any issues with the Docker container to https://github.com/phpmyadmin/docker/issues
 
