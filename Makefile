@@ -1,4 +1,4 @@
-DOCKER_REPO = phpmyadmin/phpmyadmin
+DOCKER_REPO = phpmyadmin
 
 .PHONY: all build run logs clean stop rm prune
 
