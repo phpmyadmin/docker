@@ -1,5 +1,5 @@
 # Official phpMyAdmin Docker image
-
+# Adding new line
 Run phpMyAdmin with Alpine, Apache and PHP FPM.
 
 [![Build Status Travis](https://travis-ci.org/phpmyadmin/docker.svg?branch=master)](https://travis-ci.org/phpmyadmin/docker)
