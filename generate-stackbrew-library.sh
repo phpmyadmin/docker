@@ -25,22 +25,21 @@ dockerfileCommit() {
 	)
 }
 
-# depends on docker library
-#getArches() {
-#	local repo="$1"; shift
-#	local officialImagesUrl='https://github.com/docker-library/official-images/raw/master/library/'
-#
-#	eval "declare -g -A parentRepoToArches=( $(
-#		find -name 'Dockerfile' -exec awk '
-#				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|microsoft\/[^:]+)(:|$)/ {
-#					print "'"$officialImagesUrl"'" $2
-#				}
-#			' '{}' + \
-#			| sort -u \
-#			| xargs bashbrew cat --format '[{{ .RepoName }}:{{ .TagName }}]="{{ join " " .TagEntry.Architectures }}"'
-#	) )"
-#}
-#getArches 'phpmyadmin'
+getArches() {
+	local repo="$1"; shift
+	local officialImagesUrl='https://github.com/docker-library/official-images/raw/master/library/'
+
+	eval "declare -g -A parentRepoToArches=( $(
+		find -name 'Dockerfile' -exec awk '
+				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|microsoft\/[^:]+)(:|$)/ {
+					print "'"$officialImagesUrl"'" $2
+				}
+			' '{}' + \
+			| sort -u \
+			| xargs bashbrew cat --format '[{{ .RepoName }}:{{ .TagName }}]="{{ join " " .TagEntry.Architectures }}"'
+	) )"
+}
+getArches 'phpmyadmin'
 
 # Header.
 cat <<-EOH
@@ -77,9 +76,7 @@ for variant in apache fpm fpm-alpine; do
 
 	variantParent="$(awk 'toupper($1) == "FROM" { print $2 }' "$variant/Dockerfile")"
 
-	# depends on docker library
-	#variantArches="${parentRepoToArches[$variantParent]}"
-	variantArches="amd64 arm32v7 arm64v8 i386 ppc64le s390x"
+	variantArches="${parentRepoToArches[$variantParent]}"
 
 	cat <<-EOE
 
