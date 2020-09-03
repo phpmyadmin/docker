@@ -39,6 +39,14 @@ getArches() {
 			| xargs bashbrew cat --format '[{{ .RepoName }}:{{ .TagName }}]="{{ join " " .TagEntry.Architectures }}"'
 	) )"
 }
+
+if ! command -v bashbrew --version &> /dev/null
+then
+    echo "bashbrew could not be found"
+	echo "You can download it from Jenkins at https://github.com/docker-library/bashbrew#installing"
+    exit 1
+fi
+
 getArches 'phpmyadmin'
 
 # Header.
