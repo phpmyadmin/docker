@@ -40,7 +40,7 @@ The following tags are available:
 * Specific minor versions, such as `5.0`, `5.0-fpm`, and `5-fpm-alpine`
 * Specific patch versions, such as `5.0.0`, `5.0.0-fpm`, and `5.0.0-alpine`
 
-A complete list of tags is [available at Docker Hub](https://hub.docker.com/_/phpmyadmin/tags)
+A complete list of tags is [available at Docker Hub](https://hub.docker.com/_/phpmyadmin?tab=tags)
 
 ## Image variants
 
