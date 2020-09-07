@@ -1,4 +1,5 @@
 # Official phpMyAdmin Docker image
+# New comment from Vipin John Wilson
 
 Run phpMyAdmin with Alpine, Apache and PHP FPM.
 
