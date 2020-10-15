@@ -60,8 +60,8 @@ RUN set -ex; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
-ENV VERSION 4.9.7
-ENV SHA256 294ae6f299d88eb83c99464fab2266cb18bd0fcb54bfd0384016af4961291fba
+ENV VERSION 5.0.4
+ENV SHA256 1578c1a08e594da4f4f62e676ccbdbd17784c3de769b094ba42c35bf05c057db
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
