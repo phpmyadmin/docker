@@ -21,7 +21,8 @@ $vars = array(
     'PMA_PMADB',
     'PMA_CONTROLUSER',
     'PMA_CONTROLPASS',
-    'PMA_QUERYHISTORYDB'
+    'PMA_QUERYHISTORYDB',    
+    'PMA_QUERYHISTORYMAX'
 );
 foreach ($vars as $var) {
     $env = getenv($var);
@@ -31,6 +32,10 @@ foreach ($vars as $var) {
 }
 if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
     $cfg['QueryHistoryDB'] = boolval($_ENV['PMA_QUERYHISTORYDB']);
+}
+
+if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
+    $cfg['QueryHistoryMax'] = boolval($_ENV['PMA_QUERYHISTORYMAX']);
 }
 
 /* Arbitrary server connection */
