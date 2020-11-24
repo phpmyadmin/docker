@@ -21,7 +21,8 @@ $vars = array(
     'PMA_PMADB',
     'PMA_CONTROLUSER',
     'PMA_CONTROLPASS',
-    'PMA_QUERYHISTORYDB'
+    'PMA_QUERYHISTORYDB',
+    'MAX_EXECUTION_TIME'
 );
 foreach ($vars as $var) {
     $env = getenv($var);
@@ -130,6 +131,10 @@ $i--;
 /* Uploads setup */
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
+
+if (isset($_ENV['MAX_EXECUTION_TIME'])) {
+    $cfg['ExecTimeLimit'] = $_ENV['MAX_EXECUTION_TIME'];
+}
 
 /* Include User Defined Settings Hook */
 if (file_exists('/etc/phpmyadmin/config.user.inc.php')) {
