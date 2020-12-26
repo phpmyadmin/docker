@@ -57,6 +57,7 @@ RUN set -ex; \
         echo 'allow_url_fopen = Off'; \
         echo 'max_execution_time = 600'; \
         echo 'memory_limit = 512M'; \
+        echo 'max_input_vars = 10000'; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
