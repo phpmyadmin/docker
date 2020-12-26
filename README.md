@@ -58,7 +58,7 @@ Use this variant if you already have a seperate webserver. If you need more tool
 First you need to run MySQL or MariaDB server in Docker, and this image need
 link a running mysql instance container:
 
-```
+```sh
 docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 phpmyadmin
 ```
 
@@ -67,7 +67,7 @@ docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 phpmyadmin
 You can specify MySQL host in the `PMA_HOST` environment variable. You can also
 use `PMA_PORT` to specify port of the server in case it's not the default one:
 
-```
+```sh
 docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin
 ```
 
@@ -75,7 +75,7 @@ docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin
 
 You can use arbitrary servers by adding ENV variable `PMA_ARBITRARY=1` to the startup command:
 
-```
+```sh
 docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin
 ```
 
@@ -86,7 +86,7 @@ server on login page.
 
 Using the docker-compose.yml from https://github.com/phpmyadmin/docker
 
-```
+```sh
 docker-compose up -d
 ```
 
@@ -96,7 +96,7 @@ You can run the E2E tests with the local test environment by running MariaDB/MyS
 
 Using the docker-compose.testing.yml from https://github.com/phpmyadmin/docker
 
-```
+```sh
 docker-compose -f docker-compose.testing.yml up phpmyadmin
 ```
 
@@ -106,11 +106,13 @@ You can add your own custom config.inc.php settings (such as Configuration Stora
  by creating a file named "config.user.inc.php" with the various user defined settings
 in it, and then linking it into the container using:
 
-```
+```sh
 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
 ```
+
 On the "docker run" line like this:
-```
+
+```sh
 docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin
 ```
 
@@ -133,13 +135,14 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username to use for config authentication method
 * ``PMA_ABSOLUTE_URI`` - define user-facing URI
-* ``HIDE_PHP_VERSION`` - if defined, will hide the php version (`expose_php = Off`). Set to any value (such as HIDE_PHP_VERSION=true).
-* ``UPLOAD_LIMIT`` - if set, will override the default value for apache and php-fpm (format as `[0-9+](K,M,G)` default value is 2048K, this will change ``upload_max_filesize`` and ``post_max_size`` values)
-* ``PMA_CONFIG_BASE64`` - if set, will override the default config.inc.php with the base64 decoded contents of the variable
-* ``PMA_USER_CONFIG_BASE64`` - if set, will override the default config.user.inc.php with the base64 decoded contents of the variable
+* ``HIDE_PHP_VERSION`` - if defined, this option will hide the PHP version (`expose_php = Off`). Set to any value (such as `HIDE_PHP_VERSION=true`).
+* ``UPLOAD_LIMIT`` - if set, this option will override the default value for apache and php-fpm (format as `[0-9+](K,M,G)` default value is 2048K, this will change ``upload_max_filesize`` and ``post_max_size`` values)
+* ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
+* ``PMA_USER_CONFIG_BASE64`` - if set, this option will override the default `config.user.inc.php` with the base64 decoded contents of the variable
 
 For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` environment variable is allowed (it overrides ``PMA_PASSWORD`` if it is set):
-```
+
+```sh
 docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin
 ```
 
