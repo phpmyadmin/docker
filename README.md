@@ -24,16 +24,17 @@ where you can enjoy your happy MySQL administration.
 
 ## Credentials
 
-phpMyAdmin connects using your MySQL server credentials, please check the corresponding
-database server image for information on what the default username and password are
-or to modify these during installation.
+phpMyAdmin connects using your MySQL server credentials. Please check the corresponding
+database server image for information on what the default username and password are.
+To modify username and password during installation you can check the corresponding
+database server image on Docker Hub.
 
 The official MySQL and MariaDB use the following environment variables to define these:
 
 * `MYSQL_ROOT_PASSWORD` - This variable is mandatory and specifies the password that will be set for the `root` superuser account.
 * `MYSQL_USER`, `MYSQL_PASSWORD` - These variables are optional, used in conjunction to create a new user and to set that user's password.
 
-## Supported Docker hub tags
+## Supported Docker Hub tags
 
 The following tags are available:
 
