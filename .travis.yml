@@ -6,7 +6,6 @@ python: 2.7
 dist: bionic
 
 stages:
-  - name: "Build images"
   - name: "Test docker-compose"
   - name: "Run tests in testing container"
 
@@ -48,11 +47,6 @@ _helpers:
     - docker-compose -f docker-compose.yml -f docker-compose.db.yml up -d
     - ./testing/test-docker.sh phpmyadmin 8080 db_server
     - docker-compose stop
-- &build-image
-  stage: "Build images"
-  before_install: skip
-  install: skip
-
 jobs:
   include:
     - <<: *test-docker-compose
@@ -67,21 +61,6 @@ jobs:
     - <<: *test-docker-compose-db
       name: "Run and stop container using db docker-compose file for MySQL"
       env: DB=mysql:latest
-    - <<: *build-image
-      name: "Apache amd64"
-      arch: amd64
-      script:
-      - docker build -t phpmyadmin apache
-    - <<: *build-image
-      name: "fpm amd64"
-      arch: amd64
-      script:
-      - docker build -t phpmyadmin fpm
-    - <<: *build-image
-      name: "fpm-alpine amd64"
-      arch: amd64
-      script:
-      - docker build -t phpmyadmin fpm-alpine
     - <<: *test-apache-image
       name: "Run testing for MariaDB"
       env: DB=mariadb:latest
