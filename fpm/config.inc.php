@@ -36,7 +36,7 @@ if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
 }
 
 if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
-    $cfg['QueryHistoryMax'] = boolval($_ENV['PMA_QUERYHISTORYMAX']);
+    $cfg['QueryHistoryMax'] = intval($_ENV['PMA_QUERYHISTORYMAX']);
 }
 
 /* Arbitrary server connection */
