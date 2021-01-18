@@ -1,5 +1,5 @@
 # Official phpMyAdmin Docker image
-
+made some changes
 Run phpMyAdmin with Alpine, Apache and PHP FPM.
 
 [![GitHub CI build status badge](https://github.com/phpmyadmin/docker/workflows/GitHub%20CI/badge.svg)](https://github.com/phpmyadmin/docker/actions?query=workflow%3A%22GitHub+CI%22)
