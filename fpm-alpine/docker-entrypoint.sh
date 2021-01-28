@@ -56,5 +56,6 @@ get_docker_secret MYSQL_ROOT_PASSWORD
 get_docker_secret MYSQL_PASSWORD
 get_docker_secret PMA_HOSTS
 get_docker_secret PMA_HOST
+get_docker_secret PMA_CONTROLPASS
 
 exec "$@"
