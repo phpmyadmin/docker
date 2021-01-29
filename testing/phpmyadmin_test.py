@@ -81,6 +81,7 @@ def test_phpmyadmin_secrets():
     docker_secret('PMA_PASSWORD')
     docker_secret('PMA_HOSTS')
     docker_secret('PMA_HOST')
+    docker_secret('PMA_CONTROLPASS')
 
 
 def test_php_ini(url, username, password, server):
