@@ -9,20 +9,14 @@ import mechanize
 import tempfile
 import pytest
 
-def test_phpmyadmin(url, username, password, server, sqlfile):
-    if sqlfile is None:
-        if os.path.exists('/world.sql'):
-            sqlfile = '/world.sql'
-        elif os.path.exists('./world.sql'):
-            sqlfile = './world.sql'
-        else:
-            path = os.path.dirname(os.path.realpath(__file__))
-            sqlfile = path + '/world.sql'
+def create_browser():
     br = mechanize.Browser()
 
     # Ignore robots.txt
     br.set_handle_robots(False)
+    return br
 
+def do_login(br, url, username, password, server):
     # Login page
     br.open(url)
 
@@ -35,6 +29,22 @@ def test_phpmyadmin(url, username, password, server, sqlfile):
 
     # Login and check if logged in
     response = br.submit()
+    return response
+
+def test_phpmyadmin(url, username, password, server, sqlfile):
+    if sqlfile is None:
+        if os.path.exists('/world.sql'):
+            sqlfile = '/world.sql'
+        elif os.path.exists('./world.sql'):
+            sqlfile = './world.sql'
+        else:
+            path = os.path.dirname(os.path.realpath(__file__))
+            sqlfile = path + '/world.sql'
+
+    br = create_browser()
+
+    response = do_login(br, url, username, password, server)
+
     assert(b'Server version' in response.read())
 
     # Open server import
@@ -71,3 +81,24 @@ def test_phpmyadmin_secrets():
     docker_secret('PMA_PASSWORD')
     docker_secret('PMA_HOSTS')
     docker_secret('PMA_HOST')
+
+
+def test_php_ini(url, username, password, server):
+    br = create_browser()
+    response = do_login(br, url, username, password, server)
+
+    assert(b'Show PHP information' in response.read())
+
+    # Open Show PHP information
+    response = br.follow_link(text_regex=re.compile('Show PHP information'))
+    response = response.read()
+    assert(b'PHP Version' in response)
+
+    assert(b'upload_max_filesize' in response)
+    assert(b'post_max_size' in response)
+    assert(b'expose_php' in response)
+
+    assert(b'<tr><td class="e">upload_max_filesize</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
+    assert(b'<tr><td class="e">post_max_size</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
+
+    assert(b'<tr><td class="e">expose_php</td><td class="v">Off</td><td class="v">Off</td></tr>' in response)

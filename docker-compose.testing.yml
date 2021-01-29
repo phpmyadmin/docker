@@ -25,6 +25,11 @@ services:
     container_name: phpmyadmin_testing_apache
     environment:
       PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 123M
+      MAX_EXECUTION_TIME: 125
+      HIDE_PHP_VERSION: 1
+    volumes:
+      - ./testing/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
     healthcheck:
       test: ["CMD", "curl", "-Ss", "http://localhost/robots.txt"]
       start_period: 5s
