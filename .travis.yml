@@ -20,7 +20,6 @@ _helpers:
 - &test-docker-compose
   stage: "Test docker-compose"
   script:
-    - docker-compose -f docker-compose.testing.yml up -d db_server
     - docker-compose -f docker-compose.testing.yml up -d
     - docker-compose exec phpmyadmin /test-docker.sh phpmyadmin_testing 80 phpmyadmin_testing_db
     - docker-compose stop

@@ -6,9 +6,14 @@ services:
     container_name: phpmyadmin_testing_db
     environment:
       - MYSQL_ROOT_PASSWORD=${TESTSUITE_PASSWORD:-my-secret-pw}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-uroot", "-p${TESTSUITE_PASSWORD:-my-secret-pw}"]
+      interval: 1s
+      timeout: 1s
+      retries: 3
     volumes:
       - ./testing/testing.cnf:/etc/mysql/conf.d/testing.cnf:ro
-    tmpfs: 
+    tmpfs:
       - /var/lib/mysql:rw,noexec,nosuid,size=300m
 
   phpmyadmin:
@@ -26,5 +31,11 @@ services:
     environment:
       - PMA_ARBITRARY=1
       - TESTSUITE_PASSWORD=${TESTSUITE_PASSWORD:-my-secret-pw}
+    healthcheck:
+      test: ["CMD", "curl", "-Ss", "http://localhost/robots.txt"]
+      interval: 1s
+      timeout: 1s
+      retries: 3
     depends_on:
-      - db_server
+      db_server:
+          condition: service_healthy
