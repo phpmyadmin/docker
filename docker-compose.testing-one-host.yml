@@ -24,7 +24,7 @@ services:
       context: apache
     container_name: phpmyadmin_testing_apache
     environment:
-      PMA_ARBITRARY: 1
+      PMA_HOST: db_server
       UPLOAD_LIMIT: 123M
       MAX_EXECUTION_TIME: 125
       HIDE_PHP_VERSION: 1
@@ -54,11 +54,11 @@ services:
     networks:
       testing:
     environment:
-      TESTSUITE_HOSTNAME_ARBITRARY: 1
       TESTSUITE_HOSTNAME: phpmyadmin_testing_apache
-      PMA_HOST: phpmyadmin_testing_db
       TESTSUITE_PORT: 80
       TESTSUITE_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
+      PMA_HOST: phpmyadmin_testing_db
+      PMA_PORT: 3306
     volumes:
       - ./:/tests:ro
       - /var/run/docker.sock:/var/run/docker.sock

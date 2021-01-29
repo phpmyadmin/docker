@@ -1,17 +1,6 @@
 #!/bin/sh
 
-if [ -n "$1" ] ; then
-    TESTSUITE_PORT=$1
-fi
-
-if [ -n "$2" ] ; then
-    SERVER="--server $2"
-    PMA_HOST=$2
-else
-    SERVER=''
-fi
-
-# Set PHPMyAdmin environment
+# Set phpMyAdmin environment
 PHPMYADMIN_HOSTNAME=${TESTSUITE_HOSTNAME:=localhost}
 PHPMYADMIN_PORT=${TESTSUITE_PORT:=80}
 PHPMYADMIN_URL=http://${PHPMYADMIN_HOSTNAME}:${PHPMYADMIN_PORT}/
@@ -19,6 +8,10 @@ PHPMYADMIN_URL=http://${PHPMYADMIN_HOSTNAME}:${PHPMYADMIN_PORT}/
 # Set database environment
 PHPMYADMIN_DB_HOSTNAME=${PMA_HOST:=localhost}
 PHPMYADMIN_DB_PORT=${PMA_PORT:=3306}
+
+if [ ! -z "${TESTSUITE_HOSTNAME_ARBITRARY}" ]; then
+    SERVER="--server ${PHPMYADMIN_DB_HOSTNAME}"
+fi
 
 # Find test script
 if [ -f ./phpmyadmin_test.py ] ; then
@@ -31,7 +24,7 @@ mysql -h "${PHPMYADMIN_DB_HOSTNAME}" -P"${PHPMYADMIN_DB_PORT}" -u"${TESTSUITE_US
 ret=$?
 
 if [ $ret -ne 0 ] ; then
-    echo "Could not connect to ${PHPMYADMIN_DB_HOSTNAME}"
+    echo "Could not connect to ${PHPMYADMIN_DB_HOSTNAME} on port ${PHPMYADMIN_DB_PORT}"
     exit $ret
 fi
 

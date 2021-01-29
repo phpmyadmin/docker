@@ -16,7 +16,11 @@ jobs:
             - uses: actions/checkout@v2
             - name: Build images
               run: docker-compose -f docker-compose.testing.yml build
-            - name: Run tests
+            - name: Run normal tests
               run: docker-compose -f docker-compose.testing.yml up --build --abort-on-container-exit --exit-code-from=sut
+              env:
+                DB: ${{ matrix.database-image }}
+            - name: Run one host tests
+              run: docker-compose -f docker-compose.testing-one-host.yml up --build --abort-on-container-exit --exit-code-from=sut
               env:
                 DB: ${{ matrix.database-image }}
