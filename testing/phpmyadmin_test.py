@@ -9,10 +9,6 @@ import mechanize
 import tempfile
 import pytest
 
-
-def do_test_content(match, content):
-    assert(match in content)
-
 def test_phpmyadmin(url, username, password, server, sqlfile):
     if sqlfile is None:
         if os.path.exists('/world.sql'):
@@ -37,19 +33,19 @@ def test_phpmyadmin(url, username, password, server, sqlfile):
     if server is not None:
         br['pma_servername'] = server
 
-    # Login and check if loggged in
+    # Login and check if logged in
     response = br.submit()
-    do_test_content('Server version', response.read())
+    assert(b'Server version' in response.read())
 
     # Open server import
     response = br.follow_link(text_regex=re.compile('Import'))
-    do_test_content('OpenDocument Spreadsheet', response.read())
+    assert(b'OpenDocument Spreadsheet' in response.read())
 
     # Upload SQL file
     br.select_form('import')
     br.form.add_file(open(sqlfile), 'text/plain', sqlfile)
     response = br.submit()
-    do_test_content('5326 queries executed', response.read())
+    assert(b'5326 queries executed' in response.read())
 
 
 def docker_secret(env_name):
@@ -64,7 +60,7 @@ def docker_secret(env_name):
     test_env = {env_name + '_FILE': secret_file[1]}
 
     # Run entrypoint and afterwards echo the environment variables
-    result = subprocess.Popen(dir_path+ "/../docker-entrypoint.sh 'env'", shell=True, stdout=subprocess.PIPE, env=test_env)
+    result = subprocess.Popen("bash " +dir_path+ "/../docker-entrypoint.sh 'env'", shell=True, stdout=subprocess.PIPE, env=test_env)
     output = result.stdout.read().decode()
 
     assert (env_name + "=" + password) in output

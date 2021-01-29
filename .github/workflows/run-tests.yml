@@ -1,0 +1,22 @@
+name: Internal test suite
+
+on:
+  pull_request:
+  push:
+
+jobs:
+    test-apache-container:
+        name: Test on database ${{ matrix.database-image }}
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                database-image: ["mariadb:10.4", "mysql:5.7", "mariadb:latest", "mysql:latest"]
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build images
+              run: docker-compose -f docker-compose.testing.yml build
+            - name: Run tests
+              run: docker-compose -f docker-compose.testing.yml up --build --abort-on-container-exit --exit-code-from=sut
+              env:
+                DB: ${{ matrix.database-image }}
