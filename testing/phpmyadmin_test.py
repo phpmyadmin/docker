@@ -99,6 +99,8 @@ def test_php_ini(url, username, password, server):
     assert(b'post_max_size' in response)
     assert(b'expose_php' in response)
 
+    assert(b'<tr><td class="e">max_execution_time</td><td class="v">125</td><td class="v">125</td></tr>' in response)
+
     assert(b'<tr><td class="e">upload_max_filesize</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
     assert(b'<tr><td class="e">post_max_size</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
 
