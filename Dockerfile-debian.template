@@ -40,6 +40,9 @@ RUN set -ex; \
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
+ENV MEMORY_LIMIT 512M
+ENV UPLOAD_LIMIT 2048K
+ENV MAX_EXECUTION_TIME 600
 RUN set -ex; \
     \
     { \
@@ -51,15 +54,18 @@ RUN set -ex; \
     } > $PHP_INI_DIR/conf.d/opcache-recommended.ini; \
     \
     { \
-        echo 'session.cookie_httponly = 1'; \
-        echo 'session.use_strict_mode = 1'; \
+        echo 'session.cookie_httponly=1'; \
+        echo 'session.use_strict_mode=1'; \
     } > $PHP_INI_DIR/conf.d/session-strict.ini; \
     \
     { \
-        echo 'allow_url_fopen = Off'; \
-        echo 'max_execution_time = 600'; \
-        echo 'memory_limit = 512M'; \
-        echo 'max_input_vars = 10000'; \
+        echo 'allow_url_fopen=Off'; \
+        echo 'expose_php=Off'; \
+        echo 'max_execution_time=${MAX_EXECUTION_TIME}'; \
+        echo 'max_input_vars=10000'; \
+        echo 'memory_limit=${MEMORY_LIMIT}'; \
+        echo 'post_max_size=${UPLOAD_LIMIT}'; \
+        echo 'upload_max_filesize=${UPLOAD_LIMIT}'; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL

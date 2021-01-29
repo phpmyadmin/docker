@@ -13,22 +13,6 @@ EOT
     fi
 fi
 
-if [ ! -z "${HIDE_PHP_VERSION}" ]; then
-    echo "PHP version is now hidden."
-    echo -e 'expose_php = Off\n' > $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini
-fi
-
-UPLOAD_LIMIT_INI_FILE="$PHP_INI_DIR/conf.d/phpmyadmin-upload-limit.ini"
-if [ ! -z "${UPLOAD_LIMIT}" ]; then
-    echo "Adding the custom upload limit."
-    echo -e "upload_max_filesize = $UPLOAD_LIMIT\npost_max_size = $UPLOAD_LIMIT\n" > $UPLOAD_LIMIT_INI_FILE
-fi
-
-if [ ! -z "${MAX_EXECUTION_TIME}" ]; then
-    echo "Adjusting the maximum execution time."
-    sed -i "s/^max_execution_time = .*$/max_execution_time = ${MAX_EXECUTION_TIME}/g" $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
-fi
-
 if [ ! -z "${PMA_CONFIG_BASE64}" ]; then
     echo "Adding the custom config.inc.php from base64."
     echo "${PMA_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.inc.php
