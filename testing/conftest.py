@@ -22,7 +22,7 @@ def password(request):
 @pytest.fixture
 def server(request):
     return request.config.getoption("--server")
-    
+
 @pytest.fixture
 def sqlfile(request):
     return request.config.getoption("--sqlfile")
