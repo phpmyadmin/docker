@@ -35,7 +35,7 @@ if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
     $cfg['QueryHistoryDB'] = boolval($_ENV['PMA_QUERYHISTORYDB']);
 }
 
-if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
+if (isset($_ENV['PMA_QUERYHISTORYMAX'])) {
     $cfg['QueryHistoryMax'] = intval($_ENV['PMA_QUERYHISTORYMAX']);
 }
 
