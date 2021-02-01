@@ -23,7 +23,8 @@ $vars = array(
     'PMA_CONTROLPASS',
     'PMA_QUERYHISTORYDB',
     'PMA_QUERYHISTORYMAX',
-    'MAX_EXECUTION_TIME'
+    'MAX_EXECUTION_TIME',
+    'MEMORY_LIMIT'
 );
 foreach ($vars as $var) {
     $env = getenv($var);
