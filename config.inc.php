@@ -141,6 +141,10 @@ if (isset($_ENV['MAX_EXECUTION_TIME'])) {
     $cfg['ExecTimeLimit'] = $_ENV['MAX_EXECUTION_TIME'];
 }
 
+if (isset($_ENV['MEMORY_LIMIT'])) {
+    $cfg['MemoryLimit'] = $_ENV['MEMORY_LIMIT'];
+}
+
 /* Include User Defined Settings Hook */
 if (file_exists('/etc/phpmyadmin/config.user.inc.php')) {
     include('/etc/phpmyadmin/config.user.inc.php');
