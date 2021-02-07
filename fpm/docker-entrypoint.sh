@@ -13,6 +13,11 @@ EOT
     fi
 fi
 
+if [ ! -z "${HIDE_PHP_VERSION}" ]; then
+    echo "PHP version is now hidden."
+    echo -e 'expose_php = Off\n' > $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini
+fi
+
 if [ ! -z "${PMA_CONFIG_BASE64}" ]; then
     echo "Adding the custom config.inc.php from base64."
     echo "${PMA_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.inc.php
