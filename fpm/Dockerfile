@@ -98,9 +98,7 @@ RUN set -ex; \
     curl -fsSL -o phpMyAdmin.tar.xz $URL; \
     curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
     echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
-    gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keys.gnupg.net --recv-keys "$GPGKEY" \
+    gpg --batch --keyserver keys.openpgp.org --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY"; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
