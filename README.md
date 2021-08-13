@@ -131,6 +131,16 @@ On the `docker run` line like this:
 docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin
 ```
 
+Be sure to have `<?php` as your first line of the configuration file or the contents will not be detected as PHP code.
+
+Example:
+
+```php
+<?php
+
+$cfg['ShowPhpInfo'] = true;// Adds a link to phpinfo() on the home page
+```
+
 See the following links for config file information:
 
 * https://docs.phpmyadmin.net/en/latest/config.html#config
