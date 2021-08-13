@@ -105,16 +105,6 @@ services:
       - PMA_ARBITRARY=1
 ```
 
-## Run the E2E tests with docker-compose
-
-You can run the E2E tests with the local test environment by running MariaDB/MySQL databases. Adding ENV variable `PHPMYADMIN_RUN_TEST=true` already added on docker-compose file. Simply run:
-
-Using the docker-compose.testing.yml from https://github.com/phpmyadmin/docker
-
-```sh
-docker-compose -f docker-compose.testing.yml up phpmyadmin
-```
-
 ## Adding Custom Configuration
 
 You can add your own custom config.inc.php settings (such as Configuration Storage setup)
@@ -138,7 +128,7 @@ Example:
 ```php
 <?php
 
-$cfg['ShowPhpInfo'] = true;// Adds a link to phpinfo() on the home page
+$cfg['ShowPhpInfo'] = true; // Adds a link to phpinfo() on the home page
 ```
 
 See the following links for config file information:
@@ -189,6 +179,16 @@ docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -
 - `PMA_HOSTS`
 - `PMA_HOST`
 - `PMA_CONTROLPASS`
+
+## Run the E2E tests with docker-compose
+
+You can run the E2E tests with the local test environment by running MariaDB/MySQL databases. Adding ENV variable `PHPMYADMIN_RUN_TEST=true` already added on docker-compose file. Simply run:
+
+Using the docker-compose.testing.yml from https://github.com/phpmyadmin/docker
+
+```sh
+docker-compose -f docker-compose.testing.yml up phpmyadmin
+```
 
 For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
