@@ -19,9 +19,6 @@ Run phpMyAdmin with Alpine, Apache and PHP FPM.
 [![s390x build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/s390x/job/phpmyadmin.svg?label=s390x)](https://doi-janky.infosiftr.net/job/multiarch/job/s390x/job/phpmyadmin)
 [![Docker Pulls](https://img.shields.io/docker/pulls/_/phpmyadmin.svg)][hub]
 [![Docker Stars](https://img.shields.io/docker/stars/_/phpmyadmin.svg)][hub]
-[![Docker Layers](https://images.microbadger.com/badges/image/phpmyadmin.svg)](https://microbadger.com/images/phpmyadmin "Get your own image badge on microbadger.com")
-[![Docker Version](https://images.microbadger.com/badges/version/phpmyadmin.svg)](https://microbadger.com/images/phpmyadmin "Get your own version badge on microbadger.com")
-
 
 All of the following examples will bring you phpMyAdmin on `http://localhost:8080`
 where you can enjoy your happy MySQL administration.
