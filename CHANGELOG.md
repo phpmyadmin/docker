@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove microbadger badges, it closed
 - Improve the README file
 - Fix add back composer.json and remove non needed source files (#345)
+- Update to PHP 8.0 (#325)
 
 ## [5.1.1] - 2021-06-04
 

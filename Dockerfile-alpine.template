@@ -1,4 +1,4 @@
-FROM php:7.4-%%VARIANT%%
+FROM php:8.0-%%VARIANT%%
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
