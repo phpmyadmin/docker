@@ -138,7 +138,51 @@ See the following links for config file information:
 
 ## Usage behind a reverse proxy
 
-Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma.example.net/``) where the reverse proxy makes phpMyAdmin available.
+Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma.example.net/``) where the reverse proxy makes phpMyAdmin available. See also ``PMA_SUB_URI_BASE``.
+
+## Usage on sub-URI behind a reverse proxy
+
+For NGINX, a proxy config could looks like that:
+
+docker-compose.yml:
+```yaml
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: notSecureChangeMe
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80 # <-- Exporting the port is optional when running behind a revers proxy on docker.
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_SUB_URI_BASE=/pma # <-- sub-URI used in nginx location selector.
+```
+
+
+ngix default.conf:
+```conf
+   location /pma { # <-- sub-URI set in docker-compose by PMA_SUB_URI_BASE
+       # Resolve against server_name
+       proxy_set_header Host                   $http_host;
+       
+       # Avoid warning message if proxy server is running on SSL port
+       proxy_set_header X-Forwarded-Proto      $scheme;
+       
+       # docker-compose service name and internal port of the upstream server.
+       # Port 80 is the internal port of the phpMyAdmin docker container. 
+       # It is not necessay to export the port if PhpMyAdmin should only be accessible
+       # through the proxy.
+       proxy_pass                              http://phpmyadmin:80;
+       break;
+   }
+```
 
 ## Environment variables summary
 
@@ -151,6 +195,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username and password to use only with the `config` authentication method
 * ``PMA_ABSOLUTE_URI`` - the full URL to phpMyAdmin. Sometimes needed when used in a reverse-proxy configuration. Don't set this unless needed. See [documentation](https://docs.phpmyadmin.net/en/latest/config.html#cfg_PmaAbsoluteUri).
+* ``PMA_SUB_URI_BASE`` - the URL suffix to phpMyAdmin when running on sub-URI like `your.domain.local/pma`. Syntax: `/<sub-uri>`.
 * ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
 * ``PMA_USER_CONFIG_BASE64`` - if set, this option will override the default `config.user.inc.php` with the base64 decoded contents of the variable
 * ``PMA_CONTROLHOST`` - when set, this points to an alternate database host used for storing the [phpMyAdmin Configuration Storage database](https://docs.phpmyadmin.net/en/latest/setup.html#phpmyadmin-configuration-storage) database
