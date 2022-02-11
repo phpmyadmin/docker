@@ -166,7 +166,7 @@ services:
 ```
 
 
-ngix default.conf:
+nginx configuration - e.g. default.conf:
 ```conf
    location /pma { # <-- sub-URI set in docker-compose by PMA_SUB_URI_BASE
        # Resolve against server_name
