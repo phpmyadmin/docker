@@ -40,7 +40,7 @@ The following tags are available:
 * `latest`, `fpm`, and `fpm-alpine` are always the most recent released version
 * Major versions, such as `5`, `5-fpm`, and `5-fpm-alpine`
 * Specific minor versions, such as `5.0`, `5.0-fpm`, and `5-fpm-alpine`
-* Specific patch versions, such as `5.0.0`, `5.0.0-fpm`, and `5.0.0-alpine`.  Note that, on rare occasion, there may be an intermediary "docker-only" release, such as 4.9.2-1
+* Specific patch versions, such as `5.0.0`, `5.0.0-fpm`, and `5.0.0-fpm-alpine`.  Note that, on rare occasion, there may be an intermediary "docker-only" release, such as 4.9.2-1
 
 A complete list of tags is [available at Docker Hub](https://hub.docker.com/_/phpmyadmin?tab=tags)
 
