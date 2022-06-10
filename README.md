@@ -180,14 +180,16 @@ docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -
 - `PMA_HOST`
 - `PMA_CONTROLPASS`
 
-## Run the E2E tests with docker-compose
+## Run the E2E tests for this docker image
 
-You can run the E2E tests with the local test environment by running MariaDB/MySQL databases. Adding ENV variable `PHPMYADMIN_RUN_TEST=true` already added on docker-compose file. Simply run:
+You can run the E2E test suite on a local test environment.
+The Requirements are `make`, `docker` and `docker-compose`.
 
-Using the docker-compose.testing.yml from https://github.com/phpmyadmin/docker
+Clone this repository: `https://github.com/phpmyadmin/docker.git`
 
+And then run this command to start the test suite:
 ```sh
-docker-compose -f docker-compose.testing.yml up phpmyadmin
+make run-tests
 ```
 
 For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
