@@ -9,21 +9,21 @@ on:
 
 jobs:
     test-apache-container:
-        name: Test on database ${{ matrix.database-image }}
+        name: Test (${{ matrix.configuration }}) on database ${{ matrix.database-image }}
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
                 database-image: ["mariadb:10.4", "mysql:5.7", "mariadb:latest", "mysql:latest"]
+                configuration: ["default", "one-host"]
 
         steps:
             - uses: actions/checkout@v3
             - name: Build images
-              run: docker-compose -f docker-compose.testing.yml build
-            - name: Run normal tests
-              run: docker-compose -f docker-compose.testing.yml up --build --abort-on-container-exit --exit-code-from=sut
-              env:
-                DB: ${{ matrix.database-image }}
-            - name: Run one host tests
-              run: docker-compose -f docker-compose.testing-one-host.yml up --build --abort-on-container-exit --exit-code-from=sut
+              working-directory: ./testing/
+              run: docker-compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml build
+            - name: Run ${{ matrix.configuration }} tests
+              working-directory: ./testing/
+              run: docker-compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml up --build --abort-on-container-exit --exit-code-from=sut
               env:
                 DB: ${{ matrix.database-image }}
