@@ -14,8 +14,6 @@ services:
       retries: 10
     networks:
       testing:
-    volumes:
-      - ./testing.cnf:/etc/mysql/conf.d/testing.cnf:ro
     tmpfs:
       - /var/lib/mysql:rw,noexec,nosuid,size=300m
 
