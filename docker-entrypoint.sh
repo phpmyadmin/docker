@@ -28,6 +28,28 @@ if [ ! -z "${PMA_USER_CONFIG_BASE64}" ]; then
     echo "${PMA_USER_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.user.inc.php
 fi
 
+# Create a symlink for the www root dir to support sub-URI.
+# See: https://stackoverflow.com/questions/42035947/how-to-change-the-access-url-of-official-phpmyadmin-docker-image-to-http-local/68643939#68643939
+if [ -n "${PMA_SUB_URI_BASE}" ]; then
+    echo "Using sub URI: ${PMA_SUB_URI_BASE}."
+    # Create symlink if link target does not already exit.
+    if [ ! -d /var/www/html/"${PMA_SUB_URI_BASE}" ] && [ ! -f /var/www/html/"${PMA_SUB_URI_BASE}" ]; then
+        ln -s /var/www/html /var/www/html"${PMA_SUB_URI_BASE}"
+        ## Verify creation.
+        if [ -d /var/www/html"${PMA_SUB_URI_BASE}" ]; then
+          echo "Sub URI link created."
+        else
+          echo "!! Creating sub-URI link failed. Validate PMA_SUB_URI_BASE. !!"
+          exit 1
+        fi
+    # If symlink target exist, validate that it is a symlink.
+    # Fail if the target is pointing to an existing file or dir like 'doc'.
+    elif [ ! -L /var/www/html/"${PMA_SUB_URI_BASE}" ]; then
+        echo "!! Sub URI '${PMA_SUB_URI_BASE}' invalid. Please change PMA_SUB_URI_BASE. Cannot create link since a file or directory with same name exists. !!"
+        exit 1
+    fi
+fi
+
 get_docker_secret() {
     local env_var="${1}"
     local env_var_file="${env_var}_FILE"
@@ -48,3 +70,5 @@ get_docker_secret PMA_HOST
 get_docker_secret PMA_CONTROLPASS
 
 exec "$@"
+
+
