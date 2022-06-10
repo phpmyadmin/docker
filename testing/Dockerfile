@@ -1,6 +1,6 @@
 # Testing image for phpMyAdmin
 
-FROM alpine:3.12
+FROM alpine:3.13
 
 # Install test dependencies
 RUN set -ex; \
