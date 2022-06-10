@@ -16,21 +16,23 @@ build-fpm-alpine:
 	docker build ${DOCKER_FLAGS} -t ${DOCKER_REPO}:testing-fpm-alpine fpm-alpine
 
 run:
-	docker-compose -f docker-compose.testing.yml up -d
+	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml up -d
 
-run-tests:
-	docker-compose exec phpmyadmin /test-docker.sh phpmyadmin_testing 80 phpmyadmin_testing_db
+testing-%:
+	docker-compose -f ./testing/docker-compose/docker-compose.$@.yml up --build --abort-on-container-exit --exit-code-from=sut
+
+run-tests: testing-default testing-one-host
 
 logs:
-	docker-compose -f docker-compose.testing.yml logs
+	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml logs
 
 clean: stop rm prune
 
 stop:
-	docker-compose -f docker-compose.testing.yml stop
+	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml stop
 
 rm:
-	docker-compose -f docker-compose.testing.yml rm
+	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml rm
 
 prune:
 	docker rm `docker ps -q -a --filter status=exited`
