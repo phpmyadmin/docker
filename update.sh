@@ -35,4 +35,7 @@ for variant in apache fpm fpm-alpine; do
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
 	' "$variant/Dockerfile"
+	if [ "$variant" != "apache" ]; then
+		sed -i "/^# start: Apache specific settings$/,/^# end: Apache specific settings$/d" "$variant/docker-entrypoint.sh"
+	fi
 done
