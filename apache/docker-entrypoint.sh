@@ -28,6 +28,13 @@ if [ ! -z "${PMA_USER_CONFIG_BASE64}" ]; then
     echo "${PMA_USER_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.user.inc.php
 fi
 
+if [ -n "${APACHE_PORT+x}" ]; then
+    echo "Setting apache port to ${APACHE_PORT}."
+    sed -i "s/VirtualHost \*:80/VirtualHost \*:${APACHE_PORT}/" /etc/apache2/sites-enabled/000-default.conf
+    sed -i "s/Listen 80/Listen ${APACHE_PORT}/" /etc/apache2/ports.conf
+    apachectl configtest
+fi
+
 get_docker_secret() {
     local env_var="${1}"
     local env_var_file="${env_var}_FILE"
