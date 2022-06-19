@@ -19,8 +19,8 @@ run:
 	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml up -d
 
 testing-%:
-	docker-compose -f ./testing/docker-compose/docker-compose.$@.yml up --build --abort-on-container-exit --exit-code-from=sut
-	docker-compose -f ./testing/docker-compose/docker-compose.$@.yml down
+	docker-compose -p "phpmyadmin_$@" -f ./testing/docker-compose/docker-compose.$@.yml up --build --abort-on-container-exit --exit-code-from=sut
+	docker-compose -p "phpmyadmin_$@" -f ./testing/docker-compose/docker-compose.$@.yml down
 
 run-tests: testing-default testing-one-host testing-different-apache-port
 
