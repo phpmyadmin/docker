@@ -3,7 +3,6 @@ version: "3.1"
 services:
   db_server:
     image: ${DB:-mariadb:10.3}
-    container_name: phpmyadmin_testing_db
     environment:
       MYSQL_ROOT_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
     healthcheck:
@@ -14,13 +13,14 @@ services:
       retries: 10
     networks:
       testing:
+        aliases:
+         - phpmyadmin_testing_db
     tmpfs:
       - /var/lib/mysql:rw,noexec,nosuid,size=300m
 
   phpmyadmin:
     build:
       context: ../../apache
-    container_name: phpmyadmin_testing_apache
     environment:
       PMA_HOST: db_server
       UPLOAD_LIMIT: 123M
@@ -36,6 +36,8 @@ services:
       retries: 10
     networks:
       testing:
+        aliases:
+         - phpmyadmin_testing_apache
     depends_on:
       db_server:
         condition: service_healthy
