@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased] - YYYY-MM-DD
 
+- Move docker-compose test files into a folder
+- Fix the section about E2E tests in `README.md`
+
+## [5.1.4] - 2022-05-11
+
+- Fix incorrect image tag name in `README.md`
+
+## [5.1.2] - 2022-01-22
+
 - Fix GPG keyservers in Dockerfiles
 - Remove microbadger badges, it closed
 - Improve the README file
