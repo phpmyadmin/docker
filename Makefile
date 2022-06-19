@@ -21,7 +21,7 @@ run:
 testing-%:
 	docker-compose -f ./testing/docker-compose/docker-compose.$@.yml up --build --abort-on-container-exit --exit-code-from=sut
 
-run-tests: testing-default testing-one-host
+run-tests: testing-default testing-one-host testing-different-apache-port
 
 logs:
 	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml logs

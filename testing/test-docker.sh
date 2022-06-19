@@ -28,6 +28,14 @@ if [ $ret -ne 0 ] ; then
     exit $ret
 fi
 
+curl -fsSL --output /dev/null "${PHPMYADMIN_URL}"
+ret=$?
+
+if [ $ret -ne 0 ] ; then
+    echo "Could not connect to ${PHPMYADMIN_URL}"
+    exit $ret
+fi
+
 # Perform tests
 ret=0
 pytest -p no:cacheprovider -q --url "$PHPMYADMIN_URL" --username ${TESTSUITE_USER:=root} --password "$TESTSUITE_PASSWORD"  $SERVER $FILENAME

@@ -6,4 +6,4 @@ FROM alpine:3.15
 RUN set -ex; \
 	\
 	apk add --no-cache --update mariadb-client mariadb-connector-c bash \
-	py3-html5lib py3-pytest py3-mechanize
+	py3-html5lib py3-pytest py3-mechanize curl
