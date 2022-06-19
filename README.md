@@ -173,11 +173,14 @@ docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -
 
 #### Variables that can be read from a file using ``_FILE``
 
-- `PMA_PASSWORD`
 - `MYSQL_ROOT_PASSWORD`
 - `MYSQL_PASSWORD`
+- `PMA_USER`
+- `PMA_PASSWORD`
 - `PMA_HOSTS`
 - `PMA_HOST`
+- `PMA_CONTROLHOST`
+- `PMA_CONTROLUSER`
 - `PMA_CONTROLPASS`
 
 ## Run the E2E tests for this docker image

@@ -78,9 +78,12 @@ def docker_secret(env_name):
 def test_phpmyadmin_secrets():
     docker_secret('MYSQL_PASSWORD')
     docker_secret('MYSQL_ROOT_PASSWORD')
+    docker_secret('PMA_USER')
     docker_secret('PMA_PASSWORD')
     docker_secret('PMA_HOSTS')
     docker_secret('PMA_HOST')
+    docker_secret('PMA_CONTROLHOST')
+    docker_secret('PMA_CONTROLUSER')
     docker_secret('PMA_CONTROLPASS')
 
 

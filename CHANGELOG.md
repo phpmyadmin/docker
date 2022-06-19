@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Move docker-compose test files into a folder
 - Fix the section about E2E tests in `README.md`
+- Support docker secrets from file for `PMA_USER`
+- Support docker secrets from file for `PMA_CONTROLUSER`
+- Support docker secrets from file for `PMA_CONTROLHOST`
 
 ## [5.1.4] - 2022-05-11
 
