@@ -1,4 +1,4 @@
-FROM php:8.0-buster
+FROM php:8.0-apache-buster
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
