@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.0-apache-buster
 
 # Install dependencies
 RUN set -ex; \
