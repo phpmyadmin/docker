@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Set ini setting `max_input_vars = 10000`
 - Add support for ENV `PMA_QUERYHISTORYMAX`
 - Add support for ENV `MAX_EXECUTION_TIME`
+- Add support for ENV `MEMORY_LIMIT`
 - Move to GitHub actions
 - Re-work the test system
 - Support docker secrets from file for `PMA_CONTROLPASS`
