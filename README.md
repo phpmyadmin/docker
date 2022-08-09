@@ -61,7 +61,7 @@ First you need to run a MySQL or MariaDB server in Docker, and the phpMyAdmin im
 linked to the running database container:
 
 ```sh
-docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 phpmyadmin
+docker run --name phpmyadmin -d --link mysql_db_server:db -p 8080:80 phpmyadmin:latest
 ```
 
 ## Usage with external server
@@ -70,7 +70,7 @@ You can specify a MySQL host in the `PMA_HOST` environment variable. You can als
 use `PMA_PORT` to specify the port of the server in case it's not the default one:
 
 ```sh
-docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin
+docker run --name phpmyadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin:latest
 ```
 
 ## Usage with arbitrary server
@@ -78,7 +78,7 @@ docker run --name myadmin -d -e PMA_HOST=dbhost -p 8080:80 phpmyadmin
 You can use arbitrary servers by adding the environment variable `PMA_ARBITRARY=1` to the startup command:
 
 ```sh
-docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin
+docker run --name phpmyadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin:latest
 ```
 
 ## Usage with docker-compose and arbitrary server
@@ -118,7 +118,7 @@ in it, and then linking it into the container using:
 On the `docker run` line like this:
 
 ```sh
-docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin
+docker run --name phpmyadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php phpmyadmin:latest
 ```
 
 Be sure to have `<?php` as your first line of the configuration file or the contents will not be detected as PHP code.
@@ -169,7 +169,7 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` environment variable is allowed (it overrides ``PMA_PASSWORD`` if it is set):
 
 ```sh
-docker run --name myadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin
+docker run --name phpmyadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin:latest
 ```
 
 #### Variables that can be read from a file using ``_FILE``
