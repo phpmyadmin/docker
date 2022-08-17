@@ -31,8 +31,8 @@ fi
 # start: Apache specific settings
 if [ -n "${APACHE_PORT+x}" ]; then
     echo "Setting apache port to ${APACHE_PORT}."
-    sed -i "s/VirtualHost \*:80/VirtualHost \*:${APACHE_PORT}/" /etc/apache2/sites-enabled/000-default.conf
-    sed -i "s/Listen 80/Listen ${APACHE_PORT}/" /etc/apache2/ports.conf
+    sed -i "/VirtualHost \*:80/c\\<VirtualHost \*:${APACHE_PORT}\>" /etc/apache2/sites-enabled/000-default.conf
+    sed -i "/Listen 80/c\Listen ${APACHE_PORT}" /etc/apache2/ports.conf
     apachectl configtest
 fi
 # end: Apache specific settings
