@@ -25,6 +25,8 @@ $vars = [
     'PMA_QUERYHISTORYMAX',
     'MAX_EXECUTION_TIME',
     'MEMORY_LIMIT',
+    'PMA_UPLOADDIR',
+    'PMA_SAVEDIR',
 ];
 
 foreach ($vars as $var) {
@@ -137,8 +139,13 @@ for ($i = 1; isset($sockets[$i - 1]); $i++) {
 $i--;
 
 /* Uploads setup */
-$cfg['UploadDir'] = '';
-$cfg['SaveDir'] = '';
+if (isset($_ENV['PMA_UPLOADDIR'])) {
+    $cfg['UploadDir'] = trim($_ENV['PMA_UPLOADDIR']);
+}
+
+if (isset($_ENV['PMA_SAVEDIR'])) {
+    $cfg['SaveDir'] = trim($_ENV['PMA_SAVEDIR']);
+}
 
 if (isset($_ENV['MAX_EXECUTION_TIME'])) {
     $cfg['ExecTimeLimit'] = $_ENV['MAX_EXECUTION_TIME'];
