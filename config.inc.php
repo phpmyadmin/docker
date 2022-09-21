@@ -140,11 +140,11 @@ $i--;
 
 /* Uploads setup */
 if (isset($_ENV['PMA_UPLOADDIR'])) {
-    $cfg['UploadDir'] = trim($_ENV['PMA_UPLOADDIR']);
+    $cfg['UploadDir'] = $_ENV['PMA_UPLOADDIR'];
 }
 
 if (isset($_ENV['PMA_SAVEDIR'])) {
-    $cfg['SaveDir'] = trim($_ENV['PMA_SAVEDIR']);
+    $cfg['SaveDir'] = $_ENV['PMA_SAVEDIR'];
 }
 
 if (isset($_ENV['MAX_EXECUTION_TIME'])) {
