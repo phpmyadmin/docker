@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Support docker secrets from file for `PMA_CONTROLUSER` (#372)
 - Support docker secrets from file for `PMA_CONTROLHOST` (#372)
 - Allow a different Apache port with `APACHE_PORT` (#340)
+- Add support for ENVs `PMA_UPLOADDIR` and `PMA_SAVEDIR` (#384)
+- Fixed a bug with `APACHE_PORT` ENV on container restart (#381)
 
 ## [5.1.4] - 2022-05-11
 
