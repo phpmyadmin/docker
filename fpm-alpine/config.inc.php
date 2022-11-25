@@ -1,9 +1,9 @@
 <?php
 
-require('/etc/phpmyadmin/config.secret.inc.php');
+require '/etc/phpmyadmin/config.secret.inc.php';
 
 /* Ensure we got the environment */
-$vars = array(
+$vars = [
     'PMA_ARBITRARY',
     'PMA_HOST',
     'PMA_HOSTS',
@@ -24,8 +24,9 @@ $vars = array(
     'PMA_QUERYHISTORYDB',
     'PMA_QUERYHISTORYMAX',
     'MAX_EXECUTION_TIME',
-    'MEMORY_LIMIT'
-);
+    'MEMORY_LIMIT',
+];
+
 foreach ($vars as $var) {
     $env = getenv($var);
     if (!isset($_ENV[$var]) && $env !== false) {
@@ -33,11 +34,11 @@ foreach ($vars as $var) {
     }
 }
 if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
-    $cfg['QueryHistoryDB'] = boolval($_ENV['PMA_QUERYHISTORYDB']);
+    $cfg['QueryHistoryDB'] = (bool) $_ENV['PMA_QUERYHISTORYDB'];
 }
 
 if (isset($_ENV['PMA_QUERYHISTORYMAX'])) {
-    $cfg['QueryHistoryMax'] = intval($_ENV['PMA_QUERYHISTORYMAX']);
+    $cfg['QueryHistoryMax'] = (int) $_ENV['PMA_QUERYHISTORYMAX'];
 }
 
 /* Arbitrary server connection */
@@ -53,21 +54,22 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
 /* Figure out hosts */
 
 /* Fallback to default linked */
-$hosts = array('db');
+$hosts = ['db'];
 
 /* Set by environment */
-if (!empty($_ENV['PMA_HOST'])) {
-    $hosts = array($_ENV['PMA_HOST']);
-    $verbose = array($_ENV['PMA_VERBOSE']);
-    $ports = array($_ENV['PMA_PORT']);
-} elseif (!empty($_ENV['PMA_HOSTS'])) {
+if (! empty($_ENV['PMA_HOST'])) {
+    $hosts = [$_ENV['PMA_HOST']];
+    $verbose = [$_ENV['PMA_VERBOSE']];
+    $ports = [$_ENV['PMA_PORT']];
+} elseif (! empty($_ENV['PMA_HOSTS'])) {
     $hosts = array_map('trim', explode(',', $_ENV['PMA_HOSTS']));
     $verbose = array_map('trim', explode(',', $_ENV['PMA_VERBOSES']));
     $ports = array_map('trim', explode(',', $_ENV['PMA_PORTS']));
 }
-if (!empty($_ENV['PMA_SOCKET'])) {
-    $sockets = array($_ENV['PMA_SOCKET']);
-} elseif (!empty($_ENV['PMA_SOCKETS'])) {
+
+if (! empty($_ENV['PMA_SOCKET'])) {
+    $sockets = [$_ENV['PMA_SOCKET']];
+} elseif (! empty($_ENV['PMA_SOCKETS'])) {
     $sockets = explode(',', $_ENV['PMA_SOCKETS']);
 }
 
@@ -148,5 +150,5 @@ if (isset($_ENV['MEMORY_LIMIT'])) {
 
 /* Include User Defined Settings Hook */
 if (file_exists('/etc/phpmyadmin/config.user.inc.php')) {
-    include('/etc/phpmyadmin/config.user.inc.php');
+    include '/etc/phpmyadmin/config.user.inc.php';
 }
