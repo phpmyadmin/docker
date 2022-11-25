@@ -153,6 +153,8 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``PMA_ABSOLUTE_URI`` - the full URL to phpMyAdmin. Sometimes needed when used in a reverse-proxy configuration. Don't set this unless needed. See [documentation](https://docs.phpmyadmin.net/en/latest/config.html#cfg_PmaAbsoluteUri).
 * ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
 * ``PMA_USER_CONFIG_BASE64`` - if set, this option will override the default `config.user.inc.php` with the base64 decoded contents of the variable
+* ``PMA_UPLOADDIR`` - if defined, this option will set the path where files can be saved to be available to import ([$cfg['UploadDir']](https://docs.phpmyadmin.net/en/latest/config.html#cfg_UploadDir))
+* ``PMA_SAVEDIR`` - if defined, this option will set the path where exported files can be saved ([$cfg['SaveDir']](https://docs.phpmyadmin.net/en/latest/config.html#cfg_SaveDir))
 * ``PMA_CONTROLHOST`` - when set, this points to an alternate database host used for storing the [phpMyAdmin Configuration Storage database](https://docs.phpmyadmin.net/en/latest/setup.html#phpmyadmin-configuration-storage) database
 * ``PMA_CONTROLPORT`` - if set, will override the default port (3306) for connecting to the control host for storing the [phpMyAdmin Configuration Storage database](https://docs.phpmyadmin.net/en/latest/setup.html#phpmyadmin-configuration-storage) database
 * ``PMA_PMADB`` - define the name of the database to be used for the [phpMyAdmin Configuration Storage database](https://docs.phpmyadmin.net/en/latest/setup.html#phpmyadmin-configuration-storage). When not set, the advanced features are not enabled by default: they can still potentially be enabled by the user when logging in with the zero conf (zero configuration) feature. Suggested values: `phpmyadmin` or `pmadb`
@@ -165,8 +167,6 @@ Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma
 * ``UPLOAD_LIMIT`` - if set, this option will override the default value for apache and php-fpm (format as `[0-9+](K,M,G)` default value is 2048K, this will change ``upload_max_filesize`` and ``post_max_size`` values)
 * ``HIDE_PHP_VERSION`` - if defined, this option will hide the PHP version (`expose_php = Off`). Set to any value (such as `HIDE_PHP_VERSION=true`).
 * ``APACHE_PORT`` - if defined, this option will change the default Apache port from `80` in case you want it to run on a different port like an unprivileged port.  Set to any port value (such as `APACHE_PORT=8090`)
-* ``PMA_UPLOADDIR`` - if defined, this option will set the path where imported files can be saved to be available to import ([$cfg['UploadDir']](https://docs.phpmyadmin.net/en/latest/config.html#cfg_UploadDir))
-* ``PMA_SAVEDIR`` - if defined, this option will set the path where exported files will be saved ([$cfg['SaveDir']](https://docs.phpmyadmin.net/en/latest/config.html#cfg_SaveDir)) 
 
 For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` environment variable is allowed (it overrides ``PMA_PASSWORD`` if it is set):
 
