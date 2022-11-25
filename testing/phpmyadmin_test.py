@@ -31,7 +31,7 @@ def do_login(br, url, username, password, server):
     response = br.submit()
     return response
 
-def test_phpmyadmin(url, username, password, server, sqlfile):
+def test_import(url, username, password, server, sqlfile):
     if sqlfile is None:
         if os.path.exists('/world.sql'):
             sqlfile = '/world.sql'
@@ -108,3 +108,36 @@ def test_php_ini(url, username, password, server):
     assert(b'<tr><td class="e">post_max_size</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
 
     assert(b'<tr><td class="e">expose_php</td><td class="v">Off</td><td class="v">Off</td></tr>' in response)
+
+
+def test_import_from_folder(url, username, password, server, sqlfile):
+    upload_dir = os.environ.get('PMA_UPLOADDIR');
+    if not upload_dir:
+        pytest.skip("Missing PMA_UPLOADDIR ENV", allow_module_level=True)
+
+    br = create_browser()
+
+    response = do_login(br, url, username, password, server)
+
+    assert(b'Server version' in response.read())
+
+    # Open server import
+    response = br.follow_link(text_regex=re.compile('Import'))
+    assert(b'Browse your computer:' in response.read())
+    assert(upload_dir in response.read())
+
+def test_export_to_folder(url, username, password, server, sqlfile):
+    save_dir = os.environ.get('PMA_SAVEDIR');
+    if not save_dir:
+        pytest.skip("Missing PMA_SAVEDIR ENV", allow_module_level=True)
+
+    br = create_browser()
+
+    response = do_login(br, url, username, password, server)
+
+    assert(b'Server version' in response.read())
+
+    # Open server export
+    response = br.follow_link(text_regex=re.compile('Export'))
+    assert(b'Save on server in the directory' in response.read())
+    assert(save_dir in response.read())
