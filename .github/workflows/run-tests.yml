@@ -15,7 +15,7 @@ jobs:
             fail-fast: false
             matrix:
                 database-image: ["mariadb:10.4", "mysql:5.7", "mariadb:latest", "mysql:latest"]
-                configuration: ["default", "one-host", "different-apache-port"]
+                configuration: ["default", "one-host", "fs-import-export", "different-apache-port"]
 
         steps:
             - uses: actions/checkout@v3

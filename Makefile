@@ -22,7 +22,7 @@ testing-%:
 	docker-compose -p "phpmyadmin_$@" -f ./testing/docker-compose/docker-compose.$@.yml up --build --abort-on-container-exit --exit-code-from=sut
 	docker-compose -p "phpmyadmin_$@" -f ./testing/docker-compose/docker-compose.$@.yml down
 
-run-tests: testing-default testing-one-host testing-different-apache-port
+run-tests: testing-default testing-one-host testing-fs-import-export testing-different-apache-port
 
 logs:
 	docker-compose -f ./testing/docker-compose/docker-compose.testing-default.yml logs

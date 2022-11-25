@@ -31,15 +31,18 @@ def do_login(br, url, username, password, server):
     response = br.submit()
     return response
 
+def get_world_sql_path():
+    if os.path.exists('/world.sql'):
+        return '/world.sql'
+    elif os.path.exists('./world.sql'):
+        return './world.sql'
+    else:
+        path = os.path.dirname(os.path.realpath(__file__))
+        return path + '/world.sql'
+
 def test_import(url, username, password, server, sqlfile):
     if sqlfile is None:
-        if os.path.exists('/world.sql'):
-            sqlfile = '/world.sql'
-        elif os.path.exists('./world.sql'):
-            sqlfile = './world.sql'
-        else:
-            path = os.path.dirname(os.path.realpath(__file__))
-            sqlfile = path + '/world.sql'
+        sqlfile = get_world_sql_path()
 
     br = create_browser()
 
@@ -115,6 +118,10 @@ def test_import_from_folder(url, username, password, server, sqlfile):
     if not upload_dir:
         pytest.skip("Missing PMA_UPLOADDIR ENV", allow_module_level=True)
 
+    # Copy file into the volume
+    with open(get_world_sql_path(), 'rb') as src, open(upload_dir + '/world-data.sql', 'wb') as dst:
+        dst.write(src.read())
+
     br = create_browser()
 
     response = do_login(br, url, username, password, server)
@@ -123,13 +130,25 @@ def test_import_from_folder(url, username, password, server, sqlfile):
 
     # Open server import
     response = br.follow_link(text_regex=re.compile('Import'))
-    assert(b'Browse your computer:' in response.read())
-    assert(upload_dir in response.read())
+    response = response.read()
+
+    assert(b'Browse your computer:' in response)
+    assert(upload_dir.encode() in response)
+    assert(b'world-data.sql' in response)
 
 def test_export_to_folder(url, username, password, server, sqlfile):
     save_dir = os.environ.get('PMA_SAVEDIR');
     if not save_dir:
         pytest.skip("Missing PMA_SAVEDIR ENV", allow_module_level=True)
+
+    # Delete file from previous runs
+    if os.path.exists(save_dir + "/db_server.sql"):
+        os.remove(save_dir + "/db_server.sql")
+
+    assert os.path.exists(save_dir + "/db_server.sql") == False
+
+    # Avoid: "The web server does not have permission to save the file"
+    os.chmod(save_dir , 0o777)
 
     br = create_browser()
 
@@ -139,5 +158,16 @@ def test_export_to_folder(url, username, password, server, sqlfile):
 
     # Open server export
     response = br.follow_link(text_regex=re.compile('Export'))
-    assert(b'Save on server in the directory' in response.read())
-    assert(save_dir in response.read())
+    response = response.read()
+    assert(b'Save on server in the directory' in response)
+    assert(save_dir.encode() in response)
+
+    br.select_form('dump')
+    br.find_control("quick_export_onserver").items[0].selected=True
+
+    response = br.submit()
+    response = response.read()
+
+    assert(b'Dump has been saved to file' in response)
+    assert(b'Dump has been saved to file /etc/phpmyadmin/exports/db_server.sql' in response)
+    assert os.path.exists(save_dir + "/db_server.sql") == True
