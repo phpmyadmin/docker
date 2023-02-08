@@ -119,6 +119,16 @@ RUN set -ex; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*
 
+# Install netcat to support healthcheck
+RUN set -ex; \
+    \
+    savedAptMark="$(apt-mark showmanual)"; \
+    \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        netcat \
+    ;
+
 # Copy configuration
 COPY config.inc.php /etc/phpmyadmin/config.inc.php
 
