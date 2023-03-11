@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add support for ENVs `PMA_UPLOADDIR` and `PMA_SAVEDIR` (#384)
 - Fixed a bug with `APACHE_PORT` ENV on container restart (#381)
 - Update to PHP 8.1 (#393)
+- Add support for ENV `TZ`
 
 ## [5.1.4] - 2022-05-11
 
