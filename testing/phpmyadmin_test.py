@@ -104,6 +104,7 @@ def test_php_ini(url, username, password, server):
     assert(b'upload_max_filesize' in response)
     assert(b'post_max_size' in response)
     assert(b'expose_php' in response)
+    assert(b'session.save_path' in response)
 
     assert(b'<tr><td class="e">max_execution_time</td><td class="v">125</td><td class="v">125</td></tr>' in response)
 
@@ -111,7 +112,7 @@ def test_php_ini(url, username, password, server):
     assert(b'<tr><td class="e">post_max_size</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
 
     assert(b'<tr><td class="e">expose_php</td><td class="v">Off</td><td class="v">Off</td></tr>' in response)
-
+    assert(b'<tr><td class="e">session.save_path</td><td class="v">/sessions</td><td class="v">/sessions</td></tr>' in response)
 
 def test_import_from_folder(url, username, password, server, sqlfile):
     upload_dir = os.environ.get('PMA_UPLOADDIR');
