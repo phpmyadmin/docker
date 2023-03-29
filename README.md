@@ -136,6 +136,14 @@ See the following links for config file information:
 * https://docs.phpmyadmin.net/en/latest/config.html#config
 * https://docs.phpmyadmin.net/en/latest/setup.html
 
+## Adding Custom Configuration in /etc/phpmyadmin/conf.d
+
+you can also consider storing your custom configuration files in the folder /etc/phpmyadmin/conf.d, which is very suitable for managing multiple phpMyAdmin configuration files for different hosts,Then you can create server-1.php , server-2.php , or any file name you want, and store them in the conf.d directory mounted on the host.
+
+On the docker run line like this:
+
+docker run --name phpmyadmin -d --link mysql_db_server:db -p 8080:80 -v /some/local/directory/conf.d:/etc/phpmyadmin/conf.d:ro phpmyadmin:latest
+
 ## Usage behind a reverse proxy
 
 Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma.example.net/``) where the reverse proxy makes phpMyAdmin available.
