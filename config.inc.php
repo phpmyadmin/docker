@@ -159,3 +159,9 @@ if (isset($_ENV['MEMORY_LIMIT'])) {
 if (file_exists('/etc/phpmyadmin/config.user.inc.php')) {
     include '/etc/phpmyadmin/config.user.inc.php';
 }
+
+/* Support additional configurations */
+foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
+{
+    include($filename);
+}
