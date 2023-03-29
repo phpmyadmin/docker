@@ -161,7 +161,8 @@ if (file_exists('/etc/phpmyadmin/config.user.inc.php')) {
 }
 
 /* Support additional configurations */
-foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
-{
-    include($filename);
+if(is_dir('/etc/phpmyadmin/conf.d')) {
+    foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename) {
+        include($filename);
+    }
 }
