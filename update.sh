@@ -1,13 +1,11 @@
 #!/bin/bash
-set -e
+set -eu -o pipefail -x
 
 # Check for dependencies
 command -v curl >/dev/null 2>&1 || { echo >&2 "'curl' is required but not found. Aborting."; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo >&2 "'jq' is required but not found. Aborting."; exit 1; }
-if [ -z "${BASH_VERSINFO}" ] || [ -z "${BASH_VERSINFO[0]}" ] || [ ${BASH_VERSINFO[0]} -lt 4 ]; then
-  echo "BASH version 4.0 or greater is required. Aborting."
-  exit 1
-fi
+[ -n "${BASH_VERSINFO}" ] && [ -n "${BASH_VERSINFO[0]}" ] && [ ${BASH_VERSINFO[0]} -ge 4 ] \
+	|| { echo >&2 "Bash 4.0 or greater is required. Aborting."; exit 1; }
 
 declare -A cmd=(
 	[apache]='apache2-foreground'
