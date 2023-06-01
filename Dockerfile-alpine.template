@@ -78,7 +78,7 @@ LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.vendor="phpMyAdmin" \
     org.opencontainers.image.documentation="https://github.com/phpmyadmin/docker#readme" \
     org.opencontainers.image.licenses="GPL-2.0-only" \
-    org.opencontainers.image.version="${VERSION}" \
+    org.opencontainers.image.version="%%VERSION%%" \
     org.opencontainers.image.url="https://github.com/phpmyadmin/docker#readme" \
     org.opencontainers.image.source="https://github.com/phpmyadmin/docker.git"
 
@@ -89,10 +89,10 @@ RUN set -ex; \
     ; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
-    export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
+    export GPGKEY="%%GPG_KEY%%"; \
     curl -fsSL -o phpMyAdmin.tar.xz "%%DOWNLOAD_URL%%"; \
     curl -fsSL -o phpMyAdmin.tar.xz.asc "%%DOWNLOAD_URL_ASC%%"; \
-    echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
+    echo "%%SHA256%% *phpMyAdmin.tar.xz" | sha256sum -c -; \
     gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY" \

@@ -19,6 +19,8 @@ declare -A base=(
 	[fpm-alpine]='alpine'
 )
 
+gpg_key='3D06A59ECE730EB71B511C17CE752F178259BD92'
+
 function download_url() {
 	echo "https://files.phpmyadmin.net/phpMyAdmin/$1/phpMyAdmin-$1-all-languages.tar.xz"
 }
@@ -43,6 +45,7 @@ function create_variant() {
 		s/%%SHA256%%/'"$sha256"'/;
 		s/%%DOWNLOAD_URL%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$url")"'/;
 		s/%%DOWNLOAD_URL_ASC%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$ascUrl")"'/;
+		s/%%GPG_KEY%%/'"$gpg_key"'/g;
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
 	' "$variant/Dockerfile"
