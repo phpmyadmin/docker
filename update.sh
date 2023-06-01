@@ -41,9 +41,12 @@ function create_variant() {
 
 	echo "updating $version [$branch] $variant"
 
-	# Create Dockerfile
+	# Create the variant directory with a Dockerfile
+	mkdir -p "$variant"
+
 	local template="Dockerfile-${base[$variant]}.template"
-	cp "$template" "$variant/Dockerfile"
+	echo "# DO NOT EDIT: created by update.sh from $template" > "$variant/Dockerfile"
+	cat "$template" >> "$variant/Dockerfile"
 
 	# Replace Dockerfile variables
 	sed -ri -e '
