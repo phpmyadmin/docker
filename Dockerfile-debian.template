@@ -1,4 +1,4 @@
-FROM php:8.1-%%VARIANT%%
+FROM php:%%PHP_VERSION%%-%%VARIANT%%
 
 # Install dependencies
 RUN set -ex; \

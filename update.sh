@@ -7,6 +7,10 @@ command -v jq >/dev/null 2>&1 || { echo >&2 "'jq' is required but not found. Abo
 [ -n "${BASH_VERSINFO}" ] && [ -n "${BASH_VERSINFO[0]}" ] && [ ${BASH_VERSINFO[0]} -ge 4 ] \
 	|| { echo >&2 "Bash 4.0 or greater is required. Aborting."; exit 1; }
 
+declare -A php_version=(
+	[default]='8.1'
+)
+
 declare -A cmd=(
 	[apache]='apache2-foreground'
 	[fpm]='php-fpm'
@@ -33,6 +37,7 @@ function create_variant() {
 	local branch="$(sed -ne 's/^\([0-9]*\.[0-9]*\)\..*$/\1/p' <<< "$version")"
 	local url="$(download_url "$version")"
 	local ascUrl="$(download_url "$version").asc"
+	local phpVersion="${php_version[$version]-${php_version[default]}}"
 
 	echo "updating $version [$branch] $variant"
 
@@ -45,6 +50,7 @@ function create_variant() {
 		s/%%SHA256%%/'"$sha256"'/;
 		s/%%DOWNLOAD_URL%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$url")"'/;
 		s/%%DOWNLOAD_URL_ASC%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$ascUrl")"'/;
+		s/%%PHP_VERSION%%/'"$phpVersion"'/g;
 		s/%%GPG_KEY%%/'"$gpg_key"'/g;
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
