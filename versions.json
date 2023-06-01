@@ -1,1 +1,26 @@
-{}
+{
+  "5.2": {
+    "branch": "5.2",
+    "version": "5.2.1",
+    "sha256": "373f9599dfbd96d6fe75316d5dad189e68c305f297edf42377db9dd6b41b2557",
+    "url": "https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.xz",
+    "ascUrl": "https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.xz.asc",
+    "variants": {
+      "apache": {
+        "variant": "apache",
+        "base": "debian",
+        "phpVersion": "8.1"
+      },
+      "fpm": {
+        "variant": "fpm",
+        "base": "debian",
+        "phpVersion": "8.1"
+      },
+      "fpm-alpine": {
+        "variant": "fpm-alpine",
+        "base": "alpine",
+        "phpVersion": "8.1"
+      }
+    }
+  }
+}
