@@ -19,12 +19,18 @@ declare -A base=(
 	[fpm-alpine]='alpine'
 )
 
+function download_url() {
+	echo "https://files.phpmyadmin.net/phpMyAdmin/$1/phpMyAdmin-$1-all-languages.tar.xz"
+}
+
 function create_variant() {
 	local variant="$1"
 	local version="$2"
 	local sha256="$3"
 
 	local branch="$(sed -ne 's/^\([0-9]*\.[0-9]*\)\..*$/\1/p' <<< "$version")"
+	local url="$(download_url "$version")"
+	local ascUrl="$(download_url "$version").asc"
 
 	echo "updating $version [$branch] $variant"
 
@@ -35,6 +41,8 @@ function create_variant() {
 	sed -ri -e '
 		s/%%VERSION%%/'"$version"'/;
 		s/%%SHA256%%/'"$sha256"'/;
+		s/%%DOWNLOAD_URL%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$url")"'/;
+		s/%%DOWNLOAD_URL_ASC%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$ascUrl")"'/;
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
 	' "$variant/Dockerfile"
@@ -44,7 +52,7 @@ function create_variant() {
 }
 
 latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
-sha256="$(curl -fsSL "https://files.phpmyadmin.net/phpMyAdmin/$latest/phpMyAdmin-$latest-all-languages.tar.xz.sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
+sha256="$(curl -fsSL "$(download_url "$latest").sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
 
 for variant in apache fpm fpm-alpine; do
 	create_variant "$variant" "$latest" "$sha256"
