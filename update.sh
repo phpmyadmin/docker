@@ -19,16 +19,21 @@ declare -A base=(
 	[fpm-alpine]='alpine'
 )
 
-latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
-sha256="$(curl -fsSL "https://files.phpmyadmin.net/phpMyAdmin/$latest/phpMyAdmin-$latest-all-languages.tar.xz.sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
+function create_variant() {
+	local variant="$1"
+	local version="$2"
+	local sha256="$3"
 
-for variant in apache fpm fpm-alpine; do
-	template="Dockerfile-${base[$variant]}.template"
-	cp $template "$variant/Dockerfile"
+	local branch="$(sed -ne 's/^\([0-9]*\.[0-9]*\)\..*$/\1/p' <<< "$version")"
+
+	echo "updating $version [$branch] $variant"
+
+	local template="Dockerfile-${base[$variant]}.template"
+	cp "$template" "$variant/Dockerfile"
 	cp config.inc.php "$variant/config.inc.php"
 	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 	sed -ri -e '
-		s/%%VERSION%%/'"$latest"'/;
+		s/%%VERSION%%/'"$version"'/;
 		s/%%SHA256%%/'"$sha256"'/;
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
@@ -36,4 +41,11 @@ for variant in apache fpm fpm-alpine; do
 	if [ "$variant" != "apache" ]; then
 		sed -i "/^# start: Apache specific settings$/,/^# end: Apache specific settings$/d" "$variant/docker-entrypoint.sh"
 	fi
+}
+
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
+sha256="$(curl -fsSL "https://files.phpmyadmin.net/phpMyAdmin/$latest/phpMyAdmin-$latest-all-languages.tar.xz.sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
+
+for variant in apache fpm fpm-alpine; do
+	create_variant "$variant" "$latest" "$sha256"
 done
