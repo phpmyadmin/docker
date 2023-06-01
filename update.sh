@@ -68,6 +68,15 @@ function create_variant() {
 
 	# Copy config.inc.php
 	cp config.inc.php "$variant/config.inc.php"
+
+	# Add variant to versions.json
+	versionVariantsJson="$(jq -e \
+		--arg branch "$branch" --arg variant "$variant" --arg base "${base[$variant]}" --arg phpVersion "$phpVersion" \
+		'.[$branch].variants[$variant] = {"variant": $variant, "base": $base, "phpVersion": $phpVersion}' versions.json)"
+	versionJson="$(jq -e \
+		--arg branch "$branch" --arg version "$version" --arg sha256 "$sha256" --arg url "$url" --arg ascUrl "$ascUrl" --argjson variants "$versionVariantsJson" \
+		'.[$branch] = {"branch": $branch, "version": $version, "sha256": $sha256, "url": $url, "ascUrl": $ascUrl, "variants": $variants[$branch].variants}' versions.json)"
+	printf '%s\n' "$versionJson" > versions.json
 }
 
 # Check script dependencies
@@ -77,6 +86,8 @@ command -v jq >/dev/null 2>&1 || { echo >&2 "'jq' is required but not found. Abo
 	|| { echo >&2 "Bash 4.0 or greater is required. Aborting."; exit 1; }
 
 # Create variants
+printf '%s\n' "{}" > versions.json
+
 latest="$(curl -fsSL "https://www.phpmyadmin.net/home_page/version.json" | jq -r '.version')"
 sha256="$(curl -fsSL "$(download_url "$latest").sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
 
