@@ -4,7 +4,7 @@ Note that since phpMyAdmin has been accepted in to the [official DockerHub repos
 either that or this older [phpMyAdmin repository](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) for your Docker installation. This
 is maintained as a courtesy to users who have not migrated.
 
-Run phpMyAdmin with Alpine, Apache and PHP FPM.
+Run phpMyAdmin on Debian + Apache, Debian + PHP FPM or Alpine + PHP FPM.
 
 [![GitHub CI build status badge](https://github.com/phpmyadmin/docker/workflows/GitHub%20CI/badge.svg)](https://github.com/phpmyadmin/docker/actions?query=workflow%3A%22GitHub+CI%22)
 [![update.sh build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/update.sh/job/phpmyadmin.svg?label=Automated%20update.sh)](https://doi-janky.infosiftr.net/job/update.sh/job/phpmyadmin/)
@@ -17,10 +17,10 @@ Run phpMyAdmin with Alpine, Apache and PHP FPM.
 [![mips64le build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/mips64le/job/phpmyadmin.svg?label=mips64le)](https://doi-janky.infosiftr.net/job/multiarch/job/mips64le/job/phpmyadmin)
 [![ppc64le build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/ppc64le/job/phpmyadmin.svg?label=ppc64le)](https://doi-janky.infosiftr.net/job/multiarch/job/ppc64le/job/phpmyadmin)
 [![s390x build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/s390x/job/phpmyadmin.svg?label=s390x)](https://doi-janky.infosiftr.net/job/multiarch/job/s390x/job/phpmyadmin)
-[![Docker Pulls](https://img.shields.io/docker/pulls/_/phpmyadmin.svg)][hub]
-[![Docker Stars](https://img.shields.io/docker/stars/_/phpmyadmin.svg)][hub]
+[![Docker Pulls](https://img.shields.io/docker/pulls/_/phpmyadmin.svg)](https://hub.docker.com/_/phpmyadmin)
+[![Docker Stars](https://img.shields.io/docker/stars/_/phpmyadmin.svg)](https://hub.docker.com/_/phpmyadmin)
 
-All of the following examples will bring you phpMyAdmin on `http://localhost:8080`
+All following examples will bring you phpMyAdmin on `http://localhost:8080`
 where you can enjoy your happy MySQL administration.
 
 ## Credentials
@@ -108,7 +108,7 @@ services:
 ## Adding Custom Configuration
 
 You can add your own custom config.inc.php settings (such as Configuration Storage setup)
- by creating a file named `config.user.inc.php` with the various user defined settings
+by creating a file named `config.user.inc.php` with the various user defined settings
 in it, and then linking it into the container using:
 
 ```sh
@@ -189,19 +189,20 @@ docker run --name phpmyadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.tx
 
 ## Run the E2E tests for this docker image
 
-You can run the E2E test suite on a local test environment.
-The Requirements are `make`, `docker` and `docker-compose`.
+You can run the end-to-end test suite on a local test environment.
+The requirements are `make`, `docker` and `docker-compose`.
 
-Clone this repository: `https://github.com/phpmyadmin/docker.git`
+Clone this repository: `https://github.com/phpmyadmin/docker.git` or `git@github.com:phpmyadmin/docker.git`
 
-And then run this command to start the test suite:
+Then, from the root of the cloned repository, run this command to start the test suite:
+
 ```sh
 make run-tests
 ```
 
-For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
+## Links
 
-[hub]: https://hub.docker.com/_/phpmyadmin
+For more detailed documentation see https://docs.phpmyadmin.net/en/latest/setup.html#installing-using-docker
 
 Please report any issues with the Docker container to https://github.com/phpmyadmin/docker/issues
 
