@@ -4,7 +4,7 @@ Note that since phpMyAdmin has been accepted in to the [official DockerHub repos
 either that or this older [phpMyAdmin repository](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) for your Docker installation. This
 is maintained as a courtesy to users who have not migrated.
 
-Run phpMyAdmin on Debian + Apache, Debian + PHP FPM or Alpine + PHP FPM.
+Run phpMyAdmin on Debian + Apache, Debian + PHP FPM, or Alpine + PHP FPM.
 
 [![GitHub CI build status badge](https://github.com/phpmyadmin/docker/workflows/GitHub%20CI/badge.svg)](https://github.com/phpmyadmin/docker/actions?query=workflow%3A%22GitHub+CI%22)
 [![update.sh build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/update.sh/job/phpmyadmin.svg?label=Automated%20update.sh)](https://doi-janky.infosiftr.net/job/update.sh/job/phpmyadmin/)
@@ -20,7 +20,7 @@ Run phpMyAdmin on Debian + Apache, Debian + PHP FPM or Alpine + PHP FPM.
 [![Docker Pulls](https://img.shields.io/docker/pulls/_/phpmyadmin.svg)](https://hub.docker.com/_/phpmyadmin)
 [![Docker Stars](https://img.shields.io/docker/stars/_/phpmyadmin.svg)](https://hub.docker.com/_/phpmyadmin)
 
-All following examples will bring you phpMyAdmin on `http://localhost:8080`
+The following examples will bring up phpMyAdmin on `http://localhost:8080`
 where you can enjoy your happy MySQL administration.
 
 ## Credentials
