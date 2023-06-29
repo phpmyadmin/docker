@@ -140,6 +140,14 @@ See the following links for config file information:
 
 Set the variable ``PMA_ABSOLUTE_URI`` to the fully-qualified path (``https://pma.example.net/``) where the reverse proxy makes phpMyAdmin available.
 
+## Sessions persistence
+
+In order to keep your sessions active between container updates you will need to mount the `/sessions` folder.
+
+```sh
+-v /some/local/directory/sessions:/sessions:rw
+```
+
 ## Environment variables summary
 
 * ``PMA_ARBITRARY`` - when set to 1 connection to the arbitrary server will be allowed

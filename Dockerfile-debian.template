@@ -44,6 +44,7 @@ ENV MAX_EXECUTION_TIME 600
 ENV MEMORY_LIMIT 512M
 ENV UPLOAD_LIMIT 2048K
 ENV TZ UTC
+ENV SESSION_SAVE_PATH /sessions
 RUN set -ex; \
     \
     { \
@@ -67,6 +68,7 @@ RUN set -ex; \
         echo 'post_max_size=${UPLOAD_LIMIT}'; \
         echo 'upload_max_filesize=${UPLOAD_LIMIT}'; \
         echo 'date.timezone=${TZ}'; \
+        echo 'session.save_path=${SESSION_SAVE_PATH}'; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
@@ -94,6 +96,9 @@ RUN set -ex; \
         gnupg \
         dirmngr \
     ; \
+    mkdir $SESSION_SAVE_PATH; \
+    chmod 1777 $SESSION_SAVE_PATH; \
+    chown www-data:www-data $SESSION_SAVE_PATH; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
