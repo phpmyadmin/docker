@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Update to PHP 8.2 (#411)
 - Add back a `/sessions` volume for sessions persistence (#399)
 - Support adding custom configurations in `/etc/phpmyadmin/conf.d` (#401)
+- Fix for debian 12 issue (#416) that caused libraries for extensions to be uninstalled
 
 ## [5.2.1] - 2023-02-08
 
