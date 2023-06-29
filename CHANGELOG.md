@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add `TZ` env var to change PHP `date.timezone` (#133)
 - Update to PHP 8.2 (#411)
 - Add back a `/sessions` volume for sessions persistence (#399)
+- Support adding custom configurations in `/etc/phpmyadmin/conf.d` (#401)
 
 ## [5.2.1] - 2023-02-08
 
