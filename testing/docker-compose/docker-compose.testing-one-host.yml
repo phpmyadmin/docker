@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   db_server:
-    image: ${DB:-mariadb:10.3}
+    image: ${DB:-mariadb:10.11}
     environment:
       MYSQL_ROOT_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
     healthcheck:

@@ -91,7 +91,7 @@ version: '3.1'
 
 services:
   db:
-    image: mariadb:10.3
+    image: mariadb:10.11
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: notSecureChangeMe
