@@ -14,11 +14,19 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                database-image: ["mariadb:10.6", "mariadb:10.11", "mysql:5.7", "mariadb:latest", "mysql:latest"]
+                database-image: ["mariadb:10.6", "mariadb:10.11", "mariadb:latest", "mysql:5.7", "mysql:latest"]
                 configuration: ["default", "one-host", "config-mount-dir", "fs-import-export", "different-apache-port"]
 
         steps:
             - uses: actions/checkout@v3
+            - name: Switch to MySQL compatible ENVs
+              if: ${{ contains(matrix.database-image, 'mysql') }}
+              working-directory: ./testing/docker-compose/
+              run: sed -i 's/MARIADB_ROOT_PASSWORD/MYSQL_ROOT_PASSWORD/' ./docker-compose.testing-${{ matrix.configuration }}.yml
+            - name: Switch to MySQL compatible healthcheck
+              if: ${{ contains(matrix.database-image, 'mysql') }}
+              working-directory: ./testing/docker-compose/
+              run: sed -i 's/mariadb-admin/mysqladmin/' ./docker-compose.testing-${{ matrix.configuration }}.yml
             - name: Build images
               working-directory: ./testing/
               run: docker-compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml build
