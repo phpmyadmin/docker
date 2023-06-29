@@ -27,7 +27,8 @@ RUN set -ex; \
     \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
-    ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+    extdir="$(php -r 'echo ini_get("extension_dir");')"; \
+    ldd "$extdir"/*.so \
         | awk '/=>/ { print $3 }' \
         | sort -u \
         | xargs -r dpkg-query -S \
@@ -36,7 +37,8 @@ RUN set -ex; \
         | xargs -rt apt-mark manual; \
     \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*; \
+    ldd "$extdir"/*.so | grep -qzv "=> not found";
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
