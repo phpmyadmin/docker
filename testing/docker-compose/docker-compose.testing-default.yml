@@ -4,9 +4,9 @@ services:
   db_server:
     image: ${DB:-mariadb:10.11}
     environment:
-      MYSQL_ROOT_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
+      MARIADB_ROOT_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-uroot", "-p${TESTSUITE_PASSWORD:-my-secret-pw}"]
+      test: ["CMD", "mariadb-admin", "ping", "-uroot", "-p${TESTSUITE_PASSWORD:-my-secret-pw}"]
       start_period: 10s
       interval: 5s
       timeout: 60s
