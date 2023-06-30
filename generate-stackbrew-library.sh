@@ -1,25 +1,26 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-# Get the most recent commit which modified any of "$@".
+# get the most recent commit which modified any of "$@"
 fileCommit() {
 	git log -1 --format='format:%H' HEAD -- "$@"
 }
 
-# Get the most recent commit which modified "$1/Dockerfile" or any file that
-# the Dockerfile copies into the rootfs (with COPY).
-dockerfileCommit() {
+# get the most recent commit which modified "$1/Dockerfile" or any file COPY'd from "$1/Dockerfile"
+dirCommit() {
 	local dir="$1"; shift
 	(
-		cd "$dir";
-		fileCommit Dockerfile \
+		cd "$dir"
+		fileCommit \
+			Dockerfile \
 			$(git show HEAD:./Dockerfile | awk '
 				toupper($1) == "COPY" {
-					for (i = 2; i < NF; i++)
-							print $i;
+					for (i = 2; i < NF; i++) {
+						print $i
+					}
 				}
 			')
 	)
@@ -29,9 +30,9 @@ getArches() {
 	local repo="$1"; shift
 	local officialImagesUrl='https://github.com/docker-library/official-images/raw/master/library/'
 
-	eval "declare -g -A parentRepoToArches=( $(
+	eval "declare -A -g parentRepoToArches=( $(
 		find -name 'Dockerfile' -exec awk '
-				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|microsoft\/[^:]+)(:|$)/ {
+				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|.*\/.*)(:|$)/ {
 					print "'"$officialImagesUrl"'" $2
 				}
 			' '{}' + \
@@ -39,6 +40,7 @@ getArches() {
 			| xargs bashbrew cat --format '[{{ .RepoName }}:{{ .TagName }}]="{{ join " " .TagEntry.Architectures }}"'
 	) )"
 }
+getArches 'phpmyadmin'
 
 if ! command -v bashbrew --version &> /dev/null
 then
@@ -47,9 +49,6 @@ then
     exit 1
 fi
 
-getArches 'phpmyadmin'
-
-# Header.
 cat <<-EOH
 # This file is generated via https://github.com/phpmyadmin/docker/blob/$(fileCommit "$self")/$self
 Maintainers: Isaac Bennetch <bennetch@gmail.com> (@ibennetch),
@@ -67,7 +66,7 @@ join() {
 latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
 
 for variant in apache fpm fpm-alpine; do
-	commit="$(dockerfileCommit "$variant")"
+	commit="$(dirCommit "$variant")"
 	fullversion="$(git show "$commit":"$variant/Dockerfile" | awk '$1 == "ENV" && $2 == "VERSION" { print $3; exit }')"
 
 	versionAliases=( "$fullversion" "${fullversion%.*}" "${fullversion%.*.*}" )
