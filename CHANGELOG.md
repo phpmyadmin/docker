@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add `TZ` env var to change PHP `date.timezone` (#133)
 - Refactor 'update.sh' (#408)
-- Bake download URL, version, sha256 and GPG key into Dockerfiles (#408)
-- Add 'versions.json' with info about latest version and available variants (#408)
 
 ## [5.2.1] - 2023-02-08
 
