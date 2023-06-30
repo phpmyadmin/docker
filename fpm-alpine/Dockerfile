@@ -1,4 +1,3 @@
-# DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 FROM php:8.1-fpm-alpine
 
 # docker-entrypoint.sh dependencies
@@ -71,7 +70,7 @@ RUN set -ex; \
 # Calculate download URL
 ENV VERSION 5.2.1
 ENV SHA256 373f9599dfbd96d6fe75316d5dad189e68c305f297edf42377db9dd6b41b2557
-ENV URL https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.xz
+ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.description="Run phpMyAdmin with Alpine, Apache and PHP FPM." \
@@ -79,7 +78,7 @@ LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.vendor="phpMyAdmin" \
     org.opencontainers.image.documentation="https://github.com/phpmyadmin/docker#readme" \
     org.opencontainers.image.licenses="GPL-2.0-only" \
-    org.opencontainers.image.version="5.2.1" \
+    org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.url="https://github.com/phpmyadmin/docker#readme" \
     org.opencontainers.image.source="https://github.com/phpmyadmin/docker.git"
 
@@ -91,9 +90,9 @@ RUN set -ex; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
-    curl -fsSL -o phpMyAdmin.tar.xz "https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.xz"; \
-    curl -fsSL -o phpMyAdmin.tar.xz.asc "https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.xz.asc"; \
-    echo "373f9599dfbd96d6fe75316d5dad189e68c305f297edf42377db9dd6b41b2557 *phpMyAdmin.tar.xz" | sha256sum -c -; \
+    curl -fsSL -o phpMyAdmin.tar.xz $URL; \
+    curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
+    echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
     gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY" \
