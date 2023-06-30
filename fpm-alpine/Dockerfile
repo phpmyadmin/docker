@@ -1,3 +1,4 @@
+# DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 FROM php:8.1-fpm-alpine
 
 # docker-entrypoint.sh dependencies
