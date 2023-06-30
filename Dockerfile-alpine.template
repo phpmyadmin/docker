@@ -25,6 +25,7 @@ RUN set -ex; \
         mysqli \
         opcache \
         zip \
+        bcmath \
     ; \
     \
     runDeps="$( \

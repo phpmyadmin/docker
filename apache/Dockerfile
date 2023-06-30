@@ -23,6 +23,7 @@ RUN set -ex; \
         mysqli \
         opcache \
         zip \
+        bcmath \
     ; \
     \
     apt-mark auto '.*' > /dev/null; \
