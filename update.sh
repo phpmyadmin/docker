@@ -85,9 +85,6 @@ command -v jq >/dev/null 2>&1 || { echo >&2 "'jq' is required but not found. Abo
 [ -n "${BASH_VERSINFO}" ] && [ -n "${BASH_VERSINFO[0]}" ] && [ ${BASH_VERSINFO[0]} -ge 4 ] \
 	|| { echo >&2 "Bash 4.0 or greater is required. Aborting."; exit 1; }
 
-# Create variants
-printf '%s\n' "{}" > versions.json
-
 latest="$(curl -fsSL "https://www.phpmyadmin.net/home_page/version.json" | jq -r '.version')"
 sha256="$(curl -fsSL "$(download_url "$latest").sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
 
