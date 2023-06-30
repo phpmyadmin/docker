@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Support adding custom configurations in `/etc/phpmyadmin/conf.d` (#401)
 - Fix for debian 12 issue (#416) that caused libraries for extensions to be uninstalled
 - Add extension `bcmath` for 2nd factor authentication (#415)
+- Refactor `update.sh` (#408)
 
 ## [5.2.1] - 2023-02-08
 

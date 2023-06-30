@@ -1,4 +1,4 @@
-FROM php:8.2-%%VARIANT%%
+FROM php:%%PHP_VERSION%%-%%VARIANT%%
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
@@ -95,7 +95,7 @@ RUN set -ex; \
     chown www-data:www-data $SESSION_SAVE_PATH; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
-    export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
+    export GPGKEY="%%GPG_KEY%%"; \
     curl -fsSL -o phpMyAdmin.tar.xz $URL; \
     curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
     echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
