@@ -72,7 +72,7 @@ RUN set -ex; \
 # Calculate download URL
 ENV VERSION %%VERSION%%
 ENV SHA256 %%SHA256%%
-ENV URL %%DOWNLOAD_URL%%
+ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.description="Run phpMyAdmin with Alpine, Apache and PHP FPM." \
@@ -97,8 +97,8 @@ RUN set -ex; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="%%GPG_KEY%%"; \
-    curl -fsSL -o phpMyAdmin.tar.xz "%%DOWNLOAD_URL%%"; \
-    curl -fsSL -o phpMyAdmin.tar.xz.asc "%%DOWNLOAD_URL_ASC%%"; \
+    curl -fsSL -o phpMyAdmin.tar.xz $URL; \
+    curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
     echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
     gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPGKEY" \
         || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
