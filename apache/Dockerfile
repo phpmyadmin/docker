@@ -31,8 +31,7 @@ RUN set -ex; \
     apt-mark manual $savedAptMark; \
     extdir="$(php -r 'echo ini_get("extension_dir");')"; \
     ldd "$extdir"/*.so \
-        | awk '/=>/ { print $3 }' \
-        | awk '{print $1} {system("realpath " $1)}' \
+        | awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' \
         | sort -u \
         | xargs -r dpkg-query -S \
         | cut -d: -f1 \
@@ -42,7 +41,9 @@ RUN set -ex; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*; \
     ldd "$extdir"/*.so | grep -qzv "=> not found" || (echo "Sanity check failed: missing libraries:"; ldd "$extdir"/*.so | grep " => not found"; exit 1); \
-    ldd "$extdir"/*.so | grep -q "libzip.so.* => .*/libzip.so.*" || (echo "Sanity check failed: libzip.so is not referenced"; ldd "$extdir"/*.so; exit 1);
+    ldd "$extdir"/*.so | grep -q "libzip.so.* => .*/libzip.so.*" || (echo "Sanity check failed: libzip.so is not referenced"; ldd "$extdir"/*.so; exit 1); \
+    err="$(php --version 3>&1 1>&2 2>&3)"; \
+    [ -z "$err" ] || (echo "Sanity check failed: php returned errors; $err"; exit 1;);
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
