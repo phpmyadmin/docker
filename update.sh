@@ -88,7 +88,7 @@ command -v jq >/dev/null 2>&1 || { echo >&2 "'jq' is required but not found. Abo
 # Create variants
 printf '%s\n' "{}" > versions.json
 
-latest="$(curl -fsSL "https://www.phpmyadmin.net/home_page/version.json" | jq -r '.version')"
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version' | grep -E '^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$')"
 sha256="$(curl -fsSL "$(download_url "$latest").sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
 
 for variant in "${variants[@]}"; do

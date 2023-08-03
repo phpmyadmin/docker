@@ -63,7 +63,7 @@ join() {
 	echo "${out#$sep}"
 }
 
-latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version')"
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version' | grep -E '^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$')"
 
 for variant in apache fpm fpm-alpine; do
 	commit="$(dirCommit "$variant")"
