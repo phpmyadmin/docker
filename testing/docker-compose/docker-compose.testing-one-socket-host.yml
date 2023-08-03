@@ -1,0 +1,75 @@
+version: "3.1"
+
+services:
+  db_server:
+    image: ${DB:-mariadb:10.11}
+    environment:
+      MARIADB_ROOT_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-uroot", "-p${TESTSUITE_PASSWORD:-my-secret-pw}"]
+      start_period: 10s
+      interval: 5s
+      timeout: 60s
+      retries: 10
+    networks:
+      testing:
+        aliases:
+         - phpmyadmin_testing_db
+    tmpfs:
+      - /var/lib/mysql:rw,noexec,nosuid,size=300m
+    volumes:
+      - db-socket:/run/mysqld/
+
+  phpmyadmin:
+    build:
+      context: ../../apache
+    environment:
+      PMA_SOCKET: /run/mysqld/mysqld.sock
+      UPLOAD_LIMIT: 123M
+      MAX_EXECUTION_TIME: 125
+      HIDE_PHP_VERSION: 1
+    volumes:
+      - ../config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+      - db-socket:/run/mysqld/
+    healthcheck:
+      test: ["CMD", "curl", "-Ss", "http://localhost/robots.txt"]
+      start_period: 5s
+      interval: 3s
+      timeout: 60s
+      retries: 10
+    networks:
+      testing:
+        aliases:
+         - phpmyadmin_testing_apache
+    depends_on:
+      db_server:
+        condition: service_healthy
+
+  sut:
+    depends_on:
+      phpmyadmin:
+        condition: service_healthy
+      db_server:
+        condition: service_healthy
+    build:
+      context: ../
+    command: "/tests/testing/test-docker.sh"
+    networks:
+      testing:
+    environment:
+      TESTSUITE_HOSTNAME: phpmyadmin_testing_apache
+      TESTSUITE_PORT: 80
+      TESTSUITE_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
+      PMA_HOST: phpmyadmin_testing_db
+      PMA_PORT: 3306
+    volumes:
+      - ../../:/tests:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /tests
+
+networks:
+    testing:
+        driver: bridge
+
+volumes:
+  db-socket:

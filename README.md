@@ -167,6 +167,8 @@ In order to keep your sessions active between container updates you will need to
 * ``PMA_HOSTS`` - define comma separated list of address/host names of the MySQL servers
 * ``PMA_VERBOSES`` - define comma separated list of verbose names of the MySQL servers
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
+* ``PMA_SOCKET`` - define socket file for the MySQL connection
+* ``PMA_SOCKETS`` - define comma separated list of socket files for the MySQL connections
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username and password to use only with the `config` authentication method
 * ``PMA_ABSOLUTE_URI`` - the full URL to phpMyAdmin. Sometimes needed when used in a reverse-proxy configuration. Don't set this unless needed. See [documentation](https://docs.phpmyadmin.net/en/latest/config.html#cfg_PmaAbsoluteUri).
 * ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
