@@ -64,6 +64,7 @@ function create_variant() {
 	cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 	if [ "$variant" != "apache" ]; then
 		sed -i "/^# start: Apache specific settings$/,/^# end: Apache specific settings$/d" "$variant/docker-entrypoint.sh"
+                sed -i "/a2enmod remoteip; \\\/d" "$variant/Dockerfile"
 	fi
 
 	# Copy config.inc.php
