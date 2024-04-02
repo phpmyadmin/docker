@@ -128,6 +128,7 @@ RUN set -ex; \
     sed -i "s@'configFile' => .*@'configFile' => '/etc/phpmyadmin/config.inc.php',@" /var/www/html/libraries/vendor_config.php; \
     grep -q -F "'configFile' => '/etc/phpmyadmin/config.inc.php'," /var/www/html/libraries/vendor_config.php; \
     php -l /var/www/html/libraries/vendor_config.php; \
+    chown -R www-data:www-data -R /var/www/html/; \
     \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
@@ -136,6 +137,7 @@ RUN set -ex; \
 
 # Copy configuration
 COPY config.inc.php /etc/phpmyadmin/config.inc.php
+RUN chown www-data:www-data -R /etc/phpmyadmin/
 
 # Copy main script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
