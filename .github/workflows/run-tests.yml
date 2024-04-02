@@ -18,7 +18,7 @@ jobs:
                 configuration: ["default", "one-host", "one-socket-host", "config-mount-dir", "fs-import-export", "different-apache-port"]
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Switch to MySQL compatible ENVs
               if: ${{ contains(matrix.database-image, 'mysql') }}
               working-directory: ./testing/docker-compose/
