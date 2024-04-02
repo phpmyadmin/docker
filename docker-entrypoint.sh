@@ -7,6 +7,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 \$cfg['blowfish_secret'] = '$(tr -dc 'a-zA-Z0-9~!@#$%^&*_()+}{?></";.,[]=-' < /dev/urandom | fold -w 32 | head -n 1)';
 EOT
     fi
+    chgrp www-data /etc/phpmyadmin/config.secret.inc.php
 
     if [ ! -f /etc/phpmyadmin/config.user.inc.php ]; then
         touch /etc/phpmyadmin/config.user.inc.php
