@@ -29,9 +29,9 @@ jobs:
               run: sed -i 's/mariadb-admin/mysqladmin/' ./docker-compose.testing-${{ matrix.configuration }}.yml
             - name: Build images
               working-directory: ./testing/
-              run: docker-compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml build
+              run: docker compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml build
             - name: Run ${{ matrix.configuration }} tests
               working-directory: ./testing/
-              run: docker-compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml up --build --abort-on-container-exit --exit-code-from=sut
+              run: docker compose -f ./docker-compose/docker-compose.testing-${{ matrix.configuration }}.yml up --build --abort-on-container-exit --exit-code-from=sut
               env:
                 DB: ${{ matrix.database-image }}

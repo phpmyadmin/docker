@@ -81,7 +81,7 @@ You can use arbitrary servers by adding the environment variable `PMA_ARBITRARY=
 docker run --name phpmyadmin -d -e PMA_ARBITRARY=1 -p 8080:80 phpmyadmin:latest
 ```
 
-## Usage with docker-compose and arbitrary server
+## Usage with docker compose and an arbitrary server
 
 This will run phpMyAdmin with the arbitrary server option - allowing you to specify any MySQL/MariaDB
 server on the login page.
@@ -210,7 +210,7 @@ docker run --name phpmyadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.tx
 ## Run the E2E tests for this docker image
 
 You can run the E2E test suite on a local test environment.
-The Requirements are `make`, `docker` and `docker-compose`.
+The Requirements are `make`, `docker` and the `docker compose` plugin.
 
 Clone this repository: `https://github.com/phpmyadmin/docker.git`
 
