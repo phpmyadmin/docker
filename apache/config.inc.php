@@ -77,6 +77,7 @@ if (! empty($_ENV['PMA_SOCKET'])) {
 
 /* Server settings */
 for ($i = 1; isset($hosts[$i - 1]); $i++) {
+    $cfg['Servers'][$i]['ssl'] = true;
     $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
     if (isset($verbose[$i - 1])) {
         $cfg['Servers'][$i]['verbose'] = $verbose[$i - 1];
