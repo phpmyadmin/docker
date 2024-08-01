@@ -27,6 +27,8 @@ $vars = [
     'MEMORY_LIMIT',
     'PMA_UPLOADDIR',
     'PMA_SAVEDIR',
+    'PMA_SSL',
+    'PMA_SSLS',
 ];
 
 foreach ($vars as $var) {
@@ -63,10 +65,12 @@ if (! empty($_ENV['PMA_HOST'])) {
     $hosts = [$_ENV['PMA_HOST']];
     $verbose = [$_ENV['PMA_VERBOSE']];
     $ports = [$_ENV['PMA_PORT']];
+    $ssls = [$_ENV['PMA_SSL']];
 } elseif (! empty($_ENV['PMA_HOSTS'])) {
     $hosts = array_map('trim', explode(',', $_ENV['PMA_HOSTS']));
     $verbose = array_map('trim', explode(',', $_ENV['PMA_VERBOSES']));
     $ports = array_map('trim', explode(',', $_ENV['PMA_PORTS']));
+    $ssls = array_map('trim', explode(',', $_ENV['PMA_SSLS']));
 }
 
 if (! empty($_ENV['PMA_SOCKET'])) {
@@ -77,7 +81,9 @@ if (! empty($_ENV['PMA_SOCKET'])) {
 
 /* Server settings */
 for ($i = 1; isset($hosts[$i - 1]); $i++) {
-    $cfg['Servers'][$i]['ssl'] = true;
+    if (isset($ssls[$i - 1]) && $ssls[$i - 1] === '1') {
+        $cfg['Servers'][$i]['ssl'] = $ssls[$i - 1];
+    }
     $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
     if (isset($verbose[$i - 1])) {
         $cfg['Servers'][$i]['verbose'] = $verbose[$i - 1];
