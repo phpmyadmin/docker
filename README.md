@@ -160,7 +160,7 @@ In order to keep your sessions active between container updates you will need to
 
 ## Connect over SSL with backend
 
-Set the variable ``PMA_SSL`` to '1' and enable ssl usage from phpmyadmin to mysql server. The default value is 0. Variable ``PMA_SSLS`` can be used as a comma seperated sequence of 0 and 1 where multiple hosts are mentioned. Values order must follow the ``PMA_HOSTS`` and will be computed accordingly.
+Set the variable ``PMA_SSL`` to '1' and enable ssl usage from phpmyadmin to mysql server. The default value is 0. Variable ``PMA_SSLS`` can be used as a comma seperated sequence of `0` and `1` where multiple hosts are mentioned. Values order must follow the ``PMA_HOSTS`` and will be computed accordingly.
 
 ```sh
 docker run --name phpmyadmin -d -e PMA_HOSTS=sslhost -e PMA_SSL=1 -p 8080:80 phpmyadmin:latest
@@ -203,13 +203,11 @@ docker run --name phpmyadmin -d -e PMA_HOSTS='sslhost,nosslhost' -e PMA_SSLS='1,
 
 For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` environment variable is allowed (it overrides ``PMA_PASSWORD`` if it is set):
 
-* ``PMA_SSL`` - define ssl usage for MySQL server
-
-* ``PMA_SSLS`` - comma separated list of 0 and 1 defining ssl usage for corresponding MySQL servers
-
 ```sh
 docker run --name phpmyadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin:latest
 ```
+* ``PMA_SSL`` - define ssl usage for MySQL server
+* ``PMA_SSLS`` - comma separated list of 0 and 1 defining ssl usage for corresponding MySQL servers
 
 #### Variables that can be read from a file using ``_FILE``
 
