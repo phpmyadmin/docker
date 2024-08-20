@@ -91,6 +91,8 @@ def test_phpmyadmin_secrets():
 
 
 def test_php_ini(url, username, password, server):
+    skip_expose_php_test = os.environ.get('SKIP_EXPOSE_PHP_TEST');
+
     br = create_browser()
     response = do_login(br, url, username, password, server)
 
@@ -111,7 +113,9 @@ def test_php_ini(url, username, password, server):
     assert(b'<tr><td class="e">upload_max_filesize</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
     assert(b'<tr><td class="e">post_max_size</td><td class="v">123M</td><td class="v">123M</td></tr>' in response)
 
-    assert(b'<tr><td class="e">expose_php</td><td class="v">Off</td><td class="v">Off</td></tr>' in response)
+    if not skip_expose_php_test:
+        assert(b'<tr><td class="e">expose_php</td><td class="v">Off</td><td class="v">Off</td></tr>' in response)
+
     assert(b'<tr><td class="e">session.save_path</td><td class="v">/sessions</td><td class="v">/sessions</td></tr>' in response)
 
 def test_import_from_folder(url, username, password, server, sqlfile):

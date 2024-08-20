@@ -1,8 +1,8 @@
-version: "3.1"
-
 services:
   db_server:
     image: ${DB:-mariadb:10.11}
+    # mysql:mysql in MariaDB for Docker (https://stackoverflow.com/a/55241769/5155484)
+    user: 999:999
     environment:
       MARIADB_ROOT_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
     healthcheck:
@@ -15,8 +15,8 @@ services:
       testing:
         aliases:
          - phpmyadmin_testing_db
-    tmpfs:
-      - /var/lib/mysql:rw,noexec,nosuid,size=300m
+    volumes:
+      - mariadb-data:/var/lib/mysql
 
   phpmyadmin:
     build:
@@ -27,7 +27,6 @@ services:
       PMA_HOST: db_server
       UPLOAD_LIMIT: 123M
       MAX_EXECUTION_TIME: 125
-      HIDE_PHP_VERSION: 1
     volumes:
       - ../config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
     healthcheck:
@@ -45,6 +44,8 @@ services:
         condition: service_healthy
 
   sut:
+    # nobody:nobody
+    user: 65534:65534
     depends_on:
       phpmyadmin:
         condition: service_healthy
@@ -61,6 +62,7 @@ services:
       TESTSUITE_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
       PMA_HOST: phpmyadmin_testing_db
       PMA_PORT: 3306
+      SKIP_EXPOSE_PHP_TEST: true
     volumes:
       - ../../:/tests:ro
       - /var/run/docker.sock:/var/run/docker.sock
@@ -69,3 +71,6 @@ services:
 networks:
     testing:
         driver: bridge
+
+volumes:
+  mariadb-data:
