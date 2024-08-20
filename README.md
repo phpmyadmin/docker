@@ -158,6 +158,21 @@ In order to keep your sessions active between container updates you will need to
 -v /some/local/directory/sessions:/sessions:rw
 ```
 
+## Connect to the database over SSL
+
+Set the variable ``PMA_SSL`` to `1` to enable SSL usage from phpMyAdmin to the MySQL server.
+The default value is `0`.
+The variable ``PMA_SSLS`` can be used as a comma seperated sequence of `0` and `1` where multiple hosts are mentioned.
+Values order must follow the ``PMA_HOSTS`` and will be computed accordingly.
+
+```sh
+docker run --name phpmyadmin -d -e PMA_HOSTS=sslhost -e PMA_SSL=1 -p 8080:80 phpmyadmin:latest
+```
+
+```sh
+docker run --name phpmyadmin -d -e PMA_HOSTS='sslhost,nosslhost' -e PMA_SSLS='1,0' -p 8080:80 phpmyadmin:latest
+```
+
 ## Environment variables summary
 
 * ``PMA_ARBITRARY`` - when set to 1 connection to the arbitrary server will be allowed
@@ -169,6 +184,8 @@ In order to keep your sessions active between container updates you will need to
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_SOCKET`` - define socket file for the MySQL connection
 * ``PMA_SOCKETS`` - define comma separated list of socket files for the MySQL connections
+* ``PMA_SSL`` - when set to 1, defines SSL usage for the MySQL connection
+* ``PMA_SSLS`` - comma separated list of `0` and `1` defining SSL usage for the corresponding MySQL connections
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username and password to use only with the `config` authentication method
 * ``PMA_ABSOLUTE_URI`` - the full URL to phpMyAdmin. Sometimes needed when used in a reverse-proxy configuration. Don't set this unless needed. See [documentation](https://docs.phpmyadmin.net/en/latest/config.html#cfg_PmaAbsoluteUri).
 * ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
@@ -206,6 +223,8 @@ docker run --name phpmyadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.tx
 - `PMA_CONTROLHOST`
 - `PMA_CONTROLUSER`
 - `PMA_CONTROLPASS`
+- `PMA_SSL`
+- `PMA_SSLS`
 
 ## Run the E2E tests for this docker image
 

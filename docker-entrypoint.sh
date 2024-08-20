@@ -58,5 +58,7 @@ get_docker_secret PMA_HOST
 get_docker_secret PMA_CONTROLHOST
 get_docker_secret PMA_CONTROLUSER
 get_docker_secret PMA_CONTROLPASS
+get_docker_secret PMA_SSL
+get_docker_secret PMA_SSLS
 
 exec "$@"
