@@ -79,12 +79,7 @@ RUN set -ex; \
         echo 'upload_max_filesize=${UPLOAD_LIMIT}'; \
         echo 'date.timezone=${TZ}'; \
         echo 'session.save_path=${SESSION_SAVE_PATH}'; \
-    } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini; \
-    \
-    { \
-        echo ''; \
-    } > $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini; \
-    chown www-data:www-data $PHP_INI_DIR/conf.d/phpmyadmin-hide-php-version.ini;
+    } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
 # Calculate download URL
 ENV VERSION %%VERSION%%
