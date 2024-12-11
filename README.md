@@ -185,7 +185,14 @@ docker run --name phpmyadmin -d -e PMA_HOSTS='sslhost,nosslhost' -e PMA_SSLS='1,
 * ``PMA_SOCKET`` - define socket file for the MySQL connection
 * ``PMA_SOCKETS`` - define comma separated list of socket files for the MySQL connections
 * ``PMA_SSL`` - when set to 1, defines SSL usage for the MySQL connection
-* ``PMA_SSLS`` - comma separated list of `0` and `1` defining SSL usage for the corresponding MySQL connections
+* ``PMA_SSL_VERIFY`` - when set to 1, enables SSL certificate verification for the MySQL connection.
+* ``PMA_SSL_VERIFIES`` - comma-separated list of `0` and `1` to enable or disable SSL certificate verification for multiple MySQL connections.
+* ``PMA_SSL_CA_BASE64`` - in the context of mTLS security, allows setting your CA file as a base64 string inside the default `config.inc.php`.
+* ``PMA_SSL_CAS_BASE64`` - in the context of mTLS security, allows setting multiple CA files as a comma-separated list of base64 strings inside the default `config.inc.php`.
+* ``PMA_SSL_CERT_BASE64`` - in the context of mTLS security, allows setting your CERT file as a base64 string inside the default `config.inc.php`.
+* ``PMA_SSL_CERTS_BASE64`` - in the context of mTLS security, allows setting multiple CERT files as a comma-separated list of base64 strings inside the default `config.inc.php`.
+* ``PMA_SSL_KEY_BASE64`` - in the context of mTLS security, allows setting your KEY file as a base64 string inside the default `config.inc.php`.
+* ``PMA_SSL_KEYS_BASE64`` - in the context of mTLS security, allows setting multiple KEY files as a comma-separated list of base64 strings inside the default `config.inc.php`.
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username and password to use only with the `config` authentication method
 * ``PMA_ABSOLUTE_URI`` - the full URL to phpMyAdmin. Sometimes needed when used in a reverse-proxy configuration. Don't set this unless needed. See [documentation](https://docs.phpmyadmin.net/en/latest/config.html#cfg_PmaAbsoluteUri).
 * ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
