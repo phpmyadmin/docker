@@ -30,7 +30,8 @@ function decodeAndSaveSslFiles($base64_string, $prefix, $extension) {
         
         // Write the decoded file to the output directory
         if (file_put_contents($output_file, base64_decode($file)) === false) {
-            throw new SslFileGenerationException("Failed to write to $output_file");
+            echo 'Failed to write to ' . $output_file;
+            exit(1);
         }
         
         // Add the output file path to the list
