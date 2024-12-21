@@ -29,6 +29,7 @@ if [ ! -z "${PMA_USER_CONFIG_BASE64}" ]; then
     echo "${PMA_USER_CONFIG_BASE64}" | base64 -d > /etc/phpmyadmin/config.user.inc.php
 fi
 
+
 get_docker_secret() {
     local env_var="${1}"
     local env_var_file="${env_var}_FILE"

@@ -184,7 +184,9 @@ docker run --name phpmyadmin -d -e PMA_HOSTS='sslhost,nosslhost' -e PMA_SSLS='1,
 * ``PMA_PORTS`` -  define comma separated list of ports of the MySQL servers
 * ``PMA_SOCKET`` - define socket file for the MySQL connection
 * ``PMA_SOCKETS`` - define comma separated list of socket files for the MySQL connections
+* ``PMA_SSL_DIR`` - define the path used for SSL files generated from environement variables, default value is `/etc/phpmyadmin/ssl`
 * ``PMA_SSL`` - when set to 1, defines SSL usage for the MySQL connection
+* ``PMA_SSLS`` - comma separated list of `0` and `1` defining SSL usage for the corresponding MySQL connections
 * ``PMA_SSL_VERIFY`` - when set to 1, enables SSL certificate verification for the MySQL connection.
 * ``PMA_SSL_VERIFIES`` - comma-separated list of `0` and `1` to enable or disable SSL certificate verification for multiple MySQL connections.
 * ``PMA_SSL_CA_BASE64`` - in the context of mutual TLS security, allows setting your CA file as a base64 string inside the default `config.inc.php`.

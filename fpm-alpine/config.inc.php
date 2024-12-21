@@ -1,7 +1,5 @@
 <?php
 
-define('SSL_DIR', '/etc/phpmyadmin/ssl');
-
 require '/etc/phpmyadmin/config.secret.inc.php';
 require '/etc/phpmyadmin/helpers.php';
 
@@ -39,7 +37,8 @@ $vars = [
     'PMA_SSL_VERIFIES',
     'PMA_SSL_CAS',
     'PMA_SSL_KEYS',
-    'PMA_SSL_CERTS'
+    'PMA_SSL_CERTS',
+    'PMA_PMA_SSL_DIR'
 ];
 
 foreach ($vars as $var) {
@@ -67,29 +66,29 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
 }
 
 if (isset($_ENV['PMA_SSL_CA_BASE64'])) {
-    if (!is_dir(SSL_DIR)) {
-        mkdir(SSL_DIR, 0755, true);
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
     }
-    file_put_contents(SSL_DIR . '/pma-ssl-ca.pem', base64_decode($_ENV['PMA_SSL_CA_BASE64']));
-    $_ENV['PMA_SSL_CA'] = SSL_DIR . '/pma-ssl-ca.pem';
+    file_put_contents(PMA_SSL_DIR . '/pma-ssl-ca.pem', base64_decode($_ENV['PMA_SSL_CA_BASE64']));
+    $_ENV['PMA_SSL_CA'] = PMA_SSL_DIR . '/pma-ssl-ca.pem';
 }
 
 /* Decode and save the SSL key from base64 */
 if (isset($_ENV['PMA_SSL_KEY_BASE64'])) {
-    if (!is_dir(SSL_DIR)) {
-        mkdir(SSL_DIR, 0755, true);
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
     }
-    file_put_contents(SSL_DIR . '/pma-ssl-key.key', base64_decode($_ENV['PMA_SSL_KEY_BASE64']));
-    $_ENV['PMA_SSL_KEY'] = SSL_DIR . '/pma-ssl-key.key';
+    file_put_contents(PMA_SSL_DIR . '/pma-ssl-key.key', base64_decode($_ENV['PMA_SSL_KEY_BASE64']));
+    $_ENV['PMA_SSL_KEY'] = PMA_SSL_DIR . '/pma-ssl-key.key';
 }
 
 /* Decode and save the SSL certificate from base64 */
 if (isset($_ENV['PMA_SSL_CERT_BASE64'])) {
-    if (!is_dir(SSL_DIR)) {
-        mkdir(SSL_DIR, 0755, true);
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
     }
-    file_put_contents(SSL_DIR . '/pma-ssl-cert.pem', base64_decode($_ENV['PMA_SSL_CERT_BASE64']));
-    $_ENV['PMA_SSL_CERT'] = SSL_DIR . '/pma-ssl-cert.pem';
+    file_put_contents(PMA_SSL_DIR . '/pma-ssl-cert.pem', base64_decode($_ENV['PMA_SSL_CERT_BASE64']));
+    $_ENV['PMA_SSL_CERT'] = PMA_SSL_DIR . '/pma-ssl-cert.pem';
 }
 
 /* Decode and save multiple SSL CA certificates from base64 */

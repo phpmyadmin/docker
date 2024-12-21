@@ -48,6 +48,7 @@ RUN set -ex; \
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
+ENV PMA_SSL_DIR /etc/phpmyadmin/ssl
 ENV MAX_EXECUTION_TIME 600
 ENV MEMORY_LIMIT 512M
 ENV UPLOAD_LIMIT 2048K
@@ -137,7 +138,6 @@ RUN set -ex; \
 
 # Copy configuration
 COPY config.inc.php /etc/phpmyadmin/config.inc.php
-COPY helpers.php /etc/phpmyadmin/helpers.php
 RUN chown www-data:www-data -R /etc/phpmyadmin/
 
 # Copy main script

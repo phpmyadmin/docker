@@ -1,7 +1,7 @@
 <?php
 
 
-define('OUTPUT_DIR', '/etc/phpmyadmin/ssl');
+define('PMA_SSL_DIR', $_ENV['PMA_SSL_DIR'] ?? '/etc/phpmyadmin/ssl');
 
 /**
  * Helper function to decode and save multiple SSL files from base64.
@@ -14,8 +14,8 @@ define('OUTPUT_DIR', '/etc/phpmyadmin/ssl');
  */
 function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): array {
     // Ensure the output directory exists
-    if (!is_dir(OUTPUT_DIR)) {
-        mkdir(OUTPUT_DIR, 0755, true);
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
     }
 
     // Split the base64 string into an array of files
@@ -25,7 +25,7 @@ function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $ex
 
     // Process each file
     foreach ($files as $file) {
-        $output_file = OUTPUT_DIR . "/pma-ssl-$prefix-$counter.$extension";
+        $output_file = PMA_SSL_DIR . "/pma-ssl-$prefix-$counter.$extension";
         
         // Write the decoded file to the output directory
         if (file_put_contents($output_file, base64_decode($file)) === false) {

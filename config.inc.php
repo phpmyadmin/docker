@@ -1,6 +1,7 @@
 <?php
 
 require '/etc/phpmyadmin/config.secret.inc.php';
+require '/etc/phpmyadmin/helpers.php';
 
 /* Ensure we got the environment */
 $vars = [
@@ -28,7 +29,16 @@ $vars = [
     'PMA_UPLOADDIR',
     'PMA_SAVEDIR',
     'PMA_SSL',
+    'PMA_SSL_VERIFY',
+    'PMA_SSL_CA',
+    'PMA_SSL_KEY',
+    'PMA_SSL_CERT',
     'PMA_SSLS',
+    'PMA_SSL_VERIFIES',
+    'PMA_SSL_CAS',
+    'PMA_SSL_KEYS',
+    'PMA_SSL_CERTS',
+    'PMA_PMA_SSL_DIR'
 ];
 
 foreach ($vars as $var) {
@@ -55,6 +65,47 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
     $cfg['PmaAbsoluteUri'] = trim($_ENV['PMA_ABSOLUTE_URI']);
 }
 
+if (isset($_ENV['PMA_SSL_CA_BASE64'])) {
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
+    }
+    file_put_contents(PMA_SSL_DIR . '/pma-ssl-ca.pem', base64_decode($_ENV['PMA_SSL_CA_BASE64']));
+    $_ENV['PMA_SSL_CA'] = PMA_SSL_DIR . '/pma-ssl-ca.pem';
+}
+
+/* Decode and save the SSL key from base64 */
+if (isset($_ENV['PMA_SSL_KEY_BASE64'])) {
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
+    }
+    file_put_contents(PMA_SSL_DIR . '/pma-ssl-key.key', base64_decode($_ENV['PMA_SSL_KEY_BASE64']));
+    $_ENV['PMA_SSL_KEY'] = PMA_SSL_DIR . '/pma-ssl-key.key';
+}
+
+/* Decode and save the SSL certificate from base64 */
+if (isset($_ENV['PMA_SSL_CERT_BASE64'])) {
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
+    }
+    file_put_contents(PMA_SSL_DIR . '/pma-ssl-cert.pem', base64_decode($_ENV['PMA_SSL_CERT_BASE64']));
+    $_ENV['PMA_SSL_CERT'] = PMA_SSL_DIR . '/pma-ssl-cert.pem';
+}
+
+/* Decode and save multiple SSL CA certificates from base64 */
+if (isset($_ENV['PMA_SSL_CAS_BASE64'])) {
+    $_ENV['PMA_SSL_CAS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_CAS_BASE64'], 'CA', 'pem');
+}
+
+/* Decode and save multiple SSL keys from base64 */
+if (isset($_ENV['PMA_SSL_KEYS_BASE64'])) {
+    $_ENV['PMA_SSL_KEYS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_KEYS_BASE64'], 'CERT', 'cert');
+}
+
+/* Decode and save multiple SSL certificates from base64 */
+if (isset($_ENV['PMA_SSL_CERTS_BASE64'])) {
+    $_ENV['PMA_SSL_CERTS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_CERTS_BASE64'], 'KEY', 'key');
+}
+
 /* Figure out hosts */
 
 /* Fallback to default linked */
@@ -66,11 +117,19 @@ if (! empty($_ENV['PMA_HOST'])) {
     $verbose = [$_ENV['PMA_VERBOSE']];
     $ports = [$_ENV['PMA_PORT']];
     $ssls = [$_ENV['PMA_SSL']];
+    $ssl_verifies = [$_ENV['PMA_SSL_VERIFY']];
+    $ssl_cas = [$_ENV['PMA_SSL_CA']];
+    $ssl_keys = [$_ENV['PMA_SSL_KEY']];
+    $ssl_certs = [$_ENV['PMA_SSL_CERT']];
 } elseif (! empty($_ENV['PMA_HOSTS'])) {
     $hosts = array_map('trim', explode(',', $_ENV['PMA_HOSTS']));
     $verbose = array_map('trim', explode(',', $_ENV['PMA_VERBOSES']));
     $ports = array_map('trim', explode(',', $_ENV['PMA_PORTS']));
     $ssls = array_map('trim', explode(',', $_ENV['PMA_SSLS']));
+    $ssl_verifies = array_map('trim', explode(',', $_ENV['PMA_SSL_VERIFIES']));
+    $ssl_cas = array_map('trim', explode(',', $_ENV['PMA_SSL_CAS']));
+    $ssl_keys = array_map('trim', explode(',', $_ENV['PMA_SSL_KEYS']));
+    $ssl_certs = array_map('trim', explode(',', $_ENV['PMA_SSL_CERTS']));
 }
 
 if (! empty($_ENV['PMA_SOCKET'])) {
@@ -83,6 +142,18 @@ if (! empty($_ENV['PMA_SOCKET'])) {
 for ($i = 1; isset($hosts[$i - 1]); $i++) {
     if (isset($ssls[$i - 1]) && $ssls[$i - 1] === '1') {
         $cfg['Servers'][$i]['ssl'] = $ssls[$i - 1];
+    }
+    if (isset($ssl_verifies[$i - 1]) && $ssl_verifies[$i - 1] === '1') {
+        $cfg['Servers'][$i]['ssl_verify'] = $ssl_verifies[$i - 1];
+    }
+    if (isset($ssl_cas[$i - 1])) {
+        $cfg['Servers'][$i]['ssl_ca'] = $ssl_cas[$i - 1];
+    }
+    if (isset($ssl_keys[$i - 1])) {
+        $cfg['Servers'][$i]['ssl_key'] = $ssl_keys[$i - 1];
+    }
+    if (isset($ssl_certs[$i - 1])) {
+        $cfg['Servers'][$i]['ssl_cert'] = $ssl_certs[$i - 1];
     }
     $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
     if (isset($verbose[$i - 1])) {

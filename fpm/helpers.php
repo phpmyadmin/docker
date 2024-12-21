@@ -1,8 +1,7 @@
 <?php
 
-class SslFileGenerationException extends Exception {}
 
-define('OUTPUT_DIR', '/etc/phpmyadmin/ssl');
+define('PMA_SSL_DIR', $_ENV['PMA_SSL_DIR'] ?? '/etc/phpmyadmin/ssl');
 
 /**
  * Helper function to decode and save multiple SSL files from base64.
@@ -13,10 +12,10 @@ define('OUTPUT_DIR', '/etc/phpmyadmin/ssl');
  * @param string $extension The file extension to use for the generated SSL files.
  * @return string A comma-separated list of paths to the generated SSL files.
  */
-function decodeAndSaveSslFiles($base64_string, $prefix, $extension) {
+function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): array {
     // Ensure the output directory exists
-    if (!is_dir(OUTPUT_DIR)) {
-        mkdir(OUTPUT_DIR, 0755, true);
+    if (!is_dir(PMA_SSL_DIR)) {
+        mkdir(PMA_SSL_DIR, 0755, true);
     }
 
     // Split the base64 string into an array of files
@@ -26,11 +25,12 @@ function decodeAndSaveSslFiles($base64_string, $prefix, $extension) {
 
     // Process each file
     foreach ($files as $file) {
-        $output_file = OUTPUT_DIR . "/pma-ssl-$prefix-$counter.$extension";
+        $output_file = PMA_SSL_DIR . "/pma-ssl-$prefix-$counter.$extension";
         
         // Write the decoded file to the output directory
         if (file_put_contents($output_file, base64_decode($file)) === false) {
-            throw new SslFileGenerationException("Failed to write to $output_file");
+            echo 'Failed to write to ' . $output_file;
+            exit(1);
         }
         
         // Add the output file path to the list
