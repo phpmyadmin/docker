@@ -13,7 +13,7 @@ define('OUTPUT_DIR', '/etc/phpmyadmin/ssl');
  * @param string $extension The file extension to use for the generated SSL files.
  * @return string A comma-separated list of paths to the generated SSL files.
  */
-function decodeAndSaveSslFiles($base64_string, $prefix, $extension) {
+function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): array {
     // Ensure the output directory exists
     if (!is_dir(OUTPUT_DIR)) {
         mkdir(OUTPUT_DIR, 0755, true);
