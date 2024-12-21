@@ -63,6 +63,47 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
     $cfg['PmaAbsoluteUri'] = trim($_ENV['PMA_ABSOLUTE_URI']);
 }
 
+if (isset($_ENV['PMA_SSL_CA_BASE64'])) {
+    if (!is_dir(SSL_DIR)) {
+        mkdir(SSL_DIR, 0755, true);
+    }
+    file_put_contents(SSL_DIR . '/pma-ssl-ca.pem', base64_decode($_ENV['PMA_SSL_CA_BASE64']));
+    $_ENV['PMA_SSL_CA'] = SSL_DIR . '/pma-ssl-ca.pem';
+}
+
+/* Decode and save the SSL key from base64 */
+if (isset($_ENV['PMA_SSL_KEY_BASE64'])) {
+    if (!is_dir(SSL_DIR)) {
+        mkdir(SSL_DIR, 0755, true);
+    }
+    file_put_contents(SSL_DIR . '/pma-ssl-key.key', base64_decode($_ENV['PMA_SSL_KEY_BASE64']));
+    $_ENV['PMA_SSL_KEY'] = SSL_DIR . '/pma-ssl-key.key';
+}
+
+/* Decode and save the SSL certificate from base64 */
+if (isset($_ENV['PMA_SSL_CERT_BASE64'])) {
+    if (!is_dir(SSL_DIR)) {
+        mkdir(SSL_DIR, 0755, true);
+    }
+    file_put_contents(SSL_DIR . '/pma-ssl-cert.pem', base64_decode($_ENV['PMA_SSL_CERT_BASE64']));
+    $_ENV['PMA_SSL_CERT'] = SSL_DIR . '/pma-ssl-cert.pem';
+}
+
+/* Decode and save multiple SSL CA certificates from base64 */
+if (isset($_ENV['PMA_SSL_CAS_BASE64'])) {
+    $_ENV['PMA_SSL_CAS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_CAS_BASE64'], 'CA', 'pem');
+}
+
+/* Decode and save multiple SSL keys from base64 */
+if (isset($_ENV['PMA_SSL_KEYS_BASE64'])) {
+    $_ENV['PMA_SSL_KEYS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_KEYS_BASE64'], 'CERT', 'cert');
+}
+
+/* Decode and save multiple SSL certificates from base64 */
+if (isset($_ENV['PMA_SSL_CERTS_BASE64'])) {
+    $_ENV['PMA_SSL_CERTS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_CERTS_BASE64'], 'KEY', 'key');
+}
+
 /* Figure out hosts */
 
 /* Fallback to default linked */
