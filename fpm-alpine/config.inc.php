@@ -1,6 +1,9 @@
 <?php
 
+define('SSL_DIR', '/etc/phpmyadmin/ssl');
+
 require '/etc/phpmyadmin/config.secret.inc.php';
+require '/etc/phpmyadmin/helpers.php';
 
 /* Ensure we got the environment */
 $vars = [
