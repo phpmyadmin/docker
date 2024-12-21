@@ -1,6 +1,5 @@
 <?php
 
-class SslFileGenerationException extends Exception {}
 
 define('OUTPUT_DIR', '/etc/phpmyadmin/ssl');
 
