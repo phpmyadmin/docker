@@ -67,8 +67,9 @@ function create_variant() {
 		sed -i "/^\s*# start: Apache specific build$/,/^\s*# end: Apache specific build$/d" "$variant/Dockerfile"
 	fi
 
-	# Copy config.inc.php
+	# Copy config.inc.php and helpers.php
 	cp config.inc.php "$variant/config.inc.php"
+	cp helpers.php "$variant/helpers.php"
 
 	# Add variant to versions.json
 	versionVariantsJson="$(jq -e \

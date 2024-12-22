@@ -1,7 +1,7 @@
 <?php
 
-require '/etc/phpmyadmin/config.secret.inc.php';
-require '/etc/phpmyadmin/helpers.php';
+require_once '/etc/phpmyadmin/config.secret.inc.php';
+require_once '/etc/phpmyadmin/helpers.php';
 
 /* Ensure we got the environment */
 $vars = [
