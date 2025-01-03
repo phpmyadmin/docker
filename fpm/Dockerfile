@@ -108,6 +108,7 @@ RUN set -ex; \
     mkdir $SESSION_SAVE_PATH; \
     chmod 1777 $SESSION_SAVE_PATH; \
     chown www-data:www-data $SESSION_SAVE_PATH; \
+    chown www-data:www-data $PMA_SSL_DIR; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
