@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Refactor `update.sh` (#408)
 - Enable remoteip mod for Apache (#434)
 - Add support for `PMA_SSL` and `PMA_SSLS` to enable SSL connection (#441)
+- Fixed looping through `$sockets` using the same index variable `$i` interferes with the last server id (#186)
 
 ## [5.2.1] - 2023-02-08
 
