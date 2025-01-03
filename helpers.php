@@ -12,7 +12,7 @@ define('PMA_SSL_DIR', $_ENV['PMA_SSL_DIR'] ?? '/etc/phpmyadmin/ssl');
  * @param string $extension The file extension to use for the generated SSL files.
  * @return string A comma-separated list of paths to the generated SSL files.
  */
-function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): array {
+function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): string {
     // Ensure the output directory exists
     if (!is_dir(PMA_SSL_DIR)) {
         mkdir(PMA_SSL_DIR, 0755, true);
@@ -26,13 +26,19 @@ function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $ex
     // Process each file
     foreach ($files as $file) {
         $output_file = PMA_SSL_DIR . "/pma-ssl-$prefix-$counter.$extension";
-        
+
+        $file_contents = base64_decode($file, true);
+        if ($file_contents === false) {
+            echo 'Failed to decode: ' . $file;
+            exit(1);
+        }
+
         // Write the decoded file to the output directory
-        if (file_put_contents($output_file, base64_decode($file)) === false) {
+        if (file_put_contents($output_file, $file_contents) === false) {
             echo 'Failed to write to ' . $output_file;
             exit(1);
         }
-        
+
         // Add the output file path to the list
         $ssl_files[] = $output_file;
         $counter++;
