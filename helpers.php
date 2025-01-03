@@ -7,12 +7,14 @@ define('PMA_SSL_DIR', $_ENV['PMA_SSL_DIR'] ?? '/etc/phpmyadmin/ssl');
  * Helper function to decode and save multiple SSL files from base64.
  *
  * @param string $base64_string The base64 encoded string containing multiple SSL files separated by commas.
- *                               If no commas are present, the entire string is treated as a single file.
- * @param string $prefix The prefix to use for the generated SSL file names.
- * @param string $extension The file extension to use for the generated SSL files.
+ *                              If no commas are present, the entire string is treated as a single file.
+ * @param string $prefix        The prefix to use for the generated SSL file names.
+ * @param string $extension     The file extension to use for the generated SSL files.
+ *
  * @return string A comma-separated list of paths to the generated SSL files.
  */
-function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): string {
+function decodeAndSaveSslFiles(string $base64_string, string $prefix, string $extension): string
+{
     // Ensure the output directory exists
     if (!is_dir(PMA_SSL_DIR)) {
         mkdir(PMA_SSL_DIR, 0755, true);
