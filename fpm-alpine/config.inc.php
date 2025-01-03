@@ -205,9 +205,10 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     $cfg['Servers'][$i]['compress'] = false;
     $cfg['Servers'][$i]['AllowNoPassword'] = true;
 }
-for ($i = 1; isset($sockets[$i - 1]); $i++) {
-    $cfg['Servers'][$i]['socket'] = $sockets[$i - 1];
-    $cfg['Servers'][$i]['host'] = 'localhost';
+// Avoid overwriting the last server id $i, use another variable name
+for ($socketHostId = 1; isset($sockets[$socketHostId - 1]); $socketHostId++) {
+    $cfg['Servers'][$socketHostId]['socket'] = $sockets[$socketHostId - 1];
+    $cfg['Servers'][$socketHostId]['host'] = 'localhost';
 }
 /*
  * Revert back to last configured server to make
