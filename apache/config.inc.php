@@ -29,6 +29,7 @@ $vars = [
     'PMA_UPLOADDIR',
     'PMA_SAVEDIR',
     'PMA_SSL',
+    'PMA_SSL_DIR',
     'PMA_SSL_VERIFY',
     'PMA_SSL_CA',
     'PMA_SSL_KEY',
@@ -38,7 +39,6 @@ $vars = [
     'PMA_SSL_CAS',
     'PMA_SSL_KEYS',
     'PMA_SSL_CERTS',
-    'PMA_PMA_SSL_DIR'
 ];
 
 foreach ($vars as $var) {
@@ -47,6 +47,11 @@ foreach ($vars as $var) {
         $_ENV[$var] = $env;
     }
 }
+
+if (! defined('PMA_SSL_DIR')) {
+    define('PMA_SSL_DIR', $_ENV['PMA_SSL_DIR'] ?? '/etc/phpmyadmin/ssl');
+}
+
 if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
     $cfg['QueryHistoryDB'] = (bool) $_ENV['PMA_QUERYHISTORYDB'];
 }
@@ -66,44 +71,32 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
 }
 
 if (isset($_ENV['PMA_SSL_CA_BASE64'])) {
-    if (!is_dir(PMA_SSL_DIR)) {
-        mkdir(PMA_SSL_DIR, 0755, true);
-    }
-    file_put_contents(PMA_SSL_DIR . '/pma-ssl-ca.pem', base64_decode($_ENV['PMA_SSL_CA_BASE64']));
-    $_ENV['PMA_SSL_CA'] = PMA_SSL_DIR . '/pma-ssl-ca.pem';
+    $_ENV['PMA_SSL_CA'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CA_BASE64'], 'phpmyadmin-ssl-CA', 'pem', PMA_SSL_DIR);
 }
 
 /* Decode and save the SSL key from base64 */
 if (isset($_ENV['PMA_SSL_KEY_BASE64'])) {
-    if (!is_dir(PMA_SSL_DIR)) {
-        mkdir(PMA_SSL_DIR, 0755, true);
-    }
-    file_put_contents(PMA_SSL_DIR . '/pma-ssl-key.key', base64_decode($_ENV['PMA_SSL_KEY_BASE64']));
-    $_ENV['PMA_SSL_KEY'] = PMA_SSL_DIR . '/pma-ssl-key.key';
+    $_ENV['PMA_SSL_KEY'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_KEY_BASE64'], 'phpmyadmin-ssl-CERT', 'cert', PMA_SSL_DIR);
 }
 
 /* Decode and save the SSL certificate from base64 */
 if (isset($_ENV['PMA_SSL_CERT_BASE64'])) {
-    if (!is_dir(PMA_SSL_DIR)) {
-        mkdir(PMA_SSL_DIR, 0755, true);
-    }
-    file_put_contents(PMA_SSL_DIR . '/pma-ssl-cert.pem', base64_decode($_ENV['PMA_SSL_CERT_BASE64']));
-    $_ENV['PMA_SSL_CERT'] = PMA_SSL_DIR . '/pma-ssl-cert.pem';
+    $_ENV['PMA_SSL_CERT'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CERT_BASE64'], 'phpmyadmin-ssl-CERT', 'cert', PMA_SSL_DIR);
 }
 
 /* Decode and save multiple SSL CA certificates from base64 */
 if (isset($_ENV['PMA_SSL_CAS_BASE64'])) {
-    $_ENV['PMA_SSL_CAS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_CAS_BASE64'], 'CA', 'pem');
+    $_ENV['PMA_SSL_CAS'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CAS_BASE64'], 'phpmyadmin-ssl-CA', 'pem', PMA_SSL_DIR);
 }
 
 /* Decode and save multiple SSL keys from base64 */
 if (isset($_ENV['PMA_SSL_KEYS_BASE64'])) {
-    $_ENV['PMA_SSL_KEYS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_KEYS_BASE64'], 'CERT', 'cert');
+    $_ENV['PMA_SSL_KEYS'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_KEYS_BASE64'], 'phpmyadmin-ssl-CERT', 'cert', PMA_SSL_DIR);
 }
 
 /* Decode and save multiple SSL certificates from base64 */
 if (isset($_ENV['PMA_SSL_CERTS_BASE64'])) {
-    $_ENV['PMA_SSL_CERTS'] = decodeAndSaveSslFiles($_ENV['PMA_SSL_CERTS_BASE64'], 'KEY', 'key');
+    $_ENV['PMA_SSL_CERTS'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CERTS_BASE64'], 'phpmyadmin-ssl-KEY', 'key', PMA_SSL_DIR);
 }
 
 /* Figure out hosts */
