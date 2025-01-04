@@ -40,6 +40,7 @@ RUN set -ex; \
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
+ENV PMA_SSL_DIR /etc/phpmyadmin/ssl
 ENV MAX_EXECUTION_TIME 600
 ENV MEMORY_LIMIT 512M
 ENV UPLOAD_LIMIT 2048K
@@ -92,8 +93,11 @@ RUN set -ex; \
         gnupg \
     ; \
     mkdir $SESSION_SAVE_PATH; \
+    mkdir -p $PMA_SSL_DIR; \
     chmod 1777 $SESSION_SAVE_PATH; \
+    chmod 755 $PMA_SSL_DIR; \
     chown www-data:www-data $SESSION_SAVE_PATH; \
+    chown www-data:www-data $PMA_SSL_DIR; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
