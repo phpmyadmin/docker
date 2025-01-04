@@ -189,12 +189,12 @@ docker run --name phpmyadmin -d -e PMA_HOSTS='sslhost,nosslhost' -e PMA_SSLS='1,
 * ``PMA_SSLS`` - comma separated list of `0` and `1` defining SSL usage for the corresponding MySQL connections
 * ``PMA_SSL_VERIFY`` - when set to 1, enables SSL certificate verification for the MySQL connection.
 * ``PMA_SSL_VERIFIES`` - comma-separated list of `0` and `1` to enable or disable SSL certificate verification for multiple MySQL connections.
-* ``PMA_SSL_CA_BASE64`` - in the context of mutual TLS security, allows setting your CA file as a base64 string inside the default `config.inc.php`.
-* ``PMA_SSL_CAS_BASE64`` - in the context of mutual TLS security, allows setting multiple CA files as a comma-separated list of base64 strings inside the default `config.inc.php`.
-* ``PMA_SSL_CERT_BASE64`` - in the context of mutual TLS security, allows setting your CERT file as a base64 string inside the default `config.inc.php`.
-* ``PMA_SSL_CERTS_BASE64`` - in the context of mutual TLS security, allows setting multiple CERT files as a comma-separated list of base64 strings inside the default `config.inc.php`.
-* ``PMA_SSL_KEY_BASE64`` - in the context of mutual TLS security, allows setting your KEY file as a base64 string inside the default `config.inc.php`.
-* ``PMA_SSL_KEYS_BASE64`` - in the context of mutual TLS security, allows setting multiple KEY files as a comma-separated list of base64 strings inside the default `config.inc.php`.
+* ``PMA_SSL_CA`` - in the context of mutual TLS security, allows setting your CA certificate file as a string inside the default `config.inc.php`.
+* ``PMA_SSL_CAS`` - in the context of mutual TLS security, allows setting multiple CA certificate files as a comma-separated list of strings inside the default `config.inc.php`.
+* ``PMA_SSL_CERT`` - in the context of mutual TLS security, allows setting your certificate file as a string inside the default `config.inc.php`.
+* ``PMA_SSL_CERTS`` - in the context of mutual TLS security, allows setting multiple certificate files as a comma-separated list of strings inside the default `config.inc.php`.
+* ``PMA_SSL_KEY`` - in the context of mutual TLS security, allows setting your private key file as a string inside the default `config.inc.php`.
+* ``PMA_SSL_KEYS`` - in the context of mutual TLS security, allows setting multiple private key files as a comma-separated list of strings inside the default `config.inc.php`.
 * ``PMA_USER`` and ``PMA_PASSWORD`` - define username and password to use only with the `config` authentication method
 * ``PMA_ABSOLUTE_URI`` - the full URL to phpMyAdmin. Sometimes needed when used in a reverse-proxy configuration. Don't set this unless needed. See [documentation](https://docs.phpmyadmin.net/en/latest/config.html#cfg_PmaAbsoluteUri).
 * ``PMA_CONFIG_BASE64`` - if set, this option will override the default `config.inc.php` with the base64 decoded contents of the variable
@@ -220,6 +220,19 @@ For usage with Docker secrets, appending ``_FILE`` to the ``PMA_PASSWORD`` envir
 ```sh
 docker run --name phpmyadmin -d -e PMA_PASSWORD_FILE=/run/secrets/db_password.txt -p 8080:80 phpmyadmin:latest
 ```
+
+#### Variables that can store the file contents using ``_BASE64``
+
+- `PMA_SSL_CA`
+- `PMA_SSL_CAS`
+- `PMA_SSL_KEY`
+- `PMA_SSL_KEYS`
+- `PMA_SSL_CERT`
+- `PMA_SSL_CERTS`
+
+Also includes: `PMA_CONFIG_BASE64` or `PMA_USER_CONFIG_BASE64`.
+
+For example, the variable would be named `PMA_SSL_CA_BASE64` and the value is the base64 encoded contents of the file.
 
 #### Variables that can be read from a file using ``_FILE``
 
