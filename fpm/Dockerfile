@@ -106,7 +106,9 @@ RUN set -ex; \
         dirmngr \
     ; \
     mkdir $SESSION_SAVE_PATH; \
+    mkdir $PMA_SSL_DIR; \
     chmod 1777 $SESSION_SAVE_PATH; \
+    chmod 755 $PMA_SSL_DIR; \
     chown www-data:www-data $SESSION_SAVE_PATH; \
     chown www-data:www-data $PMA_SSL_DIR; \
     \
