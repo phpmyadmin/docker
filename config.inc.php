@@ -1,6 +1,7 @@
 <?php
 
-require '/etc/phpmyadmin/config.secret.inc.php';
+require_once '/etc/phpmyadmin/config.secret.inc.php';
+require_once '/etc/phpmyadmin/helpers.php';
 
 /* Ensure we got the environment */
 $vars = [
@@ -29,6 +30,21 @@ $vars = [
     'PMA_SAVEDIR',
     'PMA_SSL',
     'PMA_SSLS',
+    'PMA_SSL_DIR',
+    'PMA_SSL_VERIFY',
+    'PMA_SSL_VERIFIES',
+    'PMA_SSL_CA',
+    'PMA_SSL_CAS',
+    'PMA_SSL_CA_BASE64',
+    'PMA_SSL_CAS_BASE64',
+    'PMA_SSL_KEY',
+    'PMA_SSL_KEYS',
+    'PMA_SSL_KEY_BASE64',
+    'PMA_SSL_KEYS_BASE64',
+    'PMA_SSL_CERT',
+    'PMA_SSL_CERTS',
+    'PMA_SSL_CERT_BASE64',
+    'PMA_SSL_CERTS_BASE64',
 ];
 
 foreach ($vars as $var) {
@@ -37,6 +53,11 @@ foreach ($vars as $var) {
         $_ENV[$var] = $env;
     }
 }
+
+if (! defined('PMA_SSL_DIR')) {
+    define('PMA_SSL_DIR', $_ENV['PMA_SSL_DIR'] ?? '/etc/phpmyadmin/ssl');
+}
+
 if (isset($_ENV['PMA_QUERYHISTORYDB'])) {
     $cfg['QueryHistoryDB'] = (bool) $_ENV['PMA_QUERYHISTORYDB'];
 }
@@ -55,6 +76,35 @@ if (isset($_ENV['PMA_ABSOLUTE_URI'])) {
     $cfg['PmaAbsoluteUri'] = trim($_ENV['PMA_ABSOLUTE_URI']);
 }
 
+if (isset($_ENV['PMA_SSL_CA_BASE64'])) {
+    $_ENV['PMA_SSL_CA'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CA_BASE64'], 'phpmyadmin-ssl-CA', 'pem', PMA_SSL_DIR);
+}
+
+/* Decode and save the SSL key from base64 */
+if (isset($_ENV['PMA_SSL_KEY_BASE64'])) {
+    $_ENV['PMA_SSL_KEY'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_KEY_BASE64'], 'phpmyadmin-ssl-CERT', 'cert', PMA_SSL_DIR);
+}
+
+/* Decode and save the SSL certificate from base64 */
+if (isset($_ENV['PMA_SSL_CERT_BASE64'])) {
+    $_ENV['PMA_SSL_CERT'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CERT_BASE64'], 'phpmyadmin-ssl-CERT', 'cert', PMA_SSL_DIR);
+}
+
+/* Decode and save multiple SSL CA certificates from base64 */
+if (isset($_ENV['PMA_SSL_CAS_BASE64'])) {
+    $_ENV['PMA_SSL_CAS'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CAS_BASE64'], 'phpmyadmin-ssl-CA', 'pem', PMA_SSL_DIR);
+}
+
+/* Decode and save multiple SSL keys from base64 */
+if (isset($_ENV['PMA_SSL_KEYS_BASE64'])) {
+    $_ENV['PMA_SSL_KEYS'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_KEYS_BASE64'], 'phpmyadmin-ssl-CERT', 'cert', PMA_SSL_DIR);
+}
+
+/* Decode and save multiple SSL certificates from base64 */
+if (isset($_ENV['PMA_SSL_CERTS_BASE64'])) {
+    $_ENV['PMA_SSL_CERTS'] = decodeBase64AndSaveFiles($_ENV['PMA_SSL_CERTS_BASE64'], 'phpmyadmin-ssl-KEY', 'key', PMA_SSL_DIR);
+}
+
 /* Figure out hosts */
 
 /* Fallback to default linked */
@@ -66,11 +116,19 @@ if (! empty($_ENV['PMA_HOST'])) {
     $verbose = [$_ENV['PMA_VERBOSE']];
     $ports = [$_ENV['PMA_PORT']];
     $ssls = [$_ENV['PMA_SSL']];
+    $ssl_verifies = [$_ENV['PMA_SSL_VERIFY']];
+    $ssl_cas = [$_ENV['PMA_SSL_CA']];
+    $ssl_keys = [$_ENV['PMA_SSL_KEY']];
+    $ssl_certs = [$_ENV['PMA_SSL_CERT']];
 } elseif (! empty($_ENV['PMA_HOSTS'])) {
     $hosts = array_map('trim', explode(',', $_ENV['PMA_HOSTS']));
     $verbose = array_map('trim', explode(',', $_ENV['PMA_VERBOSES']));
     $ports = array_map('trim', explode(',', $_ENV['PMA_PORTS']));
     $ssls = array_map('trim', explode(',', $_ENV['PMA_SSLS']));
+    $ssl_verifies = array_map('trim', explode(',', $_ENV['PMA_SSL_VERIFIES']));
+    $ssl_cas = array_map('trim', explode(',', $_ENV['PMA_SSL_CAS']));
+    $ssl_keys = array_map('trim', explode(',', $_ENV['PMA_SSL_KEYS']));
+    $ssl_certs = array_map('trim', explode(',', $_ENV['PMA_SSL_CERTS']));
 }
 
 if (! empty($_ENV['PMA_SOCKET'])) {
@@ -83,6 +141,18 @@ if (! empty($_ENV['PMA_SOCKET'])) {
 for ($i = 1; isset($hosts[$i - 1]); $i++) {
     if (isset($ssls[$i - 1]) && $ssls[$i - 1] === '1') {
         $cfg['Servers'][$i]['ssl'] = $ssls[$i - 1];
+    }
+    if (isset($ssl_verifies[$i - 1]) && $ssl_verifies[$i - 1] === '1') {
+        $cfg['Servers'][$i]['ssl_verify'] = $ssl_verifies[$i - 1];
+    }
+    if (isset($ssl_cas[$i - 1])) {
+        $cfg['Servers'][$i]['ssl_ca'] = $ssl_cas[$i - 1];
+    }
+    if (isset($ssl_keys[$i - 1])) {
+        $cfg['Servers'][$i]['ssl_key'] = $ssl_keys[$i - 1];
+    }
+    if (isset($ssl_certs[$i - 1])) {
+        $cfg['Servers'][$i]['ssl_cert'] = $ssl_certs[$i - 1];
     }
     $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
     if (isset($verbose[$i - 1])) {
