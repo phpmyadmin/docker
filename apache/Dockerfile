@@ -144,6 +144,7 @@ RUN set -ex; \
 
 # Copy configuration
 COPY config.inc.php /etc/phpmyadmin/config.inc.php
+COPY helpers.php /etc/phpmyadmin/helpers.php
 RUN chown www-data:www-data -R /etc/phpmyadmin/
 
 # Copy main script
