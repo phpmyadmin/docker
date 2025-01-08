@@ -15,6 +15,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Refactor `update.sh` (#408)
 - Enable remoteip mod for Apache (#434)
 - Add support for `PMA_SSL` and `PMA_SSLS` to enable SSL connection (#441)
+- Fixed looping through `$sockets` using the same index variable `$i` interferes with the last server id (#186)
+- Add support for `PMA_SSL_VERIFY` and `PMA_SSL_VERIFIES` (#448)
+- Add support for `PMA_SSL_CA` and `PMA_SSL_CAS` (#448)
+- Add support for `PMA_SSL_CERT` and `PMA_SSL_CERTS` (#448)
+- Add support for `PMA_SSL_KEY` and `PMA_SSL_KEYS` (#448)
+- Also add `PMA_SSL_DIR` to define the dir where SSL files are generated for `_BASE64` prefixed variables
+- Support `PMA_SSL_CA_BASE64` and `PMA_SSL_CAS_BASE64` as variables that contain the file contents (#448)
+- Support `PMA_SSL_KEY_BASE64` and `PMA_SSL_KEYS_BASE64` as variables that contain the file contents (#448)
+- Support `PMA_SSL_CERT_BASE64` and `PMA_SSL_CERTS_BASE64` as variables that contain the file contents (#448)
 
 ## [5.2.1] - 2023-02-08
 
