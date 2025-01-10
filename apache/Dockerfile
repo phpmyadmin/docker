@@ -143,9 +143,8 @@ RUN set -ex; \
     rm -rf /var/lib/apt/lists/*
 
 # Copy configuration
-COPY config.inc.php /etc/phpmyadmin/config.inc.php
-COPY helpers.php /etc/phpmyadmin/helpers.php
-RUN chown www-data:www-data -R /etc/phpmyadmin/
+COPY --chown=www-data:www-data config.inc.php /etc/phpmyadmin/config.inc.php
+COPY --chown=www-data:www-data helpers.php /etc/phpmyadmin/helpers.php
 
 # Copy main script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
