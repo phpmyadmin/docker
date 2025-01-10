@@ -4,6 +4,7 @@ def pytest_addoption(parser):
     parser.addoption("--url")
     parser.addoption("--username")
     parser.addoption("--password")
+    parser.addoption("--root-password")
     parser.addoption("--server")
     parser.addoption("--sqlfile")
 
@@ -18,6 +19,10 @@ def username(request):
 @pytest.fixture
 def password(request):
     return request.config.getoption("--password")
+
+@pytest.fixture
+def root_password(request):
+    return request.config.getoption("--root-password")
 
 @pytest.fixture
 def server(request):

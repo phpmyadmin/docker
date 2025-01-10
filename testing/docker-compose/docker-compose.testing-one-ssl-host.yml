@@ -1,0 +1,105 @@
+version: "3.1"
+
+services:
+  db_server:
+    image: ${DB:-mariadb:11}
+    command:
+      - "--plugin_load_add=server_audit"
+      - "--server_audit=FORCE_PLUS_PERMANENT"
+      - "--server_audit_events=connect"
+      - "--server_audit_logging"
+      #- "--server_audit_file_path=/var/log/mariadb-audit/audit.log"
+      - "--ssl-ca=/etc/phpmyadmin/ssl/ca-cert.pem"
+      - "--ssl-cert=/etc/phpmyadmin/ssl/server-cert.pem"
+      - "--ssl-key=/etc/phpmyadmin/ssl/server-key.pem"
+      - "--require-secure-transport=ON"
+      - "--server-audit-logging=ON"
+    environment:
+      MARIADB_USER: secure-user
+      MARIADB_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
+      MARIADB_ROOT_PASSWORD: "${TESTSUITE_ROOT_PASSWORD:-random-pass}"
+      # The database name used in the import test
+      MARIADB_DATABASE: World
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-uroot", "-prandom-pass"]
+      start_period: 10s
+      interval: 5s
+      timeout: 60s
+      retries: 10
+    networks:
+      testing:
+        aliases:
+         - mariadb.phpmyadmin.local
+    tmpfs:
+      - /var/lib/mysql:rw,noexec,nosuid,size=300m
+    volumes:
+      #- ../secure-user.sql:/docker-entrypoint-initdb.d/secure-user.sql:ro
+      - ../ca-cert.pem:/etc/phpmyadmin/ssl/ca-cert.pem:ro
+      - ../ca-key.pem:/etc/phpmyadmin/ssl/ca-key.pem:ro
+      - ../server-cert.pem:/etc/phpmyadmin/ssl/server-cert.pem:ro
+      - ../server-key.pem:/etc/phpmyadmin/ssl/server-key.pem:ro
+      #- ../mariadb-audit:/var/log/mariadb-audit
+
+  phpmyadmin:
+    build:
+      context: ../../apache
+    environment:
+      PMA_HOST: mariadb.phpmyadmin.local
+      PMA_SSL: 1
+      PMA_SSL_VERIFY: 1
+      PMA_SSL_CA: /etc/phpmyadmin/ssl/ca-cert.pem
+      PMA_SSL_CERT: /etc/phpmyadmin/ssl/client-cert.pem
+      PMA_SSL_KEY: /etc/phpmyadmin/ssl/client-key.pem
+      UPLOAD_LIMIT: 123M
+      MAX_EXECUTION_TIME: 125
+      HIDE_PHP_VERSION: 1
+    volumes:
+      - ../config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+      - ../ca-cert.pem:/etc/phpmyadmin/ssl/ca-cert.pem:ro
+      - ../client-cert.pem:/etc/phpmyadmin/ssl/client-cert.pem:ro
+      - ../client-key.pem:/etc/phpmyadmin/ssl/client-key.pem:ro
+    healthcheck:
+      test: ["CMD", "curl", "-Ss", "http://localhost/robots.txt"]
+      start_period: 5s
+      interval: 3s
+      timeout: 60s
+      retries: 10
+    networks:
+      testing:
+        aliases:
+         - phpmyadmin_testing_apache
+    depends_on:
+      db_server:
+        condition: service_healthy
+
+  sut:
+    depends_on:
+      phpmyadmin:
+        condition: service_healthy
+      db_server:
+        condition: service_healthy
+    build:
+      context: ../
+    command: "/tests/testing/test-docker.sh"
+    networks:
+      testing:
+    environment:
+      TESTSUITE_HOSTNAME: phpmyadmin_testing_apache
+      TESTSUITE_PORT: 80
+      TESTSUITE_USER: secure-user
+      TESTSUITE_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
+      TESTSUITE_ROOT_PASSWORD: "${TESTSUITE_ROOT_PASSWORD:-random-pass}"
+      PMA_HOST: mariadb.phpmyadmin.local
+      PMA_PORT: 3306
+      IS_USING_SSL: true
+    volumes:
+      - ../ca-cert.pem:/etc/phpmyadmin/ssl/ca-cert.pem:ro
+      - ../server-cert.pem:/etc/phpmyadmin/ssl/server-cert.pem:ro
+      - ../client-cert.pem:/etc/phpmyadmin/ssl/client-cert.pem:ro
+      - ../client-key.pem:/etc/phpmyadmin/ssl/client-key.pem:ro
+      - ../../:/tests:ro
+    working_dir: /tests
+
+networks:
+    testing:
+        driver: bridge

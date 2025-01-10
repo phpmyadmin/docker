@@ -58,7 +58,9 @@ def test_import(url, username, password, server, sqlfile):
     br.select_form('import')
     br.form.add_file(open(sqlfile), 'text/plain', sqlfile)
     response = br.submit()
-    assert(b'5326 queries executed' in response.read())
+    response = response.read()
+
+    assert(b'5326 queries executed' in response)
 
 
 def docker_secret(env_name):
@@ -89,14 +91,46 @@ def test_phpmyadmin_secrets():
     docker_secret('PMA_CONTROLUSER')
     docker_secret('PMA_CONTROLPASS')
 
+def test_is_using_ssl(url, username, password, server):
+    is_using_ssl = os.environ.get('IS_USING_SSL');
+
+    br = create_browser()
+    response = do_login(br, url, username, password, server)
+    response = response.read()
+
+    assert(b'Server connection' in response)
+
+    if is_using_ssl:
+        assert(b'SSL is used' in response)
+        assert(b'SSL is not being used' not in response)
+    else:
+        assert(b'SSL is used' not in response)
+        assert(b'SSL is not being used' in response)
+
+def test_is_using_ssl_client_cert(url, server):
+    is_using_ssl = os.environ.get('IS_USING_SSL');
+    if not is_using_ssl:
+        pytest.skip("Missing IS_USING_SSL ENV", allow_module_level=True)
+
+    br = create_browser()
+    password = ""
+    response = do_login(br, url, "ssl-specific-user", password, server)
+    response = response.read()
+
+    assert(b'Server connection' in response)
+    assert(b'ssl-specific-user@' in response)
+
+    assert(b'SSL is used' in response)
+    assert(b'SSL is not being used' not in response)
 
 def test_php_ini(url, username, password, server):
     skip_expose_php_test = os.environ.get('SKIP_EXPOSE_PHP_TEST');
 
     br = create_browser()
     response = do_login(br, url, username, password, server)
+    response = response.read()
 
-    assert(b'Show PHP information' in response.read())
+    assert(b'Show PHP information' in response)
 
     # Open Show PHP information
     response = br.follow_link(text_regex=re.compile('Show PHP information'))
