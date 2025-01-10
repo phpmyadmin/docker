@@ -1,10 +1,11 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 FROM php:8.2-fpm-alpine
 
-# docker-entrypoint.sh dependencies
+# install and docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
     bash \
-    tzdata
+    tzdata \
+    gnupg
 
 # Install dependencies
 RUN set -ex; \
@@ -47,6 +48,13 @@ ENV UPLOAD_LIMIT 2048K
 ENV TZ UTC
 ENV SESSION_SAVE_PATH /sessions
 RUN set -ex; \
+    mkdir $SESSION_SAVE_PATH; \
+    mkdir -p $PMA_SSL_DIR; \
+    chmod 1777 $SESSION_SAVE_PATH; \
+    chmod 755 $PMA_SSL_DIR; \
+    chown www-data:www-data /etc/phpmyadmin; \
+    chown www-data:www-data $PMA_SSL_DIR; \
+    chown www-data:www-data $SESSION_SAVE_PATH; \
     \
     { \
         echo 'opcache.memory_consumption=128'; \
@@ -72,6 +80,8 @@ RUN set -ex; \
         echo 'session.save_path=${SESSION_SAVE_PATH}'; \
     } > $PHP_INI_DIR/conf.d/phpmyadmin-misc.ini
 
+USER www-data:www-data
+
 # Calculate download URL
 ENV VERSION 5.2.1
 ENV SHA256 373f9599dfbd96d6fe75316d5dad189e68c305f297edf42377db9dd6b41b2557
@@ -89,15 +99,6 @@ LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
 
 # Download tarball, verify it using gpg and extract
 RUN set -ex; \
-    apk add --no-cache --virtual .fetch-deps \
-        gnupg \
-    ; \
-    mkdir $SESSION_SAVE_PATH; \
-    mkdir -p $PMA_SSL_DIR; \
-    chmod 1777 $SESSION_SAVE_PATH; \
-    chmod 755 $PMA_SSL_DIR; \
-    chown www-data:www-data $SESSION_SAVE_PATH; \
-    chown www-data:www-data $PMA_SSL_DIR; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
     export GPGKEY="3D06A59ECE730EB71B511C17CE752F178259BD92"; \
@@ -111,16 +112,13 @@ RUN set -ex; \
     gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
     tar -xf phpMyAdmin.tar.xz -C /var/www/html --strip-components=1; \
     mkdir -p /var/www/html/tmp; \
-    chown www-data:www-data /var/www/html/tmp; \
     gpgconf --kill all; \
     rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
     rm -r -v /var/www/html/setup/ /var/www/html/examples/ /var/www/html/js/src/ /var/www/html/babel.config.json /var/www/html/doc/html/_sources/ /var/www/html/RELEASE-DATE-$VERSION /var/www/html/CONTRIBUTING.md; \
     grep -q -F "'configFile' => ROOT_PATH . 'config.inc.php'," /var/www/html/libraries/vendor_config.php; \
     sed -i "s@'configFile' => .*@'configFile' => '/etc/phpmyadmin/config.inc.php',@" /var/www/html/libraries/vendor_config.php; \
     grep -q -F "'configFile' => '/etc/phpmyadmin/config.inc.php'," /var/www/html/libraries/vendor_config.php; \
-    php -l /var/www/html/libraries/vendor_config.php; \
-    chown -R www-data:www-data -R /var/www/html/; \
-    apk del --no-network .fetch-deps
+    php -l /var/www/html/libraries/vendor_config.php;
 
 # Copy configuration
 COPY --chown=www-data:www-data config.inc.php /etc/phpmyadmin/config.inc.php
@@ -129,5 +127,6 @@ COPY --chown=www-data:www-data helpers.php /etc/phpmyadmin/helpers.php
 # Copy main script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+USER root
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD ["php-fpm"]
