@@ -19,6 +19,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+            - name: Generate the testing keys
+              if: ${{ contains(matrix.configuration, 'one-ssl-host') }}
+              run: ./testing/generate-keys.sh
             - name: Switch to MySQL compatible ENVs
               if: ${{ contains(matrix.database-image, 'mysql') }}
               working-directory: ./testing/docker-compose/
