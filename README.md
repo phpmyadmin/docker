@@ -245,8 +245,6 @@ For example, the variable would be named `PMA_SSL_CA_BASE64` and the value is th
 - `PMA_CONTROLHOST`
 - `PMA_CONTROLUSER`
 - `PMA_CONTROLPASS`
-- `PMA_SSL`
-- `PMA_SSLS`
 
 ## Run the E2E tests for this docker image
 
