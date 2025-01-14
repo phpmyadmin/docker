@@ -120,7 +120,7 @@ RUN set -ex; \
     php -l /var/www/html/libraries/vendor_config.php; \
     find /var/www/html -type d -exec chmod 555 {} \;; \
     find /var/www/html -type f -exec chmod 444 {} \;; \
-    chmod 777 /var/www/html/tmp;
+    chmod 1777 /var/www/html/tmp;
 
 # Copy configuration
 COPY --chown=www-data:www-data config.inc.php /etc/phpmyadmin/config.inc.php
