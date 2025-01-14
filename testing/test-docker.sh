@@ -20,7 +20,7 @@ else
     FILENAME=./testing/phpmyadmin_test.py
 fi
 
-mariadb -h "${PHPMYADMIN_DB_HOSTNAME}" -P"${PHPMYADMIN_DB_PORT}" -u"${TESTSUITE_USER:=root}" -p"${TESTSUITE_PASSWORD}" -e "SELECT @@version;" > /dev/null
+mariadb -h "${PHPMYADMIN_DB_HOSTNAME}" -P"${PHPMYADMIN_DB_PORT}" -u"${TESTSUITE_USER:=root}" -p"${TESTSUITE_PASSWORD}" --skip-ssl -e "SELECT @@version;" > /dev/null
 ret=$?
 
 if [ $ret -ne 0 ] ; then
