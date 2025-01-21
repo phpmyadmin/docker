@@ -83,8 +83,8 @@ RUN set -ex; \
 USER www-data:www-data
 
 # Calculate download URL
-ENV VERSION 5.2.1
-ENV SHA256 373f9599dfbd96d6fe75316d5dad189e68c305f297edf42377db9dd6b41b2557
+ENV VERSION 5.2.2
+ENV SHA256 f881819a3b11e653b0212afaf0cc105db85c767715cb3f5852670f7fc36c9669
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
