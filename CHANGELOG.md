@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - YYYY-MM-DD
+## [5.2.2] - 2025-01-21
 
 - Add `TZ` env var to change PHP `date.timezone` (#133)
 - Update to PHP 8.2 (#411)
