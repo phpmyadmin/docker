@@ -4,16 +4,10 @@ services:
   db_server:
     image: ${DB:-mariadb:11}
     command:
-      - "--plugin_load_add=server_audit"
-      - "--server_audit=FORCE_PLUS_PERMANENT"
-      - "--server_audit_events=connect"
-      - "--server_audit_logging"
-      #- "--server_audit_file_path=/var/log/mariadb-audit/audit.log"
       - "--ssl-ca=/etc/phpmyadmin/ssl/ca-cert.pem"
       - "--ssl-cert=/etc/phpmyadmin/ssl/server-cert.pem"
       - "--ssl-key=/etc/phpmyadmin/ssl/server-key.pem"
       - "--require-secure-transport=ON"
-      - "--server-audit-logging=ON"
     environment:
       MARIADB_USER: secure-user
       MARIADB_PASSWORD: "${TESTSUITE_PASSWORD:-my-secret-pw}"
