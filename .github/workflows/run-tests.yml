@@ -14,8 +14,41 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                database-image: ["mariadb:10.6", "mariadb:10.11", "mariadb:latest", "mysql:5.7", "mysql:latest"]
-                configuration: ["default", "one-host", "one-socket-host", "config-mount-dir", "fs-import-export", "different-apache-port", "run-as-www-data", "one-ssl-host"]
+                database-image: [
+                  "mariadb:10.6",
+                  "mariadb:10.11",
+                  "mariadb:11.4",
+                  "mariadb:latest",
+                  "mysql:5.7",
+                  "mysql:8.4",
+                  "mysql:latest"
+                ]
+                configuration: [
+                  "default",
+                  "one-host",
+                  "one-socket-host",
+                  "config-mount-dir",
+                  "fs-import-export",
+                  "different-apache-port",
+                  "run-as-www-data"
+                ]
+                include:
+                  - {
+                      database-image: "mariadb:10.6",
+                      configuration: "one-ssl-host"
+                    }
+                  - {
+                      database-image: "mariadb:10.11",
+                      configuration: "one-ssl-host"
+                    }
+                  - {
+                      database-image: "mariadb:11.4",
+                      configuration: "one-ssl-host"
+                    }
+                  - {
+                      database-image: "mariadb:latest",
+                      configuration: "one-ssl-host"
+                    }
 
         steps:
             - uses: actions/checkout@v4
