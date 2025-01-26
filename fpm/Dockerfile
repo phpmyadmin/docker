@@ -53,12 +53,12 @@ RUN set -ex; \
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
-ENV PMA_SSL_DIR /etc/phpmyadmin/ssl
-ENV MAX_EXECUTION_TIME 600
-ENV MEMORY_LIMIT 512M
-ENV UPLOAD_LIMIT 2048K
-ENV TZ UTC
-ENV SESSION_SAVE_PATH /sessions
+ENV PMA_SSL_DIR=/etc/phpmyadmin/ssl
+ENV MAX_EXECUTION_TIME=600
+ENV MEMORY_LIMIT=512M
+ENV UPLOAD_LIMIT=2048K
+ENV TZ=UTC
+ENV SESSION_SAVE_PATH=/sessions
 RUN set -ex; \
     mkdir $SESSION_SAVE_PATH; \
     mkdir -p $PMA_SSL_DIR; \
@@ -95,9 +95,9 @@ RUN set -ex; \
 USER www-data:www-data
 
 # Calculate download URL
-ENV VERSION 5.2.2
-ENV SHA256 f881819a3b11e653b0212afaf0cc105db85c767715cb3f5852670f7fc36c9669
-ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
+ENV VERSION=5.2.2
+ENV SHA256=f881819a3b11e653b0212afaf0cc105db85c767715cb3f5852670f7fc36c9669
+ENV URL=https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.description="Run phpMyAdmin with Alpine, Apache and PHP FPM." \
