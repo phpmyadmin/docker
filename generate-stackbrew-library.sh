@@ -67,7 +67,7 @@ latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r
 
 for variant in apache fpm fpm-alpine; do
 	commit="$(dirCommit "$variant")"
-	fullversion="$(git show "$commit":"$variant/Dockerfile" | awk '$1 == "ENV" && $2 == "VERSION" { print $3; exit }')"
+	fullversion="$(git show "$commit":"$variant/Dockerfile" | awk -F" |=" '$1 == "ENV" && $2 == "VERSION" { print $3; exit }')"
 
 	versionAliases=( "$fullversion" "${fullversion%.*}" "${fullversion%.*.*}" )
 	if [ "$fullversion" = "$latest" ]; then
