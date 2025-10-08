@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [5.2.3.1] - 2025-10-08
+
+- Remove leftover uploadprogress.tar.gz download after installation (#465)
+
 ## [5.2.3] - 2025-10-08
 
 - Update to PHP 8.3
