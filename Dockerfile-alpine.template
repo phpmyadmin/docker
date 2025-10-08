@@ -19,6 +19,11 @@ RUN set -ex; \
         libzip-dev \
     ; \
     \
+    mkdir -p /usr/src/php/ext/uploadprogress; \
+    curl -fsSL -o uploadprogress.tar.gz "$UPLOAD_PROGRESS_EXT_URL"; \
+    echo "$UPLOAD_PROGRESS_SHA256 uploadprogress.tar.gz" | sha256sum -c -; \
+    tar -xf uploadprogress.tar.gz -C /usr/src/php/ext/uploadprogress --strip-components=1; \
+    \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
     docker-php-ext-install -j "$(nproc)" \
         bz2 \
@@ -27,7 +32,10 @@ RUN set -ex; \
         opcache \
         zip \
         bcmath \
+        uploadprogress \
     ; \
+    \
+    rm -r /usr/src/php/ext/uploadprogress; \
     \
     runDeps="$( \
         scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \

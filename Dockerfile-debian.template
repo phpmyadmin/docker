@@ -1,5 +1,8 @@
 FROM php:%%PHP_VERSION%%-%%VARIANT%%
 
+ENV UPLOAD_PROGRESS_EXT_URL="https://github.com/php/pecl-php-uploadprogress/archive/refs/tags/uploadprogress-2.0.2.tar.gz"
+ENV UPLOAD_PROGRESS_SHA256="fe3f6cdfcedad563c970c4fd1cda31e422cfc0df5cc9a217d8c80ed3c8d137f5"
+
 # Install dependencies
 RUN set -ex; \
     \
@@ -21,6 +24,11 @@ RUN set -ex; \
         libzip-dev \
     ; \
     \
+    mkdir -p /usr/src/php/ext/uploadprogress; \
+    curl -fsSL -o uploadprogress.tar.gz "$UPLOAD_PROGRESS_EXT_URL"; \
+    echo "$UPLOAD_PROGRESS_SHA256 uploadprogress.tar.gz" | sha256sum -c -; \
+    tar -xf uploadprogress.tar.gz -C /usr/src/php/ext/uploadprogress --strip-components=1; \
+    \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
     docker-php-ext-install -j "$(nproc)" \
         bz2 \
@@ -29,7 +37,10 @@ RUN set -ex; \
         opcache \
         zip \
         bcmath \
+        uploadprogress \
     ; \
+    \
+    rm -r /usr/src/php/ext/uploadprogress; \
     \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
