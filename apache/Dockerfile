@@ -25,10 +25,10 @@ RUN set -ex; \
         libzip-dev \
     ; \
     \
-    mkdir -p /usr/src/php/ext/uploadprogress; \
-    curl -fsSL -o /usr/src/php/ext/uploadprogress.tar.gz "$UPLOAD_PROGRESS_EXT_URL"; \
-    echo "$UPLOAD_PROGRESS_SHA256 /usr/src/php/ext/uploadprogress.tar.gz" | sha256sum -c -; \
-    tar -xf /usr/src/php/ext/uploadprogress.tar.gz -C /usr/src/php/ext/uploadprogress --strip-components=1; \
+    mkdir -p /tmp/uploadprogress; \
+    curl -fsSL -o /tmp/uploadprogress/uploadprogress.tar.gz "$UPLOAD_PROGRESS_EXT_URL"; \
+    echo "$UPLOAD_PROGRESS_SHA256 /tmp/uploadprogress/uploadprogress.tar.gz" | sha256sum -c -; \
+    tar -xf /tmp/uploadprogress/uploadprogress.tar.gz -C /tmp/uploadprogress --strip-components=1; \
     \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
     docker-php-ext-install -j "$(nproc)" \
@@ -38,10 +38,10 @@ RUN set -ex; \
         opcache \
         zip \
         bcmath \
-        uploadprogress \
+        /tmp/uploadprogress \
     ; \
     \
-    rm -r /usr/src/php/ext/uploadprogress /usr/src/php/ext/uploadprogress.tar.gz; \
+    rm -r /tmp/uploadprogress; \
     \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
