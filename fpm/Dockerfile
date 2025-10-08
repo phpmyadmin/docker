@@ -26,9 +26,9 @@ RUN set -ex; \
     ; \
     \
     mkdir -p /usr/src/php/ext/uploadprogress; \
-    curl -fsSL -o uploadprogress.tar.gz "$UPLOAD_PROGRESS_EXT_URL"; \
-    echo "$UPLOAD_PROGRESS_SHA256 uploadprogress.tar.gz" | sha256sum -c -; \
-    tar -xf uploadprogress.tar.gz -C /usr/src/php/ext/uploadprogress --strip-components=1; \
+    curl -fsSL -o /usr/src/php/ext/uploadprogress.tar.gz "$UPLOAD_PROGRESS_EXT_URL"; \
+    echo "$UPLOAD_PROGRESS_SHA256 /usr/src/php/ext/uploadprogress.tar.gz" | sha256sum -c -; \
+    tar -xf /usr/src/php/ext/uploadprogress.tar.gz -C /usr/src/php/ext/uploadprogress --strip-components=1; \
     \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm; \
     docker-php-ext-install -j "$(nproc)" \
@@ -41,7 +41,7 @@ RUN set -ex; \
         uploadprogress \
     ; \
     \
-    rm -r /usr/src/php/ext/uploadprogress; \
+    rm -r /usr/src/php/ext/uploadprogress /usr/src/php/ext/uploadprogress.tar.gz; \
     \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
