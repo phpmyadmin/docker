@@ -1,5 +1,5 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-debian.template
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 # Install dependencies
 RUN set -ex; \

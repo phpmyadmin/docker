@@ -1,5 +1,5 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 # install and docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
