@@ -1,6 +1,9 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 FROM php:8.3-fpm-alpine
 
+ENV UPLOAD_PROGRESS_EXT_URL="https://github.com/php/pecl-php-uploadprogress/archive/refs/tags/uploadprogress-2.0.2.tar.gz"
+ENV UPLOAD_PROGRESS_SHA256="fe3f6cdfcedad563c970c4fd1cda31e422cfc0df5cc9a217d8c80ed3c8d137f5"
+
 # install and docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
     bash \
