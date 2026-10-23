@@ -1,0 +1,75 @@
+name: Mirror official images
+
+# Mirrors docker.io/library/phpmyadmin into docker.io/phpmyadmin/phpmyadmin.
+# See https://github.com/phpmyadmin/docker/issues/363
+
+permissions:
+  contents: read
+
+on:
+  schedule:
+    # once a day, at an off-minute
+    - cron: '37 4 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: mirror-official-images
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: 'bash -Eeuo pipefail {0}'
+
+env:
+  SOURCE_REPO: docker.io/library/phpmyadmin
+  TARGET_REPO: docker.io/phpmyadmin/phpmyadmin
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      count: ${{ steps.plan.outputs.count }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: docker-library/bashbrew@v0.1.14
+      - name: Install skopeo
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq skopeo
+      - name: Log in to Docker Hub
+        run: ./.github/scripts/mirror-official-images.sh login
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Plan the tags to sync
+        id: plan
+        run: ./.github/scripts/mirror-official-images.sh plan
+
+  mirror:
+    name: Sync ${{ matrix.tag }}
+    needs: plan
+    if: ${{ needs.plan.outputs.count != '' && needs.plan.outputs.count != '0' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install skopeo
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq skopeo
+      - name: Log in to Docker Hub
+        run: ./.github/scripts/mirror-official-images.sh login
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Sync ${{ matrix.tag }}
+        run: ./.github/scripts/mirror-official-images.sh mirror "${TAG}"
+        env:
+          TAG: ${{ matrix.tag }}
