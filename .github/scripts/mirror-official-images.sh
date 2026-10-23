@@ -134,9 +134,11 @@ decide() {
 		IFS=$'\t' read -r result_dst_digest result_dst_version result_dst_created <<<"${dst_meta}"
 	fi
 
+	# Only refresh tags that already exist here: publishing new ones would
+	# attract more users to a namespace that is meant to be deprecated
 	if [ -z "${result_dst_digest}" ]; then
-		result_action="copy"
-		result_reason="missing from the target"
+		result_action="skip"
+		result_reason="not published here, not creating it"
 		return 0
 	fi
 

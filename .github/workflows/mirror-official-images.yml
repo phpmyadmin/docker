@@ -1,6 +1,7 @@
 name: Mirror official images
 
 # Mirrors docker.io/library/phpmyadmin into docker.io/phpmyadmin/phpmyadmin.
+# Only tags already published there are refreshed, no new tags are created.
 # See https://github.com/phpmyadmin/docker/issues/363
 
 permissions:
