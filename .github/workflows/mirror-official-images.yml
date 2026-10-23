@@ -30,6 +30,11 @@ jobs:
     name: Plan
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Authenticated so that the inspects use the account's rate limit instead
+    # of the shared anonymous one
+    environment:
+      name: docker-hub
+      url: https://hub.docker.com/r/phpmyadmin/phpmyadmin
     outputs:
       matrix: ${{ steps.plan.outputs.matrix }}
       count: ${{ steps.plan.outputs.count }}
@@ -43,7 +48,7 @@ jobs:
       - name: Log in to Docker Hub
         run: ./.github/scripts/mirror-official-images.sh login
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Plan the tags to sync
         id: plan
@@ -55,6 +60,12 @@ jobs:
     if: ${{ needs.plan.outputs.count != '' && needs.plan.outputs.count != '0' }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    # DOCKERHUB_TOKEN must be a secret of this environment, not of the
+    # repository, for only the jobs referencing it to see it. The username is
+    # not sensitive, so it lives in vars.DOCKERHUB_USERNAME
+    environment:
+      name: docker-hub
+      url: https://hub.docker.com/r/phpmyadmin/phpmyadmin
     strategy:
       fail-fast: false
       max-parallel: 4
@@ -68,7 +79,7 @@ jobs:
       - name: Log in to Docker Hub
         run: ./.github/scripts/mirror-official-images.sh login
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Sync ${{ matrix.tag }}
         run: ./.github/scripts/mirror-official-images.sh mirror "${TAG}"
