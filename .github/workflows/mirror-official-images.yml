@@ -36,28 +36,48 @@ jobs:
       name: docker-hub
       url: https://hub.docker.com/r/phpmyadmin/phpmyadmin
     outputs:
+      configured: ${{ steps.credentials.outputs.configured }}
       matrix: ${{ steps.plan.outputs.matrix }}
       count: ${{ steps.plan.outputs.count }}
     steps:
+      # A mirror without credentials could still read, but it would push
+      # anonymously and hit the shared rate limit, so skip quietly instead
+      - name: Check the credentials
+        id: credentials
+        env:
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -z "${DOCKERHUB_USERNAME}" ] || [ -z "${DOCKERHUB_TOKEN}" ]; then
+            echo 'configured=false' >> "${GITHUB_OUTPUT}"
+            echo '::notice title=Mirror skipped::DOCKERHUB_USERNAME (variable) or DOCKERHUB_TOKEN (secret) is not set on the docker-hub environment'
+          else
+            echo 'configured=true' >> "${GITHUB_OUTPUT}"
+          fi
       - uses: actions/checkout@v7
+        if: steps.credentials.outputs.configured == 'true'
         with:
           persist-credentials: false
       - uses: docker-library/bashbrew@v0.1.14
+        if: steps.credentials.outputs.configured == 'true'
       - name: Install skopeo
+        if: steps.credentials.outputs.configured == 'true'
         run: sudo apt-get update -qq && sudo apt-get install -y -qq skopeo
       - name: Log in to Docker Hub
+        if: steps.credentials.outputs.configured == 'true'
         run: ./.github/scripts/mirror-official-images.sh login
         env:
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Plan the tags to sync
         id: plan
+        if: steps.credentials.outputs.configured == 'true'
         run: ./.github/scripts/mirror-official-images.sh plan
 
   mirror:
     name: Sync ${{ matrix.tag }}
     needs: plan
-    if: ${{ needs.plan.outputs.count != '' && needs.plan.outputs.count != '0' }}
+    if: ${{ needs.plan.outputs.configured == 'true' && needs.plan.outputs.count != '' && needs.plan.outputs.count != '0' }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     # DOCKERHUB_TOKEN must be a secret of this environment, not of the
