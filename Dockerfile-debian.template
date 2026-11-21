@@ -1,3 +1,81 @@
+# Build the release kit from the signed release tag instead of downloading it, so
+# that the dependencies are locked for the PHP version of this image and can be
+# updated to fix vulnerabilities for the lifetime of the version.
+# See https://github.com/phpmyadmin/docker/issues/472
+FROM --platform=$BUILDPLATFORM php:%%PHP_VERSION%%-cli-trixie AS phpmyadmin-kit
+
+ENV PMA_VERSION="%%VERSION%%" \
+    PMA_BRANCH="%%RELEASE_BRANCH%%" \
+    PMA_TAG="%%TAG%%" \
+    PMA_COMMIT="%%PMA_COMMIT%%" \
+    PMA_GPG_KEY="%%GPG_KEY%%" \
+    COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
+
+# Official image, so no installer is downloaded from getcomposer.org
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        gettext \
+        git \
+        gnupg \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        libzip-dev \
+        make \
+        nodejs \
+        python3-sphinx \
+        xz-utils \
+    ; \
+    docker-php-ext-install gd mysqli zip; \
+    corepack enable; \
+    rm -rf /var/lib/apt/lists/*; \
+    echo 'memory_limit = 512M' > "$PHP_INI_DIR/conf.d/zz-build.ini"
+
+# The release tag must be signed by the phpMyAdmin release key and point at the
+# commit pinned in the generated Dockerfile
+RUN set -eux; \
+    git init /src; \
+    cd /src; \
+    git remote add origin https://github.com/phpmyadmin/phpmyadmin.git; \
+    git fetch --depth 1 origin "refs/tags/${PMA_TAG}:refs/tags/${PMA_TAG}"; \
+    test "$(git rev-parse "${PMA_TAG}^{commit}")" = "$PMA_COMMIT"; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$PMA_GPG_KEY" \
+        || gpg --batch --keyserver pgp.mit.edu --recv-keys "$PMA_GPG_KEY" \
+        || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$PMA_GPG_KEY" \
+        || gpg --batch --keyserver keys.openpgp.org --recv-keys "$PMA_GPG_KEY" \
+    ; \
+    gpg --batch --with-colons --list-keys "$PMA_GPG_KEY" | grep -q "^fpr:.*:${PMA_GPG_KEY}:"; \
+    git verify-tag --raw "$PMA_TAG" > /tmp/verify-tag.log 2>&1; \
+    ! grep -qE "REVKEYSIG|EXPKEYSIG|EXPSIG|BADSIG|ERRSIG" /tmp/verify-tag.log; \
+    grep -qE "^\[GNUPG:\] VALIDSIG [0-9A-F]+ [0-9-]+ [0-9]+ .*${PMA_GPG_KEY}( |$)" /tmp/verify-tag.log; \
+    git checkout -B "$PMA_BRANCH" "$PMA_COMMIT"; \
+    gpgconf --kill all; \
+    rm -r "$GNUPGHOME"
+
+# create-release.sh locks the dependencies for the minimum PHP version it
+# parses out of composer.json, lock them for the one of this image instead
+RUN set -eux; \
+    cd /src; \
+    php_version="$(php -r 'echo PHP_VERSION;')"; \
+    sed -i "s|^PHP_REQ=.*|PHP_REQ=\"${php_version}\"|" scripts/create-release.sh; \
+    grep -q "^PHP_REQ=\"${php_version}\"$" scripts/create-release.sh; \
+    echo y | ./scripts/create-release.sh "$PMA_VERSION" "$PMA_BRANCH" \
+        --kits all-languages --compressions txz --no-sign; \
+    sha256sum "/src/release/phpMyAdmin-${PMA_VERSION}-all-languages.tar.xz"
+
+# Show the advisories left in the kit that actually ships
+RUN set -eux; \
+    mkdir -p /kit; \
+    tar -xf "/src/release/phpMyAdmin-${PMA_VERSION}-all-languages.tar.xz" -C /kit --strip-components=1; \
+    cd /kit; \
+    composer --version; \
+    composer audit --no-dev --format=table || true
+
 FROM php:%%PHP_VERSION%%-%%VARIANT%%
 
 ENV UPLOAD_PROGRESS_EXT_URL="https://github.com/php/pecl-php-uploadprogress/archive/refs/tags/uploadprogress-2.0.2.tar.gz"
@@ -7,10 +85,6 @@ ENV UPLOAD_PROGRESS_SHA256="fe3f6cdfcedad563c970c4fd1cda31e422cfc0df5cc9a217d8c8
 RUN set -ex; \
     \
     apt-get update; \
-    apt-get install -y --no-install-recommends \
-        gnupg \
-        dirmngr \
-    ; \
     \
     savedAptMark="$(apt-mark showmanual)"; \
     \
@@ -107,10 +181,8 @@ RUN set -ex; \
 
 USER www-data:www-data
 
-# Calculate download URL
+# Version of phpMyAdmin built above
 ENV VERSION=%%VERSION%%
-ENV SHA256=%%SHA256%%
-ENV URL=https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.xz
 
 LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.description="Run phpMyAdmin with Alpine, Apache and PHP FPM." \
@@ -122,22 +194,11 @@ LABEL org.opencontainers.image.title="Official phpMyAdmin Docker image" \
     org.opencontainers.image.url="https://github.com/phpmyadmin/docker#readme" \
     org.opencontainers.image.source="https://github.com/phpmyadmin/docker.git"
 
-# Download tarball, verify it using gpg and extract
+# Copy the kit built from the signed release tag
+COPY --chown=www-data:www-data --from=phpmyadmin-kit /kit/ /var/www/html/
+
 RUN set -ex; \
-    export GNUPGHOME="$(mktemp -d)"; \
-    export GPGKEY="%%GPG_KEY%%"; \
-    curl -fsSL -o phpMyAdmin.tar.xz $URL; \
-    curl -fsSL -o phpMyAdmin.tar.xz.asc $URL.asc; \
-    echo "$SHA256 *phpMyAdmin.tar.xz" | sha256sum -c -; \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver pgp.mit.edu --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keyserver.pgp.com --recv-keys "$GPGKEY" \
-        || gpg --batch --keyserver keys.openpgp.org --recv-keys "$GPGKEY"; \
-    gpg --batch --verify phpMyAdmin.tar.xz.asc phpMyAdmin.tar.xz; \
-    tar -xf phpMyAdmin.tar.xz -C /var/www/html --strip-components=1; \
     mkdir -p /var/www/html/tmp; \
-    gpgconf --kill all; \
-    rm -r "$GNUPGHOME" phpMyAdmin.tar.xz phpMyAdmin.tar.xz.asc; \
     rm -r -v /var/www/html/setup/ /var/www/html/examples/ /var/www/html/js/src/ /var/www/html/babel.config.json /var/www/html/doc/html/_sources/ /var/www/html/RELEASE-DATE-$VERSION /var/www/html/CONTRIBUTING.md; \
     grep -q -F "'configFile' => ROOT_PATH . 'config.inc.php'," /var/www/html/libraries/vendor_config.php; \
     sed -i "s@'configFile' => .*@'configFile' => '/etc/phpmyadmin/config.inc.php',@" /var/www/html/libraries/vendor_config.php; \

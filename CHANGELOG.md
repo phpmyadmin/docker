@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+- Build the release kit from the signed release tag instead of downloading
+  it, so that the Composer dependencies are locked for the PHP version of the
+  image and can be refreshed to fix vulnerabilities for the lifetime of the
+  version (#472)
+
 ## [5.2.3.1] - 2025-10-08
 
 - Remove leftover uploadprogress.tar.gz download after installation (#465)

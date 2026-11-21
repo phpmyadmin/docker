@@ -18,12 +18,45 @@ dirCommit() {
 			Dockerfile \
 			$(git show HEAD:./Dockerfile | awk '
 				toupper($1) == "COPY" {
+					# a file taken from another build stage is not in the repository
+					from = 0
+					for (i = 2; i <= NF; i++) {
+						if ($i ~ /^--from=/) {
+							from = 1
+						}
+					}
+					if (from) {
+						next
+					}
+					# the last argument is the destination, the options are not paths
 					for (i = 2; i < NF; i++) {
-						print $i
+						if ($i !~ /^-/) {
+							print $i
+						}
 					}
 				}
 			')
 	)
+}
+
+# the image of the final FROM instruction, without its options
+finalFrom() {
+	awk '
+		toupper($1) == "FROM" {
+			image = ""
+			for (i = 2; i <= NF; i++) {
+				if ($i !~ /^-/ && toupper($i) != "AS") {
+					image = $i
+					break
+				}
+			}
+		}
+		END {
+			if (image != "") {
+				print image
+			}
+		}
+	' "$1"
 }
 
 getArches() {
@@ -32,15 +65,25 @@ getArches() {
 
 	eval "declare -A -g parentRepoToArches=( $(
 		find -name 'Dockerfile' -exec awk '
-				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|.*\/.*)(:|$)/ {
-					print "'"$officialImagesUrl"'" $2
+				toupper($1) == "FROM" {
+					image = ""
+					for (i = 2; i <= NF; i++) {
+						if ($i !~ /^-/ && toupper($i) != "AS") {
+							image = $i
+							break
+						}
+					}
 				}
-			' '{}' + \
+				END {
+					if (image != "" && image !~ /^('"$repo"'|scratch|.*\/.*)(:|$)/) {
+						print "'"$officialImagesUrl"'" image
+					}
+				}
+			' '{}' \; \
 			| sort -u \
 			| xargs bashbrew cat --format '[{{ .RepoName }}:{{ .TagName }}]="{{ join " " .TagEntry.Architectures }}"'
 	) )"
 }
-getArches 'phpmyadmin'
 
 if ! command -v bashbrew --version &> /dev/null
 then
@@ -48,6 +91,8 @@ then
 	echo "You can download it from Jenkins at https://github.com/docker-library/bashbrew#installing"
     exit 1
 fi
+
+getArches 'phpmyadmin'
 
 cat <<-EOH
 # This file is generated via https://github.com/phpmyadmin/docker/blob/$(fileCommit "$self")/$self
@@ -63,7 +108,7 @@ join() {
 	echo "${out#$sep}"
 }
 
-latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version' | grep -E '^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$')"
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$')"
 
 for variant in apache fpm fpm-alpine; do
 	commit="$(dirCommit "$variant")"
@@ -81,7 +126,7 @@ for variant in apache fpm fpm-alpine; do
 		variantAliases+=( "${versionAliases[@]}" )
 	fi
 
-	variantParent="$(awk 'toupper($1) == "FROM" { print $2 }' "$variant/Dockerfile")"
+	variantParent="$(finalFrom "$variant/Dockerfile")"
 
 	variantArches="${parentRepoToArches[$variantParent]}"
 

@@ -29,17 +29,73 @@ function download_url() {
 	echo "https://files.phpmyadmin.net/phpMyAdmin/$1/phpMyAdmin-$1-all-languages.tar.xz"
 }
 
+# Commit the signed release tag points at; the Dockerfiles build from it
+# Release tags are RELEASE_<major>_<minor>_<patch>[_<revision>], the format the
+# daily-composer script of phpmyadmin/scripts relies on to process releases
+release_tag_re='RELEASE_[0-9]+_[0-9]+_[0-9]+(_[0-9]+)?'
+
+# The version 5.2.3 is released as the tag RELEASE_5_2_3
+function release_tag() {
+	local version="$1"
+	local tag="RELEASE_${version//./_}"
+
+	if ! grep -qE "^${release_tag_re}$" <<< "$tag"; then
+		echo >&2 "'$version' does not match the release tag format $release_tag_re. Aborting."
+		exit 1
+	fi
+
+	echo "$tag"
+}
+
+function release_commit() {
+	local tag="$1"
+	local repo='https://github.com/phpmyadmin/phpmyadmin.git'
+	local tags commit
+
+	if ! grep -qE "refs/tags/${release_tag_re}$" <<< "refs/tags/${tag}"; then
+		echo >&2 "'$tag' does not match the release tag format $release_tag_re. Aborting."
+		exit 1
+	fi
+
+	# One request, so the known tags can be listed when this one is missing
+	tags="$(git ls-remote --tags "$repo")" || exit 1
+
+	if ! grep -qE "refs/tags/${tag}$" <<< "$tags"; then
+		echo >&2 "Unable to find the tag $tag in $repo. The latest release tags are:" >&2
+		grep -oE "refs/tags/${release_tag_re}$" <<< "$tags" \
+			| sed -e 's@refs/tags/@@' \
+			| sort -t_ -k2,2n -k3,3n -k4,4n -k5,5n \
+			| tail -n 5 >&2
+		exit 1
+	fi
+
+	# An annotated tag is listed twice, the tag object and its peeled commit
+	commit="$(grep -E "refs/tags/${tag}\^\{\}$" <<< "$tags" | cut -f1)"
+	if [ -z "$commit" ]; then
+		commit="$(grep -E "refs/tags/${tag}$" <<< "$tags" | cut -f1)"
+	fi
+	if [ -z "$commit" ]; then
+		echo >&2 "Unable to resolve the commit of $tag in $repo. Aborting."
+		exit 1
+	fi
+
+	echo "$commit"
+}
+
 function create_variant() {
 	local variant="$1"
 	local version="$2"
-	local sha256="$3"
 
-	local branch="$(sed -ne 's/^\([0-9]*\.[0-9]*\)\..*$/\1/p' <<< "$version")"
-	local url="$(download_url "$version")"
-	local ascUrl="$(download_url "$version").asc"
+	local branch
+	branch="$(sed -ne 's/^\([0-9]*\.[0-9]*\)\..*$/\1/p' <<< "$version")"
 	local phpVersion="${php_version[$version]-${php_version[default]}}"
+	local tag
+	local releaseBranch="QA_${branch//./_}"
+	local commit
+	tag="$(release_tag "$version")"
+	commit="$(release_commit "$tag")"
 
-	echo "updating $version [$branch] $variant"
+	echo "updating $version [$branch] $variant (tag $tag, commit $commit)"
 
 	# Create the variant directory with a Dockerfile
 	mkdir -p "$variant"
@@ -52,11 +108,11 @@ function create_variant() {
 	sed -ri -e '
 		s/%%VARIANT%%/'"$variant"'/;
 		s/%%VERSION%%/'"$version"'/;
-		s/%%SHA256%%/'"$sha256"'/;
-		s/%%DOWNLOAD_URL%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$url")"'/;
-		s/%%DOWNLOAD_URL_ASC%%/'"$(sed -e 's/[\/&]/\\&/g' <<< "$ascUrl")"'/;
 		s/%%PHP_VERSION%%/'"$phpVersion"'/g;
 		s/%%GPG_KEY%%/'"$gpg_key"'/g;
+		s/%%RELEASE_BRANCH%%/'"$releaseBranch"'/g;
+		s/%%TAG%%/'"$tag"'/g;
+		s/%%PMA_COMMIT%%/'"$commit"'/g;
 		s/%%CMD%%/'"${cmd[$variant]}"'/;
 	' "$variant/Dockerfile"
 
@@ -70,32 +126,18 @@ function create_variant() {
 	# Copy config.inc.php and helpers.php
 	cp config.inc.php "$variant/config.inc.php"
 	cp helpers.php "$variant/helpers.php"
-
-	# Add variant to versions.json
-	versionVariantsJson="$(jq -e \
-		--arg branch "$branch" --arg variant "$variant" --arg base "${base[$variant]}" --arg phpVersion "$phpVersion" \
-		'.[$branch].variants[$variant] = {"variant": $variant, "base": $base, "phpVersion": $phpVersion}' versions.json)"
-	versionJson="$(jq -e \
-		--arg branch "$branch" --arg version "$version" --arg sha256 "$sha256" --arg url "$url" --arg ascUrl "$ascUrl" --argjson variants "$versionVariantsJson" \
-		'.[$branch] = {"branch": $branch, "version": $version, "sha256": $sha256, "url": $url, "ascUrl": $ascUrl, "variants": $variants[$branch].variants}' versions.json)"
-	printf '%s\n' "$versionJson" > versions.json
 }
 
 # Check script dependencies
 command -v curl >/dev/null 2>&1 || { echo >&2 "'curl' is required but not found. Aborting."; exit 1; }
+command -v git >/dev/null 2>&1 || { echo >&2 "'git' is required but not found. Aborting."; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo >&2 "'jq' is required but not found. Aborting."; exit 1; }
 [ -n "${BASH_VERSINFO}" ] && [ -n "${BASH_VERSINFO[0]}" ] && [ ${BASH_VERSINFO[0]} -ge 4 ] \
 	|| { echo >&2 "Bash 4.0 or greater is required. Aborting."; exit 1; }
 
 # Create variants
-printf '%s\n' "{}" > versions.json
-
-latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version' | grep -E '^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$')"
-sha256="$(curl -fsSL "$(download_url "$latest").sha256" | cut -f1 -d ' ' | tr -cd 'a-f0-9' | cut -c 1-64)"
-
+latest="$(curl -fsSL 'https://www.phpmyadmin.net/home_page/version.json' | jq -r '.version' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$')"
 for variant in "${variants[@]}"; do
-	create_variant "$variant" "$latest" "$sha256"
+	create_variant "$variant" "$latest"
 done
 
-# Cleanup the file as for now it's not wanted in the repository
-rm versions.json
